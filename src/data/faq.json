@@ -1,0 +1,46 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "questionId": "Apakah tour-nya halal?",
+      "questionEn": "Is the tour halal?",
+      "answerId": "Ya, semua paket tour kami menyediakan makanan halal dan kami juga menyediakan waktu untuk sholat di masjid atau ruang doa di restoran.",
+      "answerEn": "Yes, all our tour packages provide halal food and we also provide time for prayers at mosques or prayer rooms in restaurants."
+    },
+    {
+      "id": 2,
+      "questionId": "Apakah bisa private tour?",
+      "questionEn": "Can I have a private tour?",
+      "answerId": "Tentu saja! Kami menyediakan opsi private tour untuk Anda yang ingin menikmati perjalanan dengan keluarga atau teman-teman secara eksklusif.",
+      "answerEn": "Absolutely! We provide private tour options for those who want to enjoy the journey with family or friends exclusively."
+    },
+    {
+      "id": 3,
+      "questionId": "Apakah ada jemputan dari bandara?",
+      "questionEn": "Is there airport pickup?",
+      "answerId": "Ya, kami menyediakan layanan jemputan dari bandara dengan biaya tambahan. Silakan hubungi kami untuk informasi lebih lanjut.",
+      "answerEn": "Yes, we provide airport pickup service at an additional cost. Please contact us for more information."
+    },
+    {
+      "id": 4,
+      "questionId": "Bagaimana cara pembayarannya?",
+      "questionEn": "How do I make a payment?",
+      "answerId": "Kami menerima pembayaran melalui transfer bank atau kartu kredit. Anda bisa membayar DP 20-50% terlebih dahulu dan melunasi sisanya saat kedatangan.",
+      "answerEn": "We accept payments via bank transfer or credit card. You can pay a 20-50% down payment first and pay the rest upon arrival."
+    },
+    {
+      "id": 5,
+      "questionId": "Berapa batas waktu pembatalan?",
+      "questionEn": "What is the cancellation deadline?",
+      "answerId": "Kebijakan pembatalan kami: lebih dari 30 hari sebelum tur dimulai (0% biaya), 15-29 hari (50% biaya), 1-14 hari (100% biaya).",
+      "answerEn": "Our cancellation policy: more than 30 days before the tour starts (0% fee), 15-29 days (50% fee), 1-14 days (100% fee)."
+    },
+    {
+      "id": 6,
+      "questionId": "Apakah guide berbahasa Indonesia?",
+      "questionEn": "Do you have Indonesian-speaking guides?",
+      "answerId": "Ya, semua paket tour kami dilengkapi dengan guide asli Indonesia yang ramah, informatif dan siap membantu Anda selama perjalanan.",
+      "answerEn": "Yes, all our tour packages come with native Indonesian guides who are friendly, informative and ready to assist you during your journey."
+    }
+  ]
+}

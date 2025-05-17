@@ -1,0 +1,87 @@
+{
+  "packages": [
+    {
+      "id": 1,
+      "titleId": "James Bond Island",
+      "titleEn": "James Bond Island",
+      "descriptionId": "Jelajahi pulau terkenal yang muncul di film James Bond 'The Man with the Golden Gun'.",
+      "descriptionEn": "Explore the famous island featured in the James Bond movie 'The Man with the Golden Gun'.",
+      "image": "https://images.pexels.com/photos/1450354/pexels-photo-1450354.jpeg",
+      "price": "Rp 1.500.000",
+      "duration": "1 Day",
+      "included": [
+        "Transportation",
+        "Guide",
+        "Lunch",
+        "Entrance fees"
+      ],
+      "itinerary": [
+        {
+          "time": "07:00",
+          "activityId": "Penjemputan dari hotel",
+          "activityEn": "Hotel pickup"
+        },
+        {
+          "time": "09:00",
+          "activityId": "Tiba di pelabuhan",
+          "activityEn": "Arrive at pier"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "titleId": "Phi Phi Island",
+      "titleEn": "Phi Phi Island",
+      "descriptionId": "Nikmati keindahan Pulau Phi Phi dengan air kristal dan pantai pasir putihnya.",
+      "descriptionEn": "Enjoy the beauty of Phi Phi Islands with crystal clear waters and white sandy beaches.",
+      "image": "https://images.pexels.com/photos/1450340/pexels-photo-1450340.jpeg",
+      "price": "Rp 1.800.000",
+      "duration": "1 Day",
+      "included": [
+        "Transportation",
+        "Guide",
+        "Lunch",
+        "Snorkeling gear"
+      ],
+      "itinerary": [
+        {
+          "time": "07:30",
+          "activityId": "Penjemputan dari hotel",
+          "activityEn": "Hotel pickup"
+        },
+        {
+          "time": "09:30",
+          "activityId": "Mulai snorkeling",
+          "activityEn": "Start snorkeling"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "titleId": "Phuket City Tour",
+      "titleEn": "Phuket City Tour",
+      "descriptionId": "Jelajahi tempat-tempat bersejarah dan budaya di Kota Phuket.",
+      "descriptionEn": "Explore historical and cultural sites in Phuket City.",
+      "image": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg",
+      "price": "Rp 900.000",
+      "duration": "Half Day",
+      "included": [
+        "Transportation",
+        "Guide",
+        "Entrance fees"
+      ],
+      "itinerary": [
+        {
+          "time": "09:00",
+          "activityId": "Mulai tur kota",
+          "activityEn": "Start city tour"
+        },
+        {
+          "time": "12:00",
+          "activityId": "Makan siang",
+          "activityEn": "Lunch"
+        }
+      ]
+    }
+  ]
+}

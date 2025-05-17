@@ -1,0 +1,73 @@
+{
+  "categories": [
+    {
+      "id": "james-bond",
+      "nameId": "Pulau James Bond",
+      "nameEn": "James Bond Island",
+      "images": [
+        {
+          "id": 1,
+          "url": "https://images.pexels.com/photos/12622687/pexels-photo-12622687.jpeg",
+          "captionId": "Pemandangan Pulau James Bond",
+          "captionEn": "James Bond Island View"
+        },
+        {
+          "id": 2,
+          "url": "https://images.pexels.com/photos/1268855/pexels-photo-1268855.jpeg",
+          "captionId": "Sunset di James Bond Island",
+          "captionEn": "Sunset at James Bond Island"
+        },
+        {
+          "id": 3,
+          "url": "https://images.pexels.com/photos/1320684/pexels-photo-1320684.jpeg",
+          "captionId": "Aktivitas di James Bond Island",
+          "captionEn": "Activities at James Bond Island"
+        }
+      ]
+    },
+    {
+      "id": "phi-phi",
+      "nameId": "Pulau Phi Phi",
+      "nameEn": "Phi Phi Island",
+      "images": [
+        {
+          "id": 1,
+          "url": "https://images.pexels.com/photos/9482125/pexels-photo-9482125.jpeg",
+          "captionId": "Pantai Phi Phi",
+          "captionEn": "Phi Phi Beach"
+        },
+        {
+          "id": 2,
+          "url": "https://images.pexels.com/photos/1450340/pexels-photo-1450340.jpeg",
+          "captionId": "Snorkeling di Phi Phi",
+          "captionEn": "Snorkeling at Phi Phi"
+        },
+        {
+          "id": 3,
+          "url": "https://images.pexels.com/photos/1268819/pexels-photo-1268819.jpeg",
+          "captionId": "Long Tail Boat di Phi Phi",
+          "captionEn": "Long Tail Boat at Phi Phi"
+        }
+      ]
+    },
+    {
+      "id": "phuket",
+      "nameId": "Kota Phuket",
+      "nameEn": "Phuket City",
+      "images": [
+        {
+          "id": 1,
+          "url": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg",
+          "captionId": "Kota Tua Phuket",
+          "captionEn": "Phuket Old Town"
+        },
+        {
+          "id": 2,
+          "url": "https://images.pexels.com/photos/1450354/pexels-photo-1450354.jpeg",
+          "captionId": "Big Buddha Phuket",
+          "captionEn": "Phuket Big Buddha"
+        }
+      ]
+    }
+  ]
+}
