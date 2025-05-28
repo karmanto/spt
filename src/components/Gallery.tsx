@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
-import sptLogo from '/spt_logo.png';
+import sptLogo from '/spt_logo2.png';
 
 interface GalleryImage {
   id: number;
