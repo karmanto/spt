@@ -28,14 +28,15 @@ const AboutSection: React.FC = () => {
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-8">
               {t('aboutTitle')}
             </h2>
-            <p className="text-lg text-gray-600 mb-6">
+            {/* Render description with preserved newlines */}
+            <div className="text-lg text-gray-600 mb-6 whitespace-pre-line">
               {t('aboutDescription')}
-            </p>
+            </div>
           </div>
         </div>
 
         {/* Second block: Founder */}
-        <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center mb-6">
+        {/* <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center mb-6">
           <div 
             className="mb-3"
             data-aos="fade-right"
@@ -55,10 +56,10 @@ const AboutSection: React.FC = () => {
               {t('founder')}
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Third block: Legal */}
-        <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center mb-6">
+        {/* <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center mb-6">
           <div 
             className="mb-3"
             data-aos="fade-right"
@@ -78,7 +79,7 @@ const AboutSection: React.FC = () => {
               {t('legal')}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   );
