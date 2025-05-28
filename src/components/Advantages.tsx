@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { Globe, Heart } from 'lucide-react';
 
 const Advantages: React.FC = () => {
   const { t } = useLanguage();
@@ -75,6 +76,18 @@ const Advantages: React.FC = () => {
         </svg>
       ),
     },
+    {
+      id: 8,
+      title: t('chooseAnywhere'),
+      description: t('chooseAnywhereDesc'),
+      icon: <Globe className="w-8 h-8 text-primary" />
+    },
+    // {
+    //   id: 9,
+    //   title: t('premiumService'),
+    //   description: t('premiumServiceDesc'),
+    //   icon: <Heart className="w-8 h-8 text-primary" />
+    // },
   ];
 
   return (

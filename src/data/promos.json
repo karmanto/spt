@@ -1,0 +1,17 @@
+{
+  "promos": [
+    {
+      "id": 1,
+      "titleId": "Wisata James Bond Island",
+      "titleEn": "James Bond Island Tour",
+      "descriptionId": "Nikmati keindahan alam James Bond Island dengan pemandu berbahasa Indonesia.",
+      "descriptionEn": "Enjoy the natural beauty of James Bond Island with Indonesian-speaking guides.",
+      "price": "Rp 1.500.000",
+      "oldPrice": "Rp 2.000.000",
+      "image": "/promo1.jpeg",
+      "badge": "limitedTime",
+      "remaining": 5,
+      "endDate": "2026-04-01T00:00:00"
+    }
+  ]
+}

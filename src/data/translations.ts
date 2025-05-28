@@ -54,11 +54,17 @@ export const translations = {
     ticketAssistanceDesc: 'Tanpa ribet!',
     downPayment: 'Pilihan DP 20% - 50%',
     downPaymentDesc: 'Pelunasan Saat Ketibaan',
+    chooseAnywhere: 'Pilih Liburan di Seluruh Thailand',
+    chooseAnywhereDesc: 'Nikmati liburan di berbagai tempat di seluruh Thailand',
+    premiumService: 'Pelayanan Lebih dari Nyaman',
+    premiumServiceDesc: 'Kami memberikan layanan yang melebihi ekspektasi',
     
     // About
     aboutTitle: 'Tentang Simbolon Phuket Tour',
-    aboutDescription: 'Simbolon Phuket Tour adalah partner liburan terpercaya untuk orang Indonesia di Thailand. Kami menyediakan layanan tour dengan guide berbahasa Indonesia, makanan halal, dan itinerary yang dapat disesuaikan dengan kebutuhan Anda.',
-    
+    aboutDescription: 'Kami adalah tour agent lebih mengkhususkan jasa layanan tour di Phuket, Thailand dan beberapa tempat di Thailand termasuk Bangkok pada umumnya, menyediakan layanan dan harga terbaik, Bekerjasama dengan stakeholders yang sudah berpengalaman selama belasan tahun dan siap melayani anda dengan sepenuh hati.  Terutama paket wisata anti-mainstream, serahin sama kita.',
+    founder: "Simbolon Phuket Tour dibangun oleh Abdul Rahman Simbolon Tuan berasal dari Medan yang sudah bekerja di Thailand sebagai guru dan dosen sejak 2019 dan terinspirasi untuk membantu wisatawan Indonesia mendapatkan pengalaman wisata terbaik dan bisa mengunjungi tempat-tempat anti-mainstream di Thailand. \nBeliau suka jalan-jalan dan sudah explore beberapa provinsi di Thailand. Tim kami juga akan buka sale untuk private dan group trip, siap membantu customer untuk jalan-jalan di Kota Bangkok dan sekitarnya atau yang mau jalan ke destinasi anti mainstream lainnya, dan hunting makanan autentik Thailand, menikmati alam dan relax. Pokoknya gak ngecewain deh!",
+    legal: "Didirikan di 2024 ini, bekerja sama dengan Major Tour Phuket Co.,Ltd ini memiliki nomor Izin Tanda Daftar Usaha Pariwisata resmi di Thailand dengan TAT No.: 31/01045, kami bekerjasama dengan stakeholders berkualitas yang sudah berpengalaman dibidangnya  lebih dari 15 tahun, selain itu kita juga terdaftar sebagai anggota TTAA (Thai Travel Agent Association) secara resmi. Kantor kami berlokasi di Phuket beralamat 128/73 Pracha Uthit Rd. Ratsada Mueang Phuket, Kode Pos: 83000, Thailand dalam naungan Major Phuket Group Co., Ltd.",
+
     // Gallery
     galleryTitle: 'Momen Seru dari Tour Kami',
     gallerySubtitle: 'Lihatlah keindahan destinasi Thailand yang menanti Anda',
@@ -161,11 +167,17 @@ export const translations = {
     ticketAssistanceDesc: 'Hassle-free!',
     downPayment: 'Down Payment Options 20% - 50%',
     downPaymentDesc: 'Balance payment upon arrival',
+    chooseAnywhere: 'Holiday Anywhere in Thailand',
+    chooseAnywhereDesc: 'Enjoy vacations in various locations across Thailand',
+    premiumService: 'Service Beyond Comfort',
+    premiumServiceDesc: 'We deliver service that exceeds expectations',
     
     // About
     aboutTitle: 'About Simbolon Phuket Tour',
-    aboutDescription: 'Simbolon Phuket Tour is a trusted vacation partner for Indonesians in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and itineraries that can be customized to your needs.',
-    
+    aboutDescription: 'We are a tour agency specializing in trips in Phuket, Thailand, and other destinations across Thailand—including Bangkok. We offer the best services and prices, partnering with stakeholders who have over a decade of experience, and we’re ready to serve you wholeheartedly. Our highlight? Unique, off-the-beaten-path tour packages—leave everything to us!',
+    founder: "Simbolon Phuket Tour was founded by Abdul Rahman Simbolon, originally from Medan, who has been working in Thailand as a teacher and lecturer since 2019. He was inspired to help Indonesian travelers enjoy the best travel experiences and discover off-the-beaten-path destinations in Thailand. He loves exploring and has already visited several provinces in Thailand. \nOur team is also launching special sales for private and group trips, ready to assist customers with tours around Bangkok and its surroundings, as well as to other unconventional destinations. We’ll help you hunt for authentic Thai cuisine, enjoy nature, and relax. We promise you won’t be disappointed!",
+    legal: "Founded in 2024 in partnership with Major Tour Phuket Co., Ltd., we hold an official Tourism Business Registration License in Thailand (TAT No.: 31/01045). We collaborate with top‐quality stakeholders who each bring over 15 years of industry experience, and we’re proud to be registered members of the Thai Travel Agent Association (TTAA). Our office is located in Phuket at 128/73 Pracha Uthit Rd., Ratsada, Mueang Phuket, Postal Code 83000, Thailand, operating under the umbrella of Major Phuket Group Co., Ltd.",
+
     // Gallery
     galleryTitle: 'Fun Moments from Our Tours',
     gallerySubtitle: 'See the beauty of Thailand destinations waiting for you',

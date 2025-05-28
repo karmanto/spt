@@ -101,7 +101,7 @@ const FAQ: React.FC = () => {
         >
           <h3 className="text-xl font-semibold text-gray-800 mb-4">{t('cancellationPolicyTitle')}</h3>
           <div className="bg-white p-6 rounded-lg shadow-sm">
-            <p className="font-medium text-gray-700 mb-2">{t('cancellationPolicySubtitle')}</p>
+            <p className="font-medium text-gray-700 mb-2 text-left">{t('cancellationPolicySubtitle')}</p>
             <ul className="space-y-2 text-gray-600 text-left">
               <li>• {t('over30days')}</li>
               <li>• {t('within15to29days')}</li>

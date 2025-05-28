@@ -1,39 +1,48 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import galleryData from '../data/gallery.json';
+import sptLogo from '/spt_logo.png';
+
+interface GalleryImage {
+  id: number;
+  url: string;
+  captionId: string;
+  captionEn: string;
+}
+
+interface GalleryCategory {
+  id: string;
+  nameId: string;
+  nameEn: string;
+  images: GalleryImage[];
+}
 
 const Gallery: React.FC = () => {
-  const { t } = useLanguage();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { t, language } = useLanguage();
+  const [selectedCategory, setSelectedCategory] = useState<GalleryCategory | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const images = [
-    {
-      id: 1,
-      src: 'https://images.pexels.com/photos/9482125/pexels-photo-9482125.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      alt: 'James Bond Island',
-    },
-    {
-      id: 2,
-      src: 'https://images.pexels.com/photos/3538245/pexels-photo-3538245.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      alt: 'Phuket Beach',
-    },
-    {
-      id: 3,
-      src: 'https://images.pexels.com/photos/2549018/pexels-photo-2549018.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      alt: 'Thai Temple',
-    },
-    {
-      id: 4,
-      src: 'https://images.pexels.com/photos/2506920/pexels-photo-2506920.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      alt: 'Bangkok Skyline',
-    }
-  ];
-
-  const openLightbox = (src: string) => {
-    setSelectedImage(src);
+  const openSlideshow = (category: GalleryCategory) => {
+    setSelectedCategory(category);
+    setSelectedIndex(0);
   };
 
-  const closeLightbox = () => {
-    setSelectedImage(null);
+  const closeSlideshow = () => {
+    setSelectedCategory(null);
+  };
+
+  const showNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!selectedCategory) return;
+    setSelectedIndex((prev) => (prev + 1) % selectedCategory.images.length);
+  };
+
+  const showPrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!selectedCategory) return;
+    setSelectedIndex((prev) =>
+      (prev - 1 + selectedCategory.images.length) % selectedCategory.images.length
+    );
   };
 
   return (
@@ -54,43 +63,82 @@ const Gallery: React.FC = () => {
             {t('gallerySubtitle')}
           </p>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {images.map((image, index) => (
-            <div 
-              key={image.id}
-              className="overflow-hidden rounded-lg shadow-md cursor-pointer transform transition-transform duration-300 hover:scale-105"
-              data-aos="fade-up"
-              data-aos-delay={index * 50}
-              onClick={() => openLightbox(image.src)}
-            >
-              <img 
-                src={image.src} 
-                alt={image.alt} 
-                className="w-full h-64 object-cover"
-              />
+
+        {/* Category Thumbnails */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {galleryData.galleries.map((cat) => (
+            <div key={cat.id} className="text-center">
+              <div
+                className="relative overflow-hidden rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
+                data-aos="fade-up"
+                onClick={() => openSlideshow(cat as GalleryCategory)}
+              >
+                <img
+                  src={cat.images[0].url}
+                  alt={language === 'id' ? cat.nameId : cat.nameEn}
+                  className="w-full h-64 object-cover"
+                />
+                {/* Logo Overlay */}
+                <img
+                  src={sptLogo}
+                  alt="logo"
+                  className="absolute top-2 right-2 w-8 h-8 opacity-90"
+                />
+              </div>
+              <h3 className="mt-4 text-xl font-semibold text-gray-800">
+                {language === 'id' ? cat.nameId : cat.nameEn}
+              </h3>
             </div>
           ))}
         </div>
-        
-        {/* Lightbox */}
-        {selectedImage && (
-          <div 
+
+        {/* Slideshow Lightbox */}
+        {selectedCategory && (
+          <div
             className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
-            onClick={closeLightbox}
+            onClick={closeSlideshow}
           >
-            <div className="relative max-w-4xl max-h-screen p-4">
-              <button 
+            <div className="relative max-w-3xl max-h-screen p-4">
+              <button
                 className="absolute top-4 right-4 text-white text-2xl"
-                onClick={closeLightbox}
+                onClick={closeSlideshow}
               >
                 &times;
               </button>
-              <img 
-                src={selectedImage} 
-                alt="Enlarged view" 
-                className="max-w-full max-h-[90vh] object-contain"
-              />
+
+              <div className="relative">
+                <img
+                  src={selectedCategory.images[selectedIndex].url}
+                  alt={
+                    language === 'id'
+                      ? selectedCategory.images[selectedIndex].captionId
+                      : selectedCategory.images[selectedIndex].captionEn
+                  }
+                  className="max-w-full max-h-[80vh] object-contain mx-auto"
+                />
+                {/* Logo Overlay in Slideshow */}
+                <img
+                  src={sptLogo}
+                  alt="logo"
+                  className="absolute top-2 right-2 w-12 h-12 opacity-90"
+                />
+              </div>
+
+              {/* Previous Button */}
+              <button
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
+                onClick={showPrev}
+              >
+                ‹
+              </button>
+
+              {/* Next Button */}
+              <button
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
+                onClick={showNext}
+              >
+                ›
+              </button>
             </div>
           </div>
         )}

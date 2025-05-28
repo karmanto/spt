@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
         >
           <a 
             href="#packages" 
-            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-blue-700 transition-colors duration-300"
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
           >
             {t('viewPackages')}
           </a>
@@ -42,7 +42,7 @@ const Hero: React.FC = () => {
             href="https://wa.me/123456789?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100 transition-colors duration-300"
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#25d366] hover:bg-[#13a033] transition-colors duration-300"
           >
             {t('contactAdmin')}
           </a>
