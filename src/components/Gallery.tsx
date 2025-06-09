@@ -1,4 +1,8 @@
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import React, { useState } from 'react';
+import Slider from 'react-slick';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
 import sptLogo from '/spt_logo2.png';
@@ -45,17 +49,43 @@ const Gallery: React.FC = () => {
     );
   };
 
+  // Pengaturan carousel react-slick
+  const sliderSettings = {
+    infinite: true,
+    speed: 10000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 0,
+    cssEase: 'linear',
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 640,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <section id="gallery" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 
+          <h2
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
           >
             {t('galleryTitle')}
           </h2>
-          <p 
+          <p
             className="text-lg text-gray-600 max-w-3xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
@@ -64,32 +94,33 @@ const Gallery: React.FC = () => {
           </p>
         </div>
 
-        {/* Category Thumbnails */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {galleryData.galleries.map((cat) => (
-            <div key={cat.id} className="text-center">
-              <div
-                className="relative overflow-hidden rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
-                data-aos="fade-up"
-                onClick={() => openSlideshow(cat as GalleryCategory)}
-              >
-                <img
-                  src={cat.images[0].url}
-                  alt={language === 'id' ? cat.nameId : cat.nameEn}
-                  className="w-full h-64 object-cover"
-                />
-                {/* Logo Overlay */}
-                <img
-                  src={sptLogo}
-                  alt="logo"
-                  className="absolute top-2 right-2 w-8 h-8 opacity-90"
-                />
+        {/* Carousel Category */}
+        <div data-aos="fade-up">
+          <Slider {...sliderSettings}>
+            {galleryData.galleries.map((cat) => (
+              <div key={cat.id} className="px-2">
+                <div
+                  className="relative overflow-hidden rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
+                  onClick={() => openSlideshow(cat as GalleryCategory)}
+                >
+                  <img
+                    src={cat.images[0].url}
+                    alt={language === 'id' ? cat.nameId : cat.nameEn}
+                    className="w-full h-64 object-cover"
+                  />
+                  {/* Logo Overlay */}
+                  <img
+                    src={sptLogo}
+                    alt="logo"
+                    className="absolute top-2 right-2 w-8 h-8 opacity-90"
+                  />
+                </div>
+                <h3 className="mt-4 text-xl font-semibold text-gray-800 text-center">
+                  {language === 'id' ? cat.nameId : cat.nameEn}
+                </h3>
               </div>
-              <h3 className="mt-4 text-xl font-semibold text-gray-800">
-                {language === 'id' ? cat.nameId : cat.nameEn}
-              </h3>
-            </div>
-          ))}
+            ))}
+          </Slider>
         </div>
 
         {/* Slideshow Lightbox */}

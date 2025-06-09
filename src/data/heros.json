@@ -1,0 +1,59 @@
+{
+  "heros": [
+    {
+      "image": "/hero1.jpg",
+      "heroTitle": {
+        "en": "Trusted Travel Experts in Thailand",
+        "id": "Ahli Perjalanan Terpercaya di Thailand"
+      },
+      "heroSubtitle": {
+        "en": "Discover Thailand with confidence! We provide curated travel experiences in Phuket, Krabi, and Bangkok — with seamless planning, expert local teams, and a focus on comfort, fun, and flexibility.",
+        "id": "Jelajahi Thailand dengan percaya diri! Kami menyediakan pengalaman perjalanan terkurasi di Phuket, Krabi, dan Bangkok — dengan perencanaan mudah, tim lokal ahli, dan fokus pada kenyamanan, kesenangan, serta fleksibilitas."
+      }
+    },
+    {
+      "image": "/hero2.jpg",
+      "heroTitle": {
+        "en": "Explore the Best of Phuket, Krabi & Bangkok",
+        "id": "Jelajahi Terbaik Phuket, Krabi & Bangkok"
+      },
+      "heroSubtitle": {
+        "en": "From island hopping in Phuket and Krabi to city sightseeing in Bangkok, our tours combine natural beauty, cultural gems, and local flavors. Choose from private trips, small groups, or custom-made itineraries.",
+        "id": "Dari island hopping di Phuket dan Krabi hingga city sightseeing di Bangkok, tur kami menggabungkan keindahan alam, situs budaya, dan cita rasa lokal. Pilih perjalanan privat, kelompok kecil, atau itinerary kustom."
+      }
+    },
+    {
+      "image": "/hero3.jpg",
+      "heroTitle": {
+        "en": "Day Trips, Transfers & Group Tours — All Made Easy",
+        "id": "Perjalanan Sehari, Transfer & Tur Grup — Semua Menjadi Mudah"
+      },
+      "heroSubtitle": {
+        "en": "Whether it’s a one-day island tour, airport transfer, or a full week of adventure, we make travel stress-free. Our friendly local guides and team handle everything from start to finish.",
+        "id": "Apakah itu tur pulau sehari, transfer bandara, atau petualangan seminggu penuh, kami membuat perjalanan bebas stres. Pemandu lokal ramah dan tim kami menangani semuanya dari awal hingga akhir."
+      }
+    },
+    {
+      "image": "/hero4.jpg",
+      "heroTitle": {
+        "en": "Quality Hotels, Great Food & Smooth Itineraries",
+        "id": "Hotel Berkualitas, Makanan Lezat & Itinerary Lancar"
+      },
+      "heroSubtitle": {
+        "en": "We partner with trusted hotels, select popular dining spots, and build efficient schedules—so you can relax and enjoy every moment. Special needs or preferences? Just let us know!",
+        "id": "Kami bermitra dengan hotel terpercaya, memilih tempat makan populer, dan menyusun jadwal efisien—agar Anda dapat bersantai dan menikmati setiap momen. Kebutuhan khusus atau preferensi? Beri tahu kami saja!"
+      }
+    },
+    {
+      "image": "/hero5.jpg",
+      "heroTitle": {
+        "en": "Quick Booking & Friendly Support from a Local Team",
+        "id": "Pemesan Cepat & Dukungan Ramah dari Tim Lokal"
+      },
+      "heroSubtitle": {
+        "en": "Fast responses, flexible arrangements, and real people you can talk to. Our experienced Indonesia-managed team in Thailand is here to make your travel planning easy and enjoyable—right from your first message.",
+        "id": "Respons cepat, pengaturan fleksibel, dan orang nyata yang bisa Anda ajak bicara. Tim berpengalaman yang dikelola dari Indonesia di Thailand siap mempermudah dan menyenangkan perencanaan perjalanan Anda—mulai dari pesan pertama."
+      }
+    }
+  ]
+}

@@ -14,14 +14,6 @@ export const translations = {
     viewPackages: 'Lihat Paket Tour',
     contactAdmin: 'Tanya Admin via WhatsApp',
     
-    // Promo Section
-    promoTitle: 'FLASH SALE | Promo Paket Tour Terbatas Minggu Ini!',
-    promoSubtitle: 'Jangan lewatkan kesempatan emas liburan ke Thailand dengan harga spesial!',
-    limitedTime: 'Waktu Terbatas',
-    spotsLeft: 'Tersisa',
-    bestSeller: 'Terlaris',
-    bookNow: 'Pesan Sekarang',
-    
     // Countdown
     endsIn: 'Berakhir dalam',
     days: 'Hari',
