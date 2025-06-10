@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://simbolonphuket.com/sitemap.xml

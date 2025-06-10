@@ -16,14 +16,38 @@ import { LanguageProvider } from './context/LanguageContext';
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // SEO disini
+  // SEO here: Dynamic meta tags and structured data updates
   useEffect(() => {
-    document.title = 'Simbolon Phuket Tour - Halal & Comfortable Travel in Thailand';
+    // SEO here: Set page title dynamically
+    document.title = 'Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi';
     
+    // SEO here: Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries.');
+      metaDescription.setAttribute('content', 'Simbolon Phuket Tour - Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries for Phuket, Bangkok, Krabi, and Phi Phi Island.');
     }
+
+    // SEO here: Add hreflang for multilingual support
+    const existingHreflang = document.querySelectorAll('link[hreflang]');
+    existingHreflang.forEach(link => link.remove());
+
+    const hreflangEn = document.createElement('link');
+    hreflangEn.rel = 'alternate';
+    hreflangEn.hreflang = 'en';
+    hreflangEn.href = 'https://simbolonphukettour.com/';
+    document.head.appendChild(hreflangEn);
+
+    const hreflangId = document.createElement('link');
+    hreflangId.rel = 'alternate';
+    hreflangId.hreflang = 'id';
+    hreflangId.href = 'https://simbolonphukettour.com/';
+    document.head.appendChild(hreflangId);
+
+    const hreflangDefault = document.createElement('link');
+    hreflangDefault.rel = 'alternate';
+    hreflangDefault.hreflang = 'x-default';
+    hreflangDefault.href = 'https://simbolonphukettour.com/';
+    document.head.appendChild(hreflangDefault);
   }, []);
 
   const toggleMobileMenu = () => {
@@ -33,8 +57,9 @@ function App() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-white">
+        {/* SEO here: Semantic HTML structure with proper heading hierarchy */}
         <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
-        <main>
+        <main role="main">
           <Hero />
           <PromoSection />
           <TopPackages />

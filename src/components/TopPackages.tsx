@@ -10,6 +10,7 @@ const TopPackages: React.FC = () => {
     <section id="packages" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
+          {/* SEO here: H2 heading with keywords for section structure */}
           <h2 
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
@@ -25,39 +26,53 @@ const TopPackages: React.FC = () => {
           </p>
         </div>
         
+        {/* SEO here: Structured data for tour packages */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {packages.map((pkg, index) => {
             const title = language === 'id' ? pkg.titleId : pkg.titleEn;
             const description = language === 'id' ? pkg.descriptionId : pkg.descriptionEn;
 
             return (
-              <div 
+              <article 
                 key={pkg.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
+                // SEO here: Microdata for tour package
+                itemScope
+                itemType="https://schema.org/TouristTrip"
               >
                 <div className="relative h-56 overflow-hidden">
+                  {/* SEO here: Optimized image with proper alt text */}
                   <img 
                     src={pkg.image} 
-                    alt={title}
+                    alt={`${title} - ${description} | Simbolon Phuket Tour`}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    loading="lazy"
+                    decoding="async"
+                    itemProp="image"
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
-                  <p className="text-gray-600 mb-4">{description}</p>
+                  {/* SEO here: H3 heading for package title */}
+                  <h3 className="text-xl font-bold text-gray-900 mb-2" itemProp="name">{title}</h3>
+                  <p className="text-gray-600 mb-4" itemProp="description">{description}</p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-blue-600">{pkg.price}</span>
+                    {/* SEO here: Price with structured data */}
+                    <span className="text-lg font-bold text-blue-600" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                      <span itemProp="price">{pkg.price}</span>
+                      <meta itemProp="priceCurrency" content="IDR" />
+                    </span>
                     <a 
                       href={`#package-${pkg.id}`} 
                       className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 transition-colors duration-300"
+                      aria-label={`View details for ${title} tour package`}
                     >
                       {t('viewDetail')}
                     </a>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>

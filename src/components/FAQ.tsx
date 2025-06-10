@@ -26,6 +26,7 @@ const FAQ: React.FC = () => {
     <section id="faq" className="py-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
+          {/* SEO here: H2 heading for FAQ section */}
           <h2 
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
@@ -41,19 +42,27 @@ const FAQ: React.FC = () => {
           </p>
         </div>
         
-        <div className="space-y-4">
+        {/* SEO here: FAQ structured data */}
+        <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
           {displayedFaqs.map((faq, index) => (
             <div 
               key={faq.id}
               className="border border-gray-200 rounded-lg overflow-hidden"
               data-aos="fade-up"
               data-aos-delay={index * 100}
+              itemScope
+              itemType="https://schema.org/Question"
             >
               <button
                 className="flex justify-between items-center w-full px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors duration-200"
                 onClick={() => toggleAccordion(index)}
+                aria-expanded={openIndex === index}
+                aria-controls={`faq-answer-${faq.id}`}
               >
-                <span className="text-lg font-medium text-gray-900">{getQuestion(faq)}</span>
+                {/* SEO here: Question with structured data */}
+                <span className="text-lg font-medium text-gray-900" itemProp="name">
+                  {getQuestion(faq)}
+                </span>
                 <svg
                   className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
                     openIndex === index ? 'rotate-180' : ''
@@ -62,6 +71,7 @@ const FAQ: React.FC = () => {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -76,8 +86,14 @@ const FAQ: React.FC = () => {
                 className={`transition-all duration-300 overflow-hidden ${
                   openIndex === index ? 'max-h-96 py-4' : 'max-h-0 py-0'
                 }`}
+                id={`faq-answer-${faq.id}`}
+                itemScope
+                itemType="https://schema.org/Answer"
               >
-                <div className="px-6 text-gray-600">{getAnswer(faq)}</div>
+                {/* SEO here: Answer with structured data */}
+                <div className="px-6 text-gray-600" itemProp="text">
+                  {getAnswer(faq)}
+                </div>
               </div>
             </div>
           ))}
@@ -88,6 +104,7 @@ const FAQ: React.FC = () => {
             <button
               onClick={() => setShowAll(!showAll)}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors duration-300"
+              aria-label={showAll ? 'Show fewer FAQ items' : 'Show more FAQ items'}
             >
               {showAll ? t('show less') : t('show more')}
             </button>

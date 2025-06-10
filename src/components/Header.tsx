@@ -42,12 +42,22 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
       className={`fixed w-full z-50 transition-all duration-300 ${
         scrolled || mobileMenuOpen ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
+      // SEO here: ARIA role for navigation
+      role="banner"
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-4">
         <div className="flex justify-between items-center md:space-x-4">
           <div className="flex justify-start">
-            <a href="#" className="flex items-center">
-              <img src={logoUrl} alt="Simbolon Phuket Tour" className="h-16 w-auto" />
+            {/* SEO here: Logo with proper alt text and structured data */}
+            <a href="#" className="flex items-center" aria-label="Simbolon Phuket Tour Homepage">
+              <img 
+                src={logoUrl} 
+                alt="Simbolon Phuket Tour - Halal Thailand Tours with Indonesian Guide" 
+                className="h-16 w-auto"
+                // SEO here: Image loading optimization
+                loading="eager"
+                decoding="async"
+              />
             </a>
           </div>
 
@@ -57,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               className={`flex items-center p-2 mr-2 rounded-md transition-colors ${
                 scrolled || mobileMenuOpen ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
               }`}
-              aria-label="Toggle language"
+              aria-label={`Switch to ${language === 'id' ? 'English' : 'Indonesian'} language`}
             >
               <span className={`fi fi-${flagCode} h-5 w-5 mr-[5px]`} />
               <span className={`ml-1 text-sm font-medium ${scrolled || mobileMenuOpen ? 'text-black' : 'text-white'}`}>{language.toUpperCase()}</span>
@@ -70,13 +80,14 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
                   : 'text-white hover:text-blue-200'
               }`}
               aria-expanded={mobileMenuOpen}
-              aria-label="Toggle menu"
+              aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          <nav className="hidden md:flex space-x-8">
+          {/* SEO here: Navigation with proper semantic structure */}
+          <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
             {navLinks.map((link) => (
               <a
                 key={link.name}
@@ -86,6 +97,8 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
                     ? 'text-gray-700 hover:text-[#102D5E]'
                     : 'text-white hover:text-blue-200'
                 }`}
+                // SEO here: Descriptive aria-label for navigation links
+                aria-label={`Navigate to ${link.name} section`}
               >
                 {link.name}
               </a>
@@ -98,7 +111,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               className={`flex items-center p-2 rounded-md transition-colors ${
                 scrolled ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
               }`}
-              aria-label="Toggle language"
+              aria-label={`Switch to ${language === 'id' ? 'English' : 'Indonesian'} language`}
             >
               <span className={`fi fi-${flagCode} h-6 w-6 mr-[5px]`} />
               <span className={`ml-1 text-sm font-medium ${scrolled || mobileMenuOpen ? 'text-black' : 'text-white'}`}>{language.toUpperCase()}</span>
@@ -107,19 +120,21 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
         </div>
       </div>
 
+      {/* SEO here: Mobile navigation with proper accessibility */}
       <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-white shadow-lg`}>
-        <div className="pt-2 pb-4 space-y-1 px-4">
+        <nav className="pt-2 pb-4 space-y-1 px-4" role="navigation" aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               className="block py-2 text-base font-medium text-gray-700 hover:text-[#102D5E]"
               onClick={toggleMobileMenu}
+              aria-label={`Navigate to ${link.name} section`}
             >
               {link.name}
             </a>
           ))}
-        </div>
+        </nav>
       </div>
     </header>
   );
