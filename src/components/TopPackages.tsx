@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { packages } from '../data/packages.json';
 
 const TopPackages: React.FC = () => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <section id="packages" className="py-16 bg-white">
@@ -14,16 +14,14 @@ const TopPackages: React.FC = () => {
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
           >
-            {language === 'id' ? 'Paket Terpopuler' : 'Top Packages'}
+            {t('topPackages')}
           </h2>
           <p 
             className="text-lg text-gray-600 max-w-3xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            {language === 'id' 
-              ? 'Temukan paket perjalanan terbaik kami untuk pengalaman tak terlupakan.' 
-              : 'Discover our best travel packages for unforgettable experiences.'}
+            {t('topPackagesDetail')}
           </p>
         </div>
         
@@ -55,7 +53,7 @@ const TopPackages: React.FC = () => {
                       href={`#package-${pkg.id}`} 
                       className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 transition-colors duration-300"
                     >
-                      {language === 'id' ? 'Lihat Detail' : 'View Details'}
+                      {t('viewDetail')}
                     </a>
                   </div>
                 </div>

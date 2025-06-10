@@ -10,7 +10,6 @@ import AboutSection from './components/AboutSection';
 import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
-import PromoPopup from './components/PromoPopup';
 import WhatsAppButton from './components/WhatsAppButton';
 import { LanguageProvider } from './context/LanguageContext';
 
@@ -47,7 +46,6 @@ function App() {
         </main>
         <Footer />
         <WhatsAppButton />
-        <PromoPopup />
       </div>
     </LanguageProvider>
   );

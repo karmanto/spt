@@ -5,7 +5,7 @@ const WhatsAppButton: React.FC = () => {
   const { t } = useLanguage();
   
   const message = encodeURIComponent(t('whatsappMessage'));
-  const whatsappUrl = `https://wa.me/123456789?text=${message}`;
+  const whatsappUrl = `https://wa.me/6281363878631?text=${message}`;
 
   return (
     <a

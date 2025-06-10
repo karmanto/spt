@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent(prev => (prev + 1) % length);
-    }, 5000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [length]);
 
@@ -25,20 +25,20 @@ const Hero: React.FC = () => {
       <div className="absolute inset-0 bg-black bg-opacity-50" />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
         <h1
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4"
+          className="text-4xl sm:text-3xl md:text-6xl text-center font-bold text-white leading-tight mb-4"
           data-aos="fade-up"
         >
           {language === 'id' ? slide.heroTitle.id : slide.heroTitle.en}
         </h1>
         <p
-          className="text-xl sm:text-2xl text-white mb-8 max-w-3xl"
+          className="text-xl sm:text-2xl text-white text-center mb-8"
           data-aos="fade-up"
           data-aos-delay="100"
         >
           {language === 'id' ? slide.heroSubtitle.id : slide.heroSubtitle.en}
         </p>
         <div
-          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center sm:justify-start"
+          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center"
           data-aos="fade-up"
           data-aos-delay="200"
         >
@@ -46,15 +46,15 @@ const Hero: React.FC = () => {
             href="#packages"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
           >
-            {language === 'id' ? 'Lihat Paket' : 'View Packages'}
+            {t('viewPackages')}
           </a>
           <a
-            href="https://wa.me/123456789?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda"
+            href="https://wa.me/6281363878631?text=Halo%20Admin%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#25d366] hover:bg-[#13a033] transition-colors duration-300"
           >
-            {language === 'id' ? 'Hubungi Admin' : 'Contact Admin'}
+            {t('contactAdmin')}
           </a>
         </div>
       </div>

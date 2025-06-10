@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Slider from 'react-slick';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
-import sptLogo from '/spt_logo2.png';
+import sptLogo from '/spt_logo.png';
 
 interface GalleryImage {
   id: number;
@@ -112,7 +112,7 @@ const Gallery: React.FC = () => {
                   <img
                     src={sptLogo}
                     alt="logo"
-                    className="absolute top-2 right-2 w-8 h-8 opacity-90"
+                    className="absolute top-2 right-2 w-8 h-8 opacity-90 rounded-full bg-white"
                   />
                 </div>
                 <h3 className="mt-4 text-xl font-semibold text-gray-800 text-center">
@@ -151,7 +151,7 @@ const Gallery: React.FC = () => {
                 <img
                   src={sptLogo}
                   alt="logo"
-                  className="absolute top-2 right-2 w-12 h-12 opacity-90"
+                  className="absolute top-2 right-2 w-12 h-12 opacity-90 rounded-full bg-white"
                 />
               </div>
 

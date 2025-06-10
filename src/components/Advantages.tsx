@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Globe, Heart } from 'lucide-react';
+import { Globe } from 'lucide-react';
 
 const Advantages: React.FC = () => {
   const { t } = useLanguage();
@@ -126,7 +126,7 @@ const Advantages: React.FC = () => {
         >
           <h3 className="text-2xl font-bold mb-4">{t('stillConfused')}</h3>
           <a 
-            href="https://wa.me/123456789?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda" 
+            href="https://wa.me/6281363878631?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100 transition-colors duration-300"

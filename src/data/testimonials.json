@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Indri",
+    "location": "Pekanbaru",
+    "comment_id": "SPT pilihan tepat! Hotel bersih, guide ramah dan berpengalaman, sopir profesional. Liburan jadi tak terlupakan. Terima kasih SPT! 🫶🏻",
+    "comment_en": "SPT was the right choice! Clean hotel, amazing guide, professional driver. An unforgettable trip. Thank you, SPT! 🫶🏻",
+    "rating": 5,
+    "image": "/testimoni-indri.jpeg"
+  },
+  {
+    "id": 2,
+    "name": "Ernest",
+    "location": "Jakarta",
+    "comment_id": "Owner-nya sangat membantu dan ramah, benar-benar memudahkan setiap kebutuhan kami selama perjalanan. Pelayanan yang diberikan sangat memuaskan. Kalau ke Thailand lagi, saya pasti akan menggunakan jasa mereka kembali. Terima kasih banyak, Simbolon Phuket Tour!",
+    "comment_en": "The owner was incredibly helpful and friendly, making everything we needed during our trip so much easier. The service provided was truly satisfying. I’ll definitely use their services again the next time I visit Thailand. Thank you so much, Simbolon Phuket Tour!",
+    "rating": 5,
+    "image": "/testimoni-ernest.jpeg"
+  },
+  {
+    "id": 3,
+    "name": "Dina",
+    "location": "Medan",
+    "comment_id": "Simbolon Phuket Tour adalah pilihan yang tepat untuk bepergian. Mereka menyediakan berbagai fasilitas dan informasi yang sangat membantu. Harganya juga terjangkau. Saya akan terus memilih SPT setiap kali berkunjung ke Bangkok!",
+    "comment_en": "Simbolon Phuket Tour is a great choice for traveling. They offer a wide range of facilities and helpful information. The price is also very affordable. I’ll definitely travel with SPT again and again when visiting Bangkok!",
+    "rating": 5,
+    "image": "/testimoni-dina.jpeg"
+  }
+]

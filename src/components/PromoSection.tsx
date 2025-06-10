@@ -5,7 +5,7 @@ import { promos } from '../data/promos.json';
 import { CountdownState } from '../utils/types';
 
 const PromoSection: React.FC = () => {
-  const { language } = useLanguage();
+  const { t } = useLanguage();
   const [countdowns, setCountdowns] = useState<{ [key: number]: CountdownState }>({});
 
   useEffect(() => {
@@ -38,15 +38,13 @@ const PromoSection: React.FC = () => {
     <section id="promo" className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#102d5e] mb-4">
-            {language === 'id' ? 'Promo Terbatas' : 'Limited Time Offers'}
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            {language === 'id' 
-              ? 'Nikmati penawaran spesial kami dengan diskon eksklusif hanya untuk waktu terbatas.' 
-              : 'Enjoy our special offers with exclusive discounts for limited time only.'}
-          </p>
-        </div>
+        <h2 className="text-3xl sm:text-4xl font-bold text-[#102d5e] mb-4">
+          {t('promoDesc1')}
+        </h2>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          {t('promoDesc2')}
+        </p>
+      </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {promos.map((promo) => (

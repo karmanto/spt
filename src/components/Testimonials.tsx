@@ -1,35 +1,9 @@
 import React from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '../context/LanguageContext'; // Pastikan ini sesuai path Anda
+import testimonialsData from '../data/testimonials.json'; // Sesuaikan path jika berbeda
 
 const Testimonials: React.FC = () => {
-  const { t } = useLanguage();
-
-  const testimonials = [
-    {
-      id: 1,
-      name: 'Agus Priyanto',
-      location: 'Jakarta',
-      comment: 'Perjalanan yang luar biasa! Guide nya sangat ramah dan membantu. Tempat-tempat yang dikunjungi indah dan makanannya halal. Pasti akan kembali lagi!',
-      rating: 5,
-      image: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1600'
-    },
-    {
-      id: 2,
-      name: 'Siti Nurhaliza',
-      location: 'Surabaya',
-      comment: 'Saya sangat senang dengan paket tour SPT. Guide berbahasa Indonesia memudahkan komunikasi dan spot foto yang direkomendasikan keren-keren!',
-      rating: 5,
-      image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1600'
-    },
-    {
-      id: 3,
-      name: 'Budi Santoso',
-      location: 'Bandung',
-      comment: 'Tour yang sangat worth it! Custom itinerary sesuai permintaan dan admin sangat responsif. Pelayanan prima dan profesional!',
-      rating: 5,
-      image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=1600'
-    },
-  ];
+  const { t, language } = useLanguage(); // Dapatkan bahasa aktif ('id' atau 'en')
 
   return (
     <section className="py-16 bg-blue-50">
@@ -39,19 +13,19 @@ const Testimonials: React.FC = () => {
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
           >
-            {t('testimonialsTitle')}
+            {t('testimoni')}
           </h2>
           <p 
             className="text-lg text-gray-600 max-w-3xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            {t('testimonialsSubtitle')}
+            {t('testimoniDetail')}
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+          {testimonialsData.map((testimonial, index) => (
             <div 
               key={testimonial.id}
               className="bg-white p-6 rounded-lg shadow-md"
@@ -82,7 +56,9 @@ const Testimonials: React.FC = () => {
                   </svg>
                 ))}
               </div>
-              <p className="text-gray-700 italic">"{testimonial.comment}"</p>
+              <p className="text-gray-700 italic">
+                "{language === 'id' ? testimonial.comment_id : testimonial.comment_en}"
+              </p>
             </div>
           ))}
         </div>

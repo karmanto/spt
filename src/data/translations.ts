@@ -9,8 +9,6 @@ export const translations = {
     faq: 'FAQ',
     
     // Hero
-    heroTitle: 'Liburan Halal & Nyaman di Thailand, Khusus untuk Traveler Indonesia',
-    heroSubtitle: 'Paket Tour Phuket, Krabi & Bangkok | Bisa Private & Group | Local Expert',
     viewPackages: 'Lihat Paket Tour',
     contactAdmin: 'Tanya Admin via WhatsApp',
     
@@ -20,15 +18,6 @@ export const translations = {
     hours: 'Jam',
     minutes: 'Menit',
     seconds: 'Detik',
-    
-    // Top Packages
-    topPackagesTitle: 'Paket Tour Favorit Traveler Indonesia',
-    topPackagesSubtitle: 'Pilihan terbaik untuk menikmati keindahan Thailand',
-    viewDetails: 'Lihat Detail',
-    
-    // Testimonials
-    testimonialsTitle: 'Kenapa Mereka Pilih Simbolon Phuket Tour?',
-    testimonialsSubtitle: 'Lebih dari 12.000+ Klien Puas',
     
     // Advantages
     advantagesTitle: 'Kelebihan Simbolon Phuket Tour',
@@ -65,37 +54,6 @@ export const translations = {
     faqTitle: 'Pertanyaan yang Sering Diajukan',
     faqSubtitle: 'Temukan jawaban untuk pertanyaan-pertanyaan umum',
     
-    // Package Inclusions
-    packageInclusionsTitle: 'Paket Termasuk:',
-    transportation: 'Transportasi pribadi.',
-    guide: 'Pemandu berbahasa Inggris/Bahasa Indonesia.',
-    entranceTickets: 'Program tur dengan tiket masuk.',
-    meals: 'Makanan sesuai dengan program yang disebutkan.',
-    accommodation: 'Akomodasi dengan kamar twin atau double sharing dengan sarapan harian.',
-    tax: 'Pajak pemerintah, asuransi.',
-    guideTips: 'Tip untuk pemandu.',
-    notIncluded: 'Tidak Termasuk:',
-    personalExpenses: 'Pengeluaran pribadi lainnya.',
-    otherExpenses: 'Pengeluaran lainnya yang tidak disebutkan.',
-    
-    // Booking Policy
-    bookingPolicyTitle: 'Kebijakan Pemesanan:',
-    confirmation: '1. Reservasi akan dikonfirmasi setelah pembayaran dilakukan.',
-    reservationTime: '2. Perusahaan menerima reservasi 7 hari sebelum tanggal kedatangan atau tanggal mulai tur.',
-    childPolicy: '3. Anak tambahan dari semua kelompok usia akan dikenakan tarif dewasa.',
-    
-    // Cancellation Policy
-    cancellationPolicyTitle: 'Kebijakan Pembatalan:',
-    cancellationPolicySubtitle: 'Untuk perjalanan individu dan kelompok:',
-    over30days: 'Lebih dari 30 hari sebelum tur dimulai: Tidak ada biaya pembatalan (0% dikenakan).',
-    within15to29days: '15-29 hari sebelum tur dimulai: Dikenakan biaya 50% dari total harga.',
-    within1to14days: '1-14 hari sebelum tur dimulai: Dikenakan biaya 100% dari total harga.',
-    noShow: 'Tidak hadir (No-show): Dikenakan biaya 100% dari total harga.',
-    
-    // Additional Info
-    additionalInfoTitle: 'Informasi Tambahan:',
-    muslimPrayer: 'Doa Muslim di Masjid atau Ruang Doa di Restoran.',
-    
     // Footer
     allRightsReserved: 'Hak Cipta © 2025 Simbolon Phuket Tour. Seluruh Hak Dilindungi.',
     
@@ -103,6 +61,23 @@ export const translations = {
     stillConfused: 'Masih Bingung Pilih Paket yang Mana?',
     freeConsultation: 'Konsultasi Gratis Sekarang',
     whatsappMessage: 'Halo, saya tertarik dengan paket tour di SPT. Bisakah Anda membantu saya?',
+
+    //promo section
+    startFrom: 'Mulai dari',
+    dayRemaining: 'hari lagi',
+    bookNow: 'Pesan Sekarang',
+    promoDesc1: '🔥 Promo Spesial! Penawaran Eksklusif Menantimu!',
+    promoDesc2: 'Jangan sampai terlewat, klaim penawaran spesialmu sekarang juga!',
+
+    //testimoni
+    testimoni: 'Testimoni Pelanggan',
+    testimoniDetail: 'Apa kata pelanggan kami tentang pengalaman mereka?',
+
+    //top packages
+    topPackages: 'Paket Terpopuler',
+    topPackagesDetail: 'Temukan paket perjalanan terbaik kami untuk pengalaman tak terlupakan.',
+
+    viewDetail: 'Lihat Detail',
   },
   en: {
     // Header
@@ -119,29 +94,12 @@ export const translations = {
     viewPackages: 'View Tour Packages',
     contactAdmin: 'Contact Admin via WhatsApp',
     
-    // Promo Section
-    promoTitle: 'FLASH SALE | Limited Tour Package Promos This Week!',
-    promoSubtitle: 'Don\'t miss the golden opportunity to vacation in Thailand at special prices!',
-    limitedTime: 'Limited Time',
-    spotsLeft: 'Spots Left',
-    bestSeller: 'Best Seller',
-    bookNow: 'Book Now',
-    
     // Countdown
     endsIn: 'Ends in',
     days: 'Days',
     hours: 'Hours',
     minutes: 'Minutes',
     seconds: 'Seconds',
-    
-    // Top Packages
-    topPackagesTitle: 'Favorite Tour Packages for Indonesian Travelers',
-    topPackagesSubtitle: 'The best choices to enjoy the beauty of Thailand',
-    viewDetails: 'View Details',
-    
-    // Testimonials
-    testimonialsTitle: 'Why They Choose Simbolon Phuket Tour?',
-    testimonialsSubtitle: 'More than 12,000+ Satisfied Clients',
     
     // Advantages
     advantagesTitle: 'Advantages of Simbolon Phuket Tour',
@@ -177,37 +135,6 @@ export const translations = {
     faqTitle: 'Frequently Asked Questions',
     faqSubtitle: 'Find answers to common questions',
     
-    // Package Inclusions
-    packageInclusionsTitle: 'Package Includes:',
-    transportation: 'Private transportation.',
-    guide: 'English/Indonesian speaking guide.',
-    entranceTickets: 'Tour program with entrance tickets.',
-    meals: 'Meals as mentioned in the program.',
-    accommodation: 'Accommodation with twin or double sharing room with daily breakfast.',
-    tax: 'Government tax, insurance.',
-    guideTips: 'Tips for the guide.',
-    notIncluded: 'Not Included:',
-    personalExpenses: 'Other personal expenses.',
-    otherExpenses: 'Other expenses not mentioned.',
-    
-    // Booking Policy
-    bookingPolicyTitle: 'Booking Policy:',
-    confirmation: '1. Reservation will be confirmed after payment is made.',
-    reservationTime: '2. The company accepts reservations 7 days before the arrival date or tour start date.',
-    childPolicy: '3. Additional children of all age groups will be charged at adult rates.',
-    
-    // Cancellation Policy
-    cancellationPolicyTitle: 'Cancellation Policy:',
-    cancellationPolicySubtitle: 'For individual and group travel:',
-    over30days: 'More than 30 days before the tour starts: No cancellation fee (0% charged).',
-    within15to29days: '15-29 days before the tour starts: 50% of the total price is charged.',
-    within1to14days: '1-14 days before the tour starts: 100% of the total price is charged.',
-    noShow: 'No-show: 100% of the total price is charged.',
-    
-    // Additional Info
-    additionalInfoTitle: 'Additional Information:',
-    muslimPrayer: 'Muslim prayer at the Mosque or Prayer Room in the Restaurant.',
-    
     // Footer
     allRightsReserved: 'Copyright © 2025 Simbolon Phuket Tour. All Rights Reserved.',
     
@@ -215,5 +142,22 @@ export const translations = {
     stillConfused: 'Still Confused Which Package to Choose?',
     freeConsultation: 'Free Consultation Now',
     whatsappMessage: 'Hello, I\'m interested in SPT tour packages. Can you help me?',
+
+    //promo section
+    startFrom: 'Start from',
+    dayRemaining: 'days remaining',
+    bookNow: 'Book Now',
+    promoDesc1: '🔥 Flash Sale! Exclusive Offers Await!',
+    promoDesc2: 'Don\'t miss out—claim your special offers now!',
+
+    //testimoni
+    testimoni: 'Customer Testimonials',
+    testimoniDetail: 'What do our customers say about their experience?',
+
+    //top packages
+    topPackages: 'Top Packages',
+    topPackagesDetail: 'Discover our best travel packages for unforgettable experiences.',
+
+    viewDetail: 'View Detail',
   }
 };

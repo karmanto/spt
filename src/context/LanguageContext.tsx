@@ -24,7 +24,7 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('id');
+  const [language, setLanguage] = useState<Language>('en');
 
   const t = (key: string): string => {
     const translationKey = key as keyof typeof translations.id;

@@ -2,16 +2,42 @@
   "promos": [
     {
       "id": 1,
-      "titleId": "Wisata James Bond Island",
-      "titleEn": "James Bond Island Tour",
-      "descriptionId": "Nikmati keindahan alam James Bond Island dengan pemandu berbahasa Indonesia.",
-      "descriptionEn": "Enjoy the natural beauty of James Bond Island with Indonesian-speaking guides.",
-      "price": "Rp 1.500.000",
-      "oldPrice": "Rp 2.000.000",
+      "titleId": "4D3N BANGKOK – PATTAYA",
+      "titleEn": "4D3N BANGKOK – PATTAYA",
+      "descriptionId": "Nikmati 4 hari 3 malam di Bangkok dan Pattaya dengan pemandu berbahasa Indonesia.",
+      "descriptionEn": "Enjoy 4 days and 3 nights in Bangkok and Pattaya with Indonesian-speaking guide.",
+      "price": "THB 15,800",
+      "oldPrice": "THB 17,000",
       "image": "/promo1.jpeg",
-      "badge": "limitedTime",
-      "remaining": 5,
-      "endDate": "2026-04-01T00:00:00"
+      "remaining": 20,
+      "endDate": "2025-07-18T00:00:00",
+      "pdfUrl": "https://drive.google.com/file/d/1rMOd6B5Eks15yu-o6QuAuOll4BL2APCi/view?usp=drive_link"
+    },
+    {
+      "id": 2,
+      "titleId": "3D2N BANGKOK",
+      "titleEn": "3D2N BANGKOK",
+      "descriptionId": "Nikmati 3 hari 2 malam di Bangkok dengan pemandu berbahasa Indonesia.",
+      "descriptionEn": "Enjoy 3 days and 2 nights in Bangkok with Indonesian-speaking guide.",
+      "price": "THB 12,400",
+      "oldPrice": "THB 14,000",
+      "image": "/promo2.jpeg",
+      "remaining": 20,
+      "endDate": "2025-07-18T00:00:00",
+      "pdfUrl": "https://drive.google.com/file/d/1Npii7NzqIk4Pi73O1FYGct2E5ZnxL41p/view?usp=drive_link"
+    },
+    {
+      "id": 3,
+      "titleId": "4D3N PHUKET-PHI PHI ISLANDS",
+      "titleEn": "4D3N PHUKET-PHI PHI ISLANDS",
+      "descriptionId": "Nikmati 4 hari 3 malam di Phuket dan Phi Phi Islands dengan pemandu berbahasa Indonesia.",
+      "descriptionEn": "Enjoy 4 days and 3 nights in Phuket and Phi Phi Islands with Indonesian-speaking guide.",
+      "price": "THB 13,000",
+      "oldPrice": "THB 14,500",
+      "image": "/promo3.jpeg",
+      "remaining": 20,
+      "endDate": "2025-07-18T00:00:00",
+      "pdfUrl": "https://drive.google.com/file/d/15_d7HSEMkpsaXlA7HzTRZu9l2usnWvMh/view?usp=drive_link"
     }
   ]
 }

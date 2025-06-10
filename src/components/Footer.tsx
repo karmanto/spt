@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, Facebook, Twitter } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
 import { Instagram as IgIcon } from 'lucide-react'; // or use lucide-react’s Instagram icon
 import { SiYoutube, SiTiktok } from 'react-icons/si';
 import { useLanguage } from '../context/LanguageContext';
@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">{t('packages')}</h3>
             <ul className="space-y-2">
-              {['James Bond Island', 'Phi Phi Island', 'Phuket City Tour', 'Krabi Day Tour', 'Bangkok Floating Market'].map(item => (
+              {['James Bond Island', 'Phi Phi Island', 'Phuket City Tour'].map(item => (
                 <li key={item}>
                   <a href="#" className="text-gray-400 hover:text-white transition-colors">
                     {item}
@@ -85,6 +85,12 @@ const Footer: React.FC = () => {
                 <Phone size={20} className="mr-2 text-blue-400 flex-shrink-0" />
                 <a href="tel:+6281363878631" className="text-gray-400 hover:text-white transition-colors">
                   (+62) 813-6387-8631
+                </a>
+              </li>
+              <li className="flex items-center">
+                <Phone size={20} className="mr-2 text-blue-400 flex-shrink-0" />
+                <a href="tel:+6285275106059" className="text-gray-400 hover:text-white transition-colors">
+                  (+62) 852-7510-6059
                 </a>
               </li>
               {/* Email */}

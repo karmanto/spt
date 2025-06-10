@@ -15,9 +15,9 @@ export interface Promo {
   price: string;
   oldPrice: string;
   image: string;
-  badge: string;
   remaining: number;
   endDate: string;
+  pdfUrl: string;
 }
 
 export interface CountdownState {
