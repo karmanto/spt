@@ -2,45 +2,111 @@
   "faqs": [
     {
       "id": 1,
-      "questionId": "Apakah tour-nya halal?",
-      "questionEn": "Is the tour halal?",
-      "answerId": "Ya, semua paket tour kami menyediakan makanan halal dan kami juga menyediakan waktu untuk sholat di masjid atau ruang doa di restoran.",
-      "answerEn": "Yes, all our tour packages provide halal food and we also provide time for prayers at mosques or prayer rooms in restaurants."
+      "questionId": "Bagaimana metode pembayarannya?",
+      "questionEn": "How can I make a payment?",
+      "questionRu": "Как я могу произвести оплату?",
+      "answerId": "Pembayaran saat ini dapat dilakukan melalui rekening bank lokal Indonesia atau Thailand. Metode pembayaran online akan segera tersedia di website kami.",
+      "answerEn": "Currently, payment can be made via local bank transfers in Indonesia or Thailand. Online payment via our website will be available soon.",
+      "answerRu": "В настоящее время оплата возможна через местные банковские переводы в Индонезии или Таиланде. Онлайн-оплата через наш сайт будет доступна в ближайшее время."
     },
     {
       "id": 2,
-      "questionId": "Apakah bisa private tour?",
-      "questionEn": "Can I have a private tour?",
-      "answerId": "Tentu saja! Kami menyediakan opsi private tour untuk Anda yang ingin menikmati perjalanan dengan keluarga atau teman-teman secara eksklusif.",
-      "answerEn": "Absolutely! We provide private tour options for those who want to enjoy the journey with family or friends exclusively."
+      "questionId": "Kapan batas maksimal pemesanan Day Trip atau aktivitas wisata?",
+      "questionEn": "When is the latest time to book a Day Trip or activity?",
+      "questionRu": "Когда крайний срок бронирования однодневных туров или активностей?",
+      "answerId": "Maksimal 1–2 hari sebelum hari keberangkatan.",
+      "answerEn": "Booking must be made at least 1–2 days before the departure date.",
+      "answerRu": "Бронирование необходимо произвести минимум за 1–2 дня до даты начала тура."
     },
     {
       "id": 3,
-      "questionId": "Apakah ada jemputan dari bandara?",
-      "questionEn": "Is there airport pickup?",
-      "answerId": "Ya, kami menyediakan layanan jemputan dari bandara dengan biaya tambahan. Silakan hubungi kami untuk informasi lebih lanjut.",
-      "answerEn": "Yes, we provide airport pickup service at an additional cost. Please contact us for more information."
+      "questionId": "Apakah layanan ini halal atau Muslim-friendly?",
+      "questionEn": "Is this service halal or Muslim-friendly?",
+      "questionRu": "Подходит ли ваш тур для мусульман?",
+      "answerId": "Iya, semua layanan kami halal-friendly berdasarkan referensi dari tamu sebelumnya. Untuk yang ingin opsi non-halal, kami juga bisa menyesuaikan sesuai permintaan.",
+      "answerEn": "Yes, our services are halal-friendly based on feedback from past guests. For non-halal preferences, we can also adjust upon request.",
+      "answerRu": "Да, наши услуги соответствуют требованиям халяль. Также мы можем предложить альтернативные варианты по запросу."
     },
     {
       "id": 4,
-      "questionId": "Bagaimana cara pembayarannya?",
-      "questionEn": "How do I make a payment?",
-      "answerId": "Kami menerima pembayaran melalui transfer bank atau kartu kredit. Anda bisa membayar DP 20-50% terlebih dahulu dan melunasi sisanya saat kedatangan.",
-      "answerEn": "We accept payments via bank transfer or credit card. You can pay a 20-50% down payment first and pay the rest upon arrival."
+      "questionId": "Apakah ada layanan antar jemput dari bandara?",
+      "questionEn": "Is airport transfer service available?",
+      "questionRu": "Есть ли трансфер из аэропорта?",
+      "answerId": "Tersedia. Kendaraan kami bersih dan nyaman, dengan driver profesional. Silakan hubungi admin untuk titik penjemputan dan harga.",
+      "answerEn": "Yes. Our vehicles are clean and comfortable, with professional drivers. Please contact our admin for pickup points and pricing.",
+      "answerRu": "Да. У нас чистые и комфортные автомобили с профессиональными водителями. Свяжитесь с администратором для получения информации о местах встречи и ценах."
     },
     {
       "id": 5,
-      "questionId": "Berapa batas waktu pembatalan?",
-      "questionEn": "What is the cancellation deadline?",
-      "answerId": "Kebijakan pembatalan kami: lebih dari 30 hari sebelum tur dimulai (0% biaya), 15-29 hari (50% biaya), 1-14 hari (100% biaya).",
-      "answerEn": "Our cancellation policy: more than 30 days before the tour starts (0% fee), 15-29 days (50% fee), 1-14 days (100% fee)."
+      "questionId": "Bisa pesan tiket wisata seperti Phi Phi Island, James Bond Island, dan lainnya lewat SPT?",
+      "questionEn": "Can I book tourist attractions like Phi Phi Island, James Bond Island, and others through SPT?",
+      "questionRu": "Можно ли забронировать билеты на экскурсии, такие как остров Пхи-Пхи, остров Джеймса Бонда и другие, через SPT?",
+      "answerId": "Bisa! Kami bantu proses pemesanan dan jika ada kendala, guide lokal kami siap membantu di lokasi.",
+      "answerEn": "Yes! We assist with bookings, and our local guide will help on site in case of any issues.",
+      "answerRu": "Да! Мы поможем с бронированием, а наш местный гид окажет поддержку при необходимости."
     },
     {
       "id": 6,
-      "questionId": "Apakah guide berbahasa Indonesia?",
-      "questionEn": "Do you have Indonesian-speaking guides?",
-      "answerId": "Ya, semua paket tour kami dilengkapi dengan guide asli Indonesia yang ramah, informatif dan siap membantu Anda selama perjalanan.",
-      "answerEn": "Yes, all our tour packages come with native Indonesian guides who are friendly, informative and ready to assist you during your journey."
+      "questionId": "Berapa besar DP untuk program custom dan paket wisata?",
+      "questionEn": "How much is the Down Payment (DP) for custom and tour packages?",
+      "questionRu": "Сколько составляет предоплата за тур или индивидуальную программу?",
+      "answerId": "Program custom: DP 20% di awal, pelunasan saat hari H. Paket All-In: DP 50%, pelunasan 7–10 hari sebelum keberangkatan.",
+      "answerEn": "Custom program: 20% DP upfront, the rest on the day of the tour. All-in packages: 50% DP, full payment 7–10 days before departure.",
+      "answerRu": "Индивидуальная программа: 20% предоплата, остальная сумма оплачивается в день начала тура. Пакетные туры: 50% предоплата, остальное — за 7–10 дней до выезда."
+    },
+    {
+      "id": 7,
+      "questionId": "Apakah bisa request atau mengganti destinasi saat tour?",
+      "questionEn": "Can I request or change destinations during the tour?",
+      "questionRu": "Можно ли изменить маршрут или пункты назначения во время тура?",
+      "answerId": "Bisa untuk program custom, bahkan saat hari H. Untuk paket fixed itinerary, perubahan maksimal 3 hari sebelum berangkat.",
+      "answerEn": "Yes, for custom programs—even on the day of the trip. For fixed itineraries, changes must be made at least 3 days before departure.",
+      "answerRu": "Да, для индивидуальных программ изменения возможны даже в день тура. Для фиксированных маршрутов — минимум за 3 дня до начала."
+    },
+    {
+      "id": 8,
+      "questionId": "Berapa lama durasi sewa kendaraan?",
+      "questionEn": "What is the rental duration for vehicles?",
+      "questionRu": "Какова продолжительность аренды транспорта?",
+      "answerId": "Kami menyediakan transfer point-to-point, sewa 5 jam, dan 10 jam. Bisa juga sewa dengan sopir saja.",
+      "answerEn": "We offer point-to-point transfer, 5-hour rental, and 10-hour rental. Driver-only rental is also available.",
+      "answerRu": "Мы предлагаем трансфер от точки до точки, аренду на 5 часов, 10 часов и аренду только с водителем."
+    },
+    {
+      "id": 9,
+      "questionId": "Apakah bisa sewa guide saja dan naik transportasi umum?",
+      "questionEn": "Can I hire a guide only and use public transport?",
+      "questionRu": "Можно ли арендовать только гида и передвигаться на общественном транспорте?",
+      "answerId": "Bisa. Guide akan menemani selama 10 jam. Biaya makan dan transportasi guide ditanggung oleh tamu.",
+      "answerEn": "Yes. Our guide will accompany you for 10 hours. Meals and transport for the guide are covered by the guest.",
+      "answerRu": "Да. Наш гид будет сопровождать вас 10 часов. Гость оплачивает питание и проезд гида."
+    },
+    {
+      "id": 10,
+      "questionId": "Apakah SPT melayani Company Outing atau Incentive Trip?",
+      "questionEn": "Does SPT organize Company Outings or Incentive Trips?",
+      "questionRu": "Организуете ли вы корпоративные туры или поощрительные поездки?",
+      "answerId": "Ya! Kami melayani B2B dan B2C. Sebagai first-hand tour operator, kami siap atur semua kebutuhan perusahaan Anda.",
+      "answerEn": "Yes! We serve both B2B and B2C. As a first-hand tour operator, we're ready to handle your company's travel needs.",
+      "answerRu": "Да! Мы работаем с B2B и B2C. Как прямой туроператор, мы организуем любые поездки для вашей компании."
+    },
+    {
+      "id": 11,
+      "questionId": "Bisa pesan kendaraan & guide untuk group private?",
+      "questionEn": "Can I book a vehicle & guide for a private group?",
+      "questionRu": "Можно ли заказать транспорт и гида для частной группы?",
+      "answerId": "Bisa. Kami bantu buatkan itinerary GRATIS dan beri penawaran harga terbaik.",
+      "answerEn": "Yes. We’ll help create a FREE itinerary and offer the best price.",
+      "answerRu": "Да. Мы бесплатно составим маршрут и предложим лучшую цену."
+    },
+    {
+      "id": 12,
+      "questionId": "Jika ada pertanyaan lain, kemana harus menghubungi?",
+      "questionEn": "Who should I contact for more questions?",
+      "questionRu": "Куда обращаться, если есть другие вопросы?",
+      "answerId": "Silakan hubungi kami via WhatsApp. Kontak tersedia di Website dan Instagram.",
+      "answerEn": "Feel free to contact us via WhatsApp. Contact details are available on our Website and Instagram.",
+      "answerRu": "Вы можете связаться с нами через WhatsApp. Контакты указаны на нашем сайте и в Instagram."
     }
   ]
 }

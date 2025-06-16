@@ -2,85 +2,59 @@
   "packages": [
     {
       "id": 1,
-      "titleId": "James Bond Island",
-      "titleEn": "James Bond Island",
-      "descriptionId": "Jelajahi pulau terkenal yang muncul di film James Bond 'The Man with the Golden Gun'.",
-      "descriptionEn": "Explore the famous island featured in the James Bond movie 'The Man with the Golden Gun'.",
-      "image": "https://images.pexels.com/photos/1450354/pexels-photo-1450354.jpeg",
-      "price": "Rp 1.500.000",
-      "duration": "1 Day",
-      "included": [
-        "Transportation",
-        "Guide",
-        "Lunch",
-        "Entrance fees"
-      ],
-      "itinerary": [
-        {
-          "time": "07:00",
-          "activityId": "Penjemputan dari hotel",
-          "activityEn": "Hotel pickup"
-        },
-        {
-          "time": "09:00",
-          "activityId": "Tiba di pelabuhan",
-          "activityEn": "Arrive at pier"
-        }
+      "titleId": "⁠Phi Phi Islands + Bamboo Islands",
+      "titleEn": "⁠Phi Phi Islands + Bamboo Islands",
+      "titleRu": "Острова Пхи-Пхи + Бамбуковые острова",
+      "descriptionId": "Nikmati keindahan Pulau Phi Phi  + Bamboo Islands dengan air kristal dan pantai pasir putihnya.",
+      "descriptionEn": "Enjoy the beauty of Phi Phi Islands  + Bamboo Islands with crystal clear waters and white sandy beaches.",
+      "descriptionRu": "Насладитесь красотой островов Пхи-Пхи и Бамбуковых островов с кристально чистой водой и белыми песчаными пляжами.",
+      "image": "/package1/thumbnail.jpg",
+      "price": "THB 2,200",
+      "oldPrice": "THB 3,500",
+      "gallery": [
+        "/package1/2.jpg",
+        "/package1/3.jpg",
+        "/package1/4.jpg",
+        "/package1/5.jpg",
+        "/package1/6.jpg"
       ]
     },
     {
       "id": 2,
-      "titleId": "Phi Phi Island",
-      "titleEn": "Phi Phi Island",
-      "descriptionId": "Nikmati keindahan Pulau Phi Phi dengan air kristal dan pantai pasir putihnya.",
-      "descriptionEn": "Enjoy the beauty of Phi Phi Islands with crystal clear waters and white sandy beaches.",
-      "image": "https://images.pexels.com/photos/1450340/pexels-photo-1450340.jpeg",
-      "price": "Rp 1.800.000",
-      "duration": "1 Day",
-      "included": [
-        "Transportation",
-        "Guide",
-        "Lunch",
-        "Snorkeling gear"
-      ],
-      "itinerary": [
-        {
-          "time": "07:30",
-          "activityId": "Penjemputan dari hotel",
-          "activityEn": "Hotel pickup"
-        },
-        {
-          "time": "09:30",
-          "activityId": "Mulai snorkeling",
-          "activityEn": "Start snorkeling"
-        }
+      "titleId": "⁠James Bond Islands",
+      "titleEn": "James Bond Islands",
+      "titleRu": "Острова Джеймса Бонда",
+      "descriptionId": "Jelajahi pulau terkenal yang muncul di film James Bond 'The Man with the Golden Gun'.",
+      "descriptionEn": "Explore the famous island featured in the James Bond movie 'The Man with the Golden Gun'.",
+      "descriptionRu": "Исследуйте знаменитый остров, появившийся в фильме о Джеймсе Бонде «Человек с золотым пистолетом».",
+      "image": "/package2/thumbnail.jpg",
+      "price": "THB 2,200",
+      "oldPrice": "THB 3,500",
+      "gallery": [
+        "/package2/2.jpg",
+        "/package2/3.jpg",
+        "/package2/4.jpg",
+        "/package2/5.jpg",
+        "/package2/6.jpg"
       ]
     },
     {
       "id": 3,
-      "titleId": "Phuket City Tour",
-      "titleEn": "Phuket City Tour",
-      "descriptionId": "Jelajahi tempat-tempat bersejarah dan budaya di Kota Phuket.",
-      "descriptionEn": "Explore historical and cultural sites in Phuket City.",
-      "image": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg",
-      "price": "Rp 900.000",
-      "duration": "Half Day",
-      "included": [
-        "Transportation",
-        "Guide",
-        "Entrance fees"
-      ],
-      "itinerary": [
-        {
-          "time": "09:00",
-          "activityId": "Mulai tur kota",
-          "activityEn": "Start city tour"
-        },
-        {
-          "time": "12:00",
-          "activityId": "Makan siang",
-          "activityEn": "Lunch"
-        }
+      "titleId": "Van Rental",
+      "titleEn": "Van Rental",
+      "titleRu": "Аренда микроавтобуса",
+      "descriptionId": "Rental van di Bangkok, Phuket & kota lain, nyaman keliling bareng supir ramah profesional!",
+      "descriptionEn": "Rental van in Bangkok, Phuket & other cities, comfortable travel with friendly professional drivers!",
+      "descriptionRu": "Аренда микроавтобуса в Бангкоке, Пхукете и других городах — комфортные поездки с дружелюбными и профессиональными водителями!",
+      "image": "/package3/thumbnail.jpg",
+      "price": "THB 3,500",
+      "oldPrice": "THB 4,000",
+      "gallery": [
+        "/package3/2.jpg",
+        "/package3/3.jpg",
+        "/package3/4.jpg",
+        "/package3/5.jpg",
+        "/package3/6.jpg"
       ]
     }
   ]

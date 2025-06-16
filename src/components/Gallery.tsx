@@ -10,14 +10,13 @@ import sptLogo from '/spt_logo.png';
 interface GalleryImage {
   id: number;
   url: string;
-  captionId: string;
-  captionEn: string;
 }
 
 interface GalleryCategory {
-  id: string;
+  id: number;
   nameId: string;
   nameEn: string;
+  nameRu?: string;
   images: GalleryImage[];
 }
 
@@ -44,12 +43,9 @@ const Gallery: React.FC = () => {
   const showPrev = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!selectedCategory) return;
-    setSelectedIndex((prev) =>
-      (prev - 1 + selectedCategory.images.length) % selectedCategory.images.length
-    );
+    setSelectedIndex((prev) => (prev - 1 + selectedCategory.images.length) % selectedCategory.images.length);
   };
 
-  // Pengaturan carousel react-slick
   const sliderSettings = {
     infinite: true,
     speed: 10000,
@@ -60,19 +56,15 @@ const Gallery: React.FC = () => {
     cssEase: 'linear',
     arrows: false,
     responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 640,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
     ],
+  };
+
+  const getCategoryName = (cat: GalleryCategory) => {
+    if (language === 'id') return cat.nameId;
+    if (language === 'ru') return cat.nameRu || cat.nameEn;
+    return cat.nameEn;
   };
 
   return (
@@ -94,21 +86,19 @@ const Gallery: React.FC = () => {
           </p>
         </div>
 
-        {/* Carousel Category */}
         <div data-aos="fade-up">
           <Slider {...sliderSettings}>
-            {galleryData.galleries.map((cat) => (
+            {galleryData.galleries.map((cat: GalleryCategory) => (
               <div key={cat.id} className="px-2">
                 <div
                   className="relative overflow-hidden rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
-                  onClick={() => openSlideshow(cat as GalleryCategory)}
+                  onClick={() => openSlideshow(cat)}
                 >
                   <img
                     src={cat.images[0].url}
-                    alt={language === 'id' ? cat.nameId : cat.nameEn}
+                    alt={getCategoryName(cat)}
                     className="w-full h-64 object-cover"
                   />
-                  {/* Logo Overlay */}
                   <img
                     src={sptLogo}
                     alt="logo"
@@ -116,23 +106,25 @@ const Gallery: React.FC = () => {
                   />
                 </div>
                 <h3 className="mt-4 text-xl font-semibold text-gray-800 text-center">
-                  {language === 'id' ? cat.nameId : cat.nameEn}
+                  {getCategoryName(cat)}
                 </h3>
               </div>
             ))}
           </Slider>
         </div>
 
-        {/* Slideshow Lightbox */}
         {selectedCategory && (
           <div
             className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50"
             onClick={closeSlideshow}
+            aria-modal="true"
+            role="dialog"
           >
             <div className="relative max-w-3xl max-h-screen p-4">
               <button
                 className="absolute top-4 right-4 text-white text-2xl"
                 onClick={closeSlideshow}
+                aria-label={t('close')}
               >
                 &times;
               </button>
@@ -140,14 +132,9 @@ const Gallery: React.FC = () => {
               <div className="relative">
                 <img
                   src={selectedCategory.images[selectedIndex].url}
-                  alt={
-                    language === 'id'
-                      ? selectedCategory.images[selectedIndex].captionId
-                      : selectedCategory.images[selectedIndex].captionEn
-                  }
+                  alt={getCategoryName(selectedCategory)}
                   className="max-w-full max-h-[80vh] object-contain mx-auto"
                 />
-                {/* Logo Overlay in Slideshow */}
                 <img
                   src={sptLogo}
                   alt="logo"
@@ -155,18 +142,18 @@ const Gallery: React.FC = () => {
                 />
               </div>
 
-              {/* Previous Button */}
               <button
                 className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
                 onClick={showPrev}
+                aria-label={t('previous')}
               >
                 ‹
               </button>
 
-              {/* Next Button */}
               <button
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
                 onClick={showNext}
+                aria-label={t('next')}
               >
                 ›
               </button>

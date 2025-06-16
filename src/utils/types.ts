@@ -10,12 +10,13 @@ export interface Promo {
   id: number;
   titleId: string;
   titleEn: string;
+  titleRu?: string;
   descriptionId: string;
   descriptionEn: string;
+  descriptionRu?: string;
   price: string;
   oldPrice: string;
   image: string;
-  remaining: number;
   endDate: string;
   pdfUrl: string;
 }

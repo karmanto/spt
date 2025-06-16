@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import faqData from '../data/faq.json';
 
@@ -15,18 +15,31 @@ const FAQ: React.FC = () => {
   const displayedFaqs = showAll ? faqData.faqs : faqData.faqs.slice(0, initialDisplayCount);
 
   const getQuestion = (faq: typeof faqData.faqs[0]) => {
-    return language === 'id' ? faq.questionId : faq.questionEn;
+    switch (language) {
+      case 'id':
+        return faq.questionId;
+      case 'ru':
+        return faq.questionRu || faq.questionEn;
+      default:
+        return faq.questionEn;
+    }
   };
 
   const getAnswer = (faq: typeof faqData.faqs[0]) => {
-    return language === 'id' ? faq.answerId : faq.answerEn;
+    switch (language) {
+      case 'id':
+        return faq.answerId;
+      case 'ru':
+        return faq.answerRu || faq.answerEn;
+      default:
+        return faq.answerEn;
+    }
   };
 
   return (
     <section id="faq" className="py-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          {/* SEO here: H2 heading for FAQ section */}
           <h2 
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
@@ -41,8 +54,6 @@ const FAQ: React.FC = () => {
             {t('faqSubtitle')}
           </p>
         </div>
-        
-        {/* SEO here: FAQ structured data */}
         <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
           {displayedFaqs.map((faq, index) => (
             <div 
@@ -59,14 +70,11 @@ const FAQ: React.FC = () => {
                 aria-expanded={openIndex === index}
                 aria-controls={`faq-answer-${faq.id}`}
               >
-                {/* SEO here: Question with structured data */}
                 <span className="text-lg font-medium text-gray-900" itemProp="name">
                   {getQuestion(faq)}
                 </span>
                 <svg
-                  className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
-                    openIndex === index ? 'rotate-180' : ''
-                  }`}
+                  className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${openIndex === index ? 'rotate-180' : ''}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -78,19 +86,15 @@ const FAQ: React.FC = () => {
                     strokeLinejoin="round"
                     strokeWidth="2"
                     d="M19 9l-7 7-7-7"
-                  ></path>
+                  />
                 </svg>
               </button>
-              
               <div
-                className={`transition-all duration-300 overflow-hidden ${
-                  openIndex === index ? 'max-h-96 py-4' : 'max-h-0 py-0'
-                }`}
+                className={`transition-all duration-300 overflow-hidden ${openIndex === index ? 'max-h-96 py-4' : 'max-h-0 py-0'}`}
                 id={`faq-answer-${faq.id}`}
                 itemScope
                 itemType="https://schema.org/Answer"
               >
-                {/* SEO here: Answer with structured data */}
                 <div className="px-6 text-gray-600" itemProp="text">
                   {getAnswer(faq)}
                 </div>
@@ -98,15 +102,14 @@ const FAQ: React.FC = () => {
             </div>
           ))}
         </div>
-
         {faqData.faqs.length > initialDisplayCount && (
           <div className="text-center mt-8">
             <button
               onClick={() => setShowAll(!showAll)}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors duration-300"
-              aria-label={showAll ? 'Show fewer FAQ items' : 'Show more FAQ items'}
+              aria-label={showAll ? t('showLess') : t('showMore')}
             >
-              {showAll ? t('show less') : t('show more')}
+              {showAll ? t('showLess') : t('showMore')}
             </button>
           </div>
         )}

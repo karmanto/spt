@@ -72,7 +72,13 @@ const Testimonials: React.FC = () => {
               </div>
               {/* SEO here: Review text with structured data */}
               <p className="text-gray-700 italic" itemProp="reviewBody">
-                "{language === 'id' ? testimonial.comment_id : testimonial.comment_en}"
+                "{
+                  language === 'id'
+                    ? testimonial.comment_id
+                    : language === 'ru'
+                    ? testimonial.comment_ru
+                    : testimonial.comment_en
+                }"
               </p>
               {/* SEO here: Hidden structured data for review subject */}
               <meta itemProp="itemReviewed" itemScope itemType="https://schema.org/TravelAgency" content="Simbolon Phuket Tour" />

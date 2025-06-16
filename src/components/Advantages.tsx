@@ -121,19 +121,28 @@ const Advantages: React.FC = () => {
         </div>
         
         <div 
-          className="mt-16 bg-primary rounded-lg p-8 text-center text-white"
-          data-aos="fade-up"
-        >
-          <h3 className="text-2xl font-bold mb-4">{t('stillConfused')}</h3>
-          <a 
-            href="https://wa.me/6281363878631?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100 transition-colors duration-300"
-          >
-            {t('freeConsultation')}
-          </a>
-        </div>
+  className="mt-16 bg-primary rounded-lg p-8 text-center text-white"
+  data-aos="fade-up"
+>
+  <h3 className="text-4xl font-bold mb-3">
+    {t('happyCustomers')}
+  </h3>
+
+  <h3 className="text-2xl font-medium mb-4">{t('stillConfused')}</h3>
+
+  {/* Tambahan Happy Customer */}
+  
+
+  <a 
+    href="https://wa.me/6281363878631?text=Halo%20Simbolon%20Phuket%20Tour,%20saya%20tertarik%20dengan%20paket%20tour%20Anda" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-primary bg-white hover:bg-gray-100 transition-colors duration-300"
+  >
+    {t('freeConsultation')}
+  </a>
+</div>
+
       </div>
     </section>
   );

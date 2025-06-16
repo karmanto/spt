@@ -16,33 +16,44 @@ import { LanguageProvider } from './context/LanguageContext';
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // SEO here: Dynamic meta tags and structured data updates
   useEffect(() => {
-    // SEO here: Set page title dynamically
+    // Set page title dynamically
     document.title = 'Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi';
     
-    // SEO here: Update meta description
+    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute('content', 'Simbolon Phuket Tour - Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries for Phuket, Bangkok, Krabi, and Phi Phi Island.');
+      metaDescription.setAttribute(
+        'content',
+        'Simbolon Phuket Tour - Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries for Phuket, Bangkok, Krabi, and Phi Phi Island.'
+      );
     }
 
-    // SEO here: Add hreflang for multilingual support
-    const existingHreflang = document.querySelectorAll('link[hreflang]');
-    existingHreflang.forEach(link => link.remove());
+    // Remove any existing hreflang links
+    document.querySelectorAll('link[hreflang]').forEach(link => link.remove());
 
+    // English
     const hreflangEn = document.createElement('link');
     hreflangEn.rel = 'alternate';
     hreflangEn.hreflang = 'en';
     hreflangEn.href = 'https://simbolonphukettour.com/';
     document.head.appendChild(hreflangEn);
 
+    // Indonesian
     const hreflangId = document.createElement('link');
     hreflangId.rel = 'alternate';
     hreflangId.hreflang = 'id';
     hreflangId.href = 'https://simbolonphukettour.com/';
     document.head.appendChild(hreflangId);
 
+    // Russian
+    const hreflangRu = document.createElement('link');
+    hreflangRu.rel = 'alternate';
+    hreflangRu.hreflang = 'ru';
+    hreflangRu.href = 'https://simbolonphukettour.com/ru';  // sesuaikan jika ada path khusus
+    document.head.appendChild(hreflangRu);
+
+    // Default
     const hreflangDefault = document.createElement('link');
     hreflangDefault.rel = 'alternate';
     hreflangDefault.hreflang = 'x-default';
@@ -57,7 +68,6 @@ function App() {
   return (
     <LanguageProvider>
       <div className="min-h-screen bg-white">
-        {/* SEO here: Semantic HTML structure with proper heading hierarchy */}
         <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
         <main role="main">
           <Hero />

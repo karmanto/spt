@@ -18,13 +18,13 @@ const AboutSection: React.FC = () => {
               <iframe
                 className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
                 src="https://www.youtube.com/embed/4FjNbNPUaB4"
-                title="Simbolon Phuket Tour Overview - Halal Thailand Tours with Indonesian Guide"
+                title={t('iframeTitle')}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 loading="lazy"
                 // SEO here: ARIA label for accessibility
-                aria-label="Video overview of Simbolon Phuket Tour services and destinations"
+                aria-label={t('iframeAriaLabel')}
               />
             </div>
           </div>

@@ -24,37 +24,34 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
   ];
 
   const toggleLanguage = () => {
-    setLanguage(language === 'id' ? 'en' : 'id');
+    const next = language === 'id' ? 'en' : language === 'en' ? 'ru' : 'id';
+    setLanguage(next);
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const flagCode = language === 'id' ? 'id' : 'us';
+  const flagCode = language === 'id' ? 'id' : language === 'en' ? 'us' : 'ru';
+  const nextLangLabel = language === 'id' ? 'English' : language === 'en' ? 'Русский' : 'Bahasa Indonesia';
 
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
         scrolled || mobileMenuOpen ? 'bg-white shadow-md' : 'bg-transparent'
       }`}
-      // SEO here: ARIA role for navigation
       role="banner"
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-4">
         <div className="flex justify-between items-center md:space-x-4">
           <div className="flex justify-start">
-            {/* SEO here: Logo with proper alt text and structured data */}
-            <a href="#" className="flex items-center" aria-label="Simbolon Phuket Tour Homepage">
-              <img 
-                src={logoUrl} 
-                alt="Simbolon Phuket Tour - Halal Thailand Tours with Indonesian Guide" 
+            <a href="#" aria-label="Simbolon Phuket Tour Homepage">
+              <img
+                src={logoUrl}
+                alt={t('heroTitle')}
                 className="h-16 w-auto"
-                // SEO here: Image loading optimization
                 loading="eager"
                 decoding="async"
               />
@@ -67,10 +64,12 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               className={`flex items-center p-2 mr-2 rounded-md transition-colors ${
                 scrolled || mobileMenuOpen ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
               }`}
-              aria-label={`Switch to ${language === 'id' ? 'English' : 'Indonesian'} language`}
+              aria-label={`Switch to ${nextLangLabel}`}
             >
               <span className={`fi fi-${flagCode} h-5 w-5 mr-[5px]`} />
-              <span className={`ml-1 text-sm font-medium ${scrolled || mobileMenuOpen ? 'text-black' : 'text-white'}`}>{language.toUpperCase()}</span>
+              <span className={`ml-1 text-sm font-medium ${
+                scrolled || mobileMenuOpen ? 'text-black' : 'text-white'
+              }`}>{language.toUpperCase()}</span>
             </button>
             <button
               onClick={toggleMobileMenu}
@@ -86,18 +85,16 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
             </button>
           </div>
 
-          {/* SEO here: Navigation with proper semantic structure */}
           <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
             {navLinks.map((link) => (
               <a
-                key={link.name}
+                key={link.href}
                 href={link.href}
                 className={`text-sm font-medium transition-colors ${
                   scrolled
                     ? 'text-gray-700 hover:text-[#102D5E]'
                     : 'text-white hover:text-blue-200'
                 }`}
-                // SEO here: Descriptive aria-label for navigation links
                 aria-label={`Navigate to ${link.name} section`}
               >
                 {link.name}
@@ -111,21 +108,22 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               className={`flex items-center p-2 rounded-md transition-colors ${
                 scrolled ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
               }`}
-              aria-label={`Switch to ${language === 'id' ? 'English' : 'Indonesian'} language`}
+              aria-label={`Switch to ${nextLangLabel}`}
             >
               <span className={`fi fi-${flagCode} h-6 w-6 mr-[5px]`} />
-              <span className={`ml-1 text-sm font-medium ${scrolled || mobileMenuOpen ? 'text-black' : 'text-white'}`}>{language.toUpperCase()}</span>
+              <span className={`ml-1 text-sm font-medium ${
+                scrolled || mobileMenuOpen ? 'text-black' : 'text-white'
+              }`}>{language.toUpperCase()}</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* SEO here: Mobile navigation with proper accessibility */}
       <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-white shadow-lg`}>
         <nav className="pt-2 pb-4 space-y-1 px-4" role="navigation" aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <a
-              key={link.name}
+              key={link.href}
               href={link.href}
               className="block py-2 text-base font-medium text-gray-700 hover:text-[#102D5E]"
               onClick={toggleMobileMenu}
