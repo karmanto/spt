@@ -1,7 +1,7 @@
 import React from 'react';
 import { Phone, Mail } from 'lucide-react';
 import { Instagram as IgIcon } from 'lucide-react';
-import { SiYoutube, SiTiktok } from 'react-icons/si';
+import { SiYoutube, SiTiktok, SiFacebook } from 'react-icons/si';
 import { useLanguage } from '../context/LanguageContext';
 // Import flag-icons CSS
 import 'flag-icons/css/flag-icons.min.css';
@@ -46,6 +46,15 @@ const Footer: React.FC = () => {
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <SiTiktok size={20} />
+              </a>
+              <a
+                href="https://www.facebook.com/share/197Mwm5CWn/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t('subscribeYoutube')}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <SiFacebook size={20} />
               </a>
             </div>
           </div>

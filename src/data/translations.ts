@@ -104,6 +104,7 @@ export const translations = {
     privacyPolicy: 'Kebijakan Privasi',
     termsOfService: 'Syarat & Ketentuan',
     sitemap: 'Peta Situs',
+    allRightsReserved: 'Hak Cipta © 2025 Simbolon Phuket Tour. Seluruh Hak Dilindungi.',
 
     // CTA
     happyCustomers: '500+ PELANGGAN YANG PUAS 😍',
@@ -215,6 +216,7 @@ export const translations = {
     privacyPolicy: 'Privacy Policy',
     termsOfService: 'Terms of Service',
     sitemap: 'Sitemap',
+    allRightsReserved: 'Copyright © 2025 Simbolon Phuket Tour. All Rights Reserved.',
     
     // CTA
     happyCustomers: '500+ HAPPY CUSTOMERS 😍',
@@ -326,6 +328,7 @@ export const translations = {
     privacyPolicy: 'Политика конфиденциальности',
     termsOfService: 'Условия использования',
     sitemap: 'Карта сайта',
+    allRightsReserved: 'Авторские права © 2025 Simbolon Phuket Tour. Все права защищены.',
 
     // CTA
     happyCustomers: '500+ ДОВОЛЬНЫХ КЛИЕНТОВ 😍',
