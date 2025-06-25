@@ -51,9 +51,7 @@ export const translations = {
     // About
     aboutTitle: 'Tentang Simbolon Phuket Tour',
     aboutDescription:
-      'Selamat Datang di Simbolon Phuket Tour! \nYour Trusted Travel Partner in Thailand \n\nSawasdee Khub! 🇹🇭 \nKami adalah tour agent profesional yang fokus melayani wisata di Phuket dan destinasi populer lainnya di Thailand, termasuk Bangkok. Bersama tim berpengalaman dan pemandu asli Indonesia, kami telah dipercaya lebih dari 500 wisatawan untuk menghadirkan perjalanan yang nyaman, berkualitas, dan berkesan. \n\nMau paket wisata anti-mainstream? Rental mobil/van? Atau itinerary custom GRATIS? Semua bisa kamu serahkan ke kami! \nPercayakan liburanmu kepada Simbolon Phuket Tour dan rasakan pengalaman menjelajah Thailand tanpa repot, seru, aman, dan penuh kenangan!',
-    founder:
-      'Simbolon Phuket Tour dibangun oleh Abdul Rahman Simbolon Tuan berasal dari Medan yang sudah bekerja di Thailand sebagai guru dan dosen sejak 2019 dan terinspirasi untuk membantu wisatawan Indonesia mendapatkan pengalaman wisata terbaik dan bisa mengunjungi tempat-tempat anti-mainstream di Thailand. \nBeliau suka jalan-jalan dan sudah explore beberapa provinsi di Thailand. Tim kami juga akan buka sale untuk private dan group trip, siap membantu customer untuk jalan-jalan di Kota Bangkok dan sekitarnya atau yang mau jalan ke destinasi anti mainstream lainnya, dan hunting makanan autentik Thailand, menikmati alam dan relax. Pokoknya gak ngecewain deh!',
+      'Selamat Datang di Simbolon Phuket Tour!\nYour Trusted Travel Partner in Thailand\n\nSawasdee Khub! 🇹🇭\nSimbolon Phuket Tour (SPT) adalah perusahaan resmi berbasis di Indonesia, yang melayani wisatawan untuk perjalanan ke Phuket, Bangkok, dan destinasi populer lainnya di Thailand.\n\nKami telah dipercaya oleh 500+ wisatawan dari Indonesia, Asia, Eropa, hingga Rusia untuk menghadirkan pengalaman liburan yang nyaman, aman, dan berkesan.\nDengan tim berpengalaman dan pemandu asli Thailand / Indonesia / Malay / Rusia, kami siap bantu dari paket wisata, rental van, hingga itinerary custom GRATIS. Liburan jadi mudah & seru bersama SPT — tanpa repot, tanpa khawatir!',
     legal:
       'Didirikan di 2024 ini, bekerja sama dengan Major Tour Phuket Co.,Ltd memiliki nomor Izin Tanda Daftar Usaha Pariwisata resmi di Thailand dengan TAT No.: 31/01045. Kami bekerjasama dengan stakeholders berkualitas yang sudah berpengalaman di bidangnya lebih dari 15 tahun, serta terdaftar sebagai anggota TTAA (Thai Travel Agent Association) secara resmi. Kantor kami berlokasi di Phuket: 128/73 Pracha Uthit Rd., Ratsada, Mueang Phuket 83000, Thailand.',
     iframeTitle:
@@ -66,7 +64,7 @@ export const translations = {
     gallerySubtitle: 'Lihatlah keindahan destinasi Thailand yang menanti Anda',
     
     // FAQ
-    faqTitle: 'Pertanyaan yang Sering Diajukan',
+    faqTitle: 'FAQ',
     faqSubtitle: 'Temukan jawaban untuk pertanyaan-pertanyaan umum',
     showMore: 'Tampilkan lebih banyak',
     showLess: 'Tampilkan lebih sedikit',
@@ -85,6 +83,9 @@ export const translations = {
     // Top Packages
     topPackages: 'Paket Terpopuler',
     topPackagesDetail: 'Temukan paket perjalanan terbaik kami untuk pengalaman tak terlupakan.',
+    groupTour: 'Tur Grup',
+    perAdult: 'per dewasa',
+    viewDetails: 'Lihat Detail',
 
     // Footer
     footerTagline: 'SPT: Tour Lokal Rasa Indonesia di Thailand',
@@ -93,7 +94,9 @@ export const translations = {
     followTiktok: 'Ikuti Simbolon Phuket Tour di TikTok',
     jbiLink: 'Pulau James Bond',
     phiPhiLink: 'Pulau Phi Phi',
-    phuketCityLink: 'Kota Phuket',
+    rentalLink: 'Rental Van VIP - Thailand',
+    tourLink: 'Local Tour Guide',
+    similianLink: 'Similan Islands',
     newsletterTitle: 'Newsletter',
     newsletterDesc: 'Subscribe to get special offers and updates.',
     newsletterAria: 'Langganan newsletter',
@@ -119,6 +122,7 @@ export const translations = {
 
     // Header
     home: 'Home',
+    toppackages: 'Top Packages',
     packages: 'Tour Packages',
     about: 'About Us',
     contact: 'Contact',
@@ -166,8 +170,7 @@ export const translations = {
     // About
     aboutTitle: 'About Simbolon Phuket Tour',
     aboutDescription:
-      'Welcome to Simbolon Phuket Tour! \nYour Trusted Travel Partner in Thailand \n\nSawasdee Khub! 🇹🇭 \nWe are a professional tour agency specializing in trips to Phuket and other popular destinations across Thailand, including Bangkok. With an experienced team and native English/Indonesian/Thai-speaking guides, we’ve served over 500 happy travelers, delivering comfortable, high-quality, and memorable travel experiences. \n\nLooking for unique, off-the-beaten-path tour packages? Need car or van rental? Or want a custom itinerary for FREE? Leave it all to us! \nTrust Simbolon Phuket Tour with your vacation and discover Thailand in a fun, hassle-free, and unforgettable way!',
-    founder: '...', // you can fill as needed
+      'Welcome to Simbolon Phuket Tour!\nYour Trusted Travel Partner in Thailand\n\nSawasdee Khub! 🇹🇭\nSimbolon Phuket Tour (SPT) is an official Indonesia-based company serving travelers for trips to Phuket, Bangkok, and other popular destinations in Thailand.\n\nWe have served over 500+ travelers from Indonesia, Asia, Europe, and Russia, providing comfortable, safe, and memorable vacation experiences.\nWith our experienced team and native Thai/Indonesian/Malay/Russian guides, we are ready to assist with tour packages, van rentals, and even FREE custom itineraries. Enjoy a hassle-free and exciting vacation with SPT!',
     legal:
       'Founded in 2024 in partnership with Major Tour Phuket Co., Ltd., we hold an official Tourism Business Registration License in Thailand (TAT No.: 31/01045). We collaborate with top-quality stakeholders who each bring over 15 years of industry experience, and we’re proud to be registered members of the Thai Travel Agent Association (TTAA). Our office is located in Phuket at 128/73 Pracha Uthit Rd., Ratsada, Mueang Phuket, Postal Code 83000, Thailand, operating under the umbrella of Major Phuket Group Co., Ltd.',
     iframeTitle: 'Overview of Simbolon Phuket Tour Services - Halal Tours in Thailand with Indonesian Guide',
@@ -178,7 +181,7 @@ export const translations = {
     gallerySubtitle: 'See the beauty of Thailand destinations waiting for you',
     
     // FAQ
-    faqTitle: 'Frequently Asked Questions',
+    faqTitle: 'FAQ',
     faqSubtitle: 'Find answers to common questions',
     showMore: 'Show more',
     showLess: 'Show less',
@@ -197,6 +200,9 @@ export const translations = {
     // Top Packages
     topPackages: 'Top Packages',
     topPackagesDetail: 'Discover our best travel packages for unforgettable experiences.',
+    groupTour: 'Group Tour',
+    perAdult: 'per dewasa',
+    viewDetails: 'View Details',
     
     // Footer
     footerTagline: 'SPT: Indonesian-flavored Local Tours in Thailand',
@@ -234,13 +240,13 @@ export const translations = {
     about: 'О нас',
     contact: 'Контакты',
     gallery: 'Галерея',
-    faq: 'Часто задаваемые вопросы',
+    faq: 'FAQ',
 
     // Hero
     heroTitle: 'Халяльный и комфортный отдых в Таиланде для туристов из Индонезии',
     heroSubtitle: 'Туры в Пхукет, Краби и Бангкок | Индивидуальные и групповые туры | Местные эксперты',
-    viewPackages: 'Посмотреть турпакеты',
-    contactAdmin: 'Связаться с админом через WhatsApp',
+    viewPackages: 'Подобрать тур',
+    contactAdmin: 'Связаться через Telegram',
     heroAria: 'Вступительный раздел с обзором услуг Simbolon Phuket Tour',
     viewPackagesAria: 'Просмотреть раздел с турами',
     contactAdminAria: 'Связаться с администратором через WhatsApp',
@@ -277,7 +283,7 @@ export const translations = {
     // About
     aboutTitle: 'О Simbolon Phuket Tour',
     aboutDescription:
-      'Добро пожаловать в Simbolon Phuket Tour! \nВаш надежный партнёр по путешествиям в Таиланде \n\nСавадди Кхап! 🇹🇭 \nМы — профессиональное туристическое агентство, специализирующееся на турах по Пхукету и другим популярным направлениям Таиланда, включая Бангкок. Наша опытная команда и гиды, говорящие на индонезийском, русском и английском, уже обслужили более 500 довольных клиентов, предоставляя комфортные, качественные и незабываемые поездки. \n\nХотите нестандартные туры? Аренда автомобиля или микроавтобуса? Индивидуальный маршрут БЕСПЛАТНО? Мы обо всем позаботимся! \nДоверьте свой отдых Simbolon Phuket Tour и откройте для себя Таиланд без забот и с яркими впечатлениями!',
+      'Савади Кхап! 🇹🇭\n\nSimbolon Phuket Tour (SPT) — официальная компания из Индонезии, предлагающая туристические услуги для поездок в Пхукет, Бангкок и другие популярные направления Таиланда.\nМы обслужили более 500+ туристов из Индонезии, Азии, Европы и России, предоставляя комфортный, безопасный и незабываемый отдых.\nС нашей опытной командой и местными гидами мы всегда готовы помочь с турами, арендой микроавтобусов и даже бесплатными индивидуальными маршрутами.\n\nОтдых без забот с SPT!',
     legal:
       'Основано в 2024 году в сотрудничестве с Major Tour Phuket Co., Ltd. Мы имеем официальную туристическую лицензию в Таиланде (TAT No.: 31/01045) и сотрудничаем с надежными партнёрами с более чем 15-летним опытом. Также являемся официальными членами Thai Travel Agent Association (TTAA). Наш офис расположен в Пхукете по адресу: 128/73 Pracha Uthit Rd., Ratsada, Mueang Phuket, 83000, Таиланд.',
 
@@ -287,10 +293,10 @@ export const translations = {
 
     // Gallery
     galleryTitle: 'Яркие моменты с наших туров',
-    gallerySubtitle: 'Откройте для себя красоту направлений в Таиланде',
+    gallerySubtitle: 'Откройте для себя красоту Таиланда',
 
     // FAQ
-    faqTitle: 'Часто задаваемые вопросы',
+    faqTitle: 'FAQ',
     faqSubtitle: 'Найдите ответы на распространённые вопросы',
     showMore: 'Показать больше',
     showLess: 'Показать меньше',
@@ -309,6 +315,9 @@ export const translations = {
     // Top Packages
     topPackages: 'Популярные туры',
     topPackagesDetail: 'Откройте для себя наши лучшие турпакеты для незабываемого отдыха.',
+    groupTour: 'Групповой тур',
+    perAdult: 'за взрослого',
+    viewDetails: 'Подробнее',
 
     // Footer
     footerTagline: 'SPT: Местные туры в стиле Индонезии в Таиланде',
@@ -332,8 +341,8 @@ export const translations = {
 
     // CTA
     happyCustomers: '500+ ДОВОЛЬНЫХ КЛИЕНТОВ 😍',
-    stillConfused: 'Всё ещё не можете выбрать тур?',
-    freeConsultation: 'Бесплатная консультация сейчас',
+    stillConfused: 'Не можете выбрать тур?',
+    freeConsultation: 'Получить бесплатную консультацию',
     whatsappMessage: 'Здравствуйте! Я заинтересован в турах от SPT. Вы можете мне помочь?'
   }
 };

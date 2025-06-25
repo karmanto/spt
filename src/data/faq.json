@@ -13,7 +13,7 @@
       "id": 2,
       "questionId": "Kapan batas maksimal pemesanan Day Trip atau aktivitas wisata?",
       "questionEn": "When is the latest time to book a Day Trip or activity?",
-      "questionRu": "Когда крайний срок бронирования однодневных туров или активностей?",
+      "questionRu": "Когда крайний срок бронирования однодневных туров или экскурсий?",
       "answerId": "Maksimal 1–2 hari sebelum hari keberangkatan.",
       "answerEn": "Booking must be made at least 1–2 days before the departure date.",
       "answerRu": "Бронирование необходимо произвести минимум за 1–2 дня до даты начала тура."
@@ -49,10 +49,10 @@
       "id": 6,
       "questionId": "Berapa besar DP untuk program custom dan paket wisata?",
       "questionEn": "How much is the Down Payment (DP) for custom and tour packages?",
-      "questionRu": "Сколько составляет предоплата за тур или индивидуальную программу?",
-      "answerId": "Program custom: DP 20% di awal, pelunasan saat hari H. Paket All-In: DP 50%, pelunasan 7–10 hari sebelum keberangkatan.",
-      "answerEn": "Custom program: 20% DP upfront, the rest on the day of the tour. All-in packages: 50% DP, full payment 7–10 days before departure.",
-      "answerRu": "Индивидуальная программа: 20% предоплата, остальная сумма оплачивается в день начала тура. Пакетные туры: 50% предоплата, остальное — за 7–10 дней до выезда."
+      "questionRu": "Какова предоплата за тур или индивидуальный маршрут?",
+      "answerId": "Custom Trip: DP 20%, pelunasan saat hari H, Paket All-In: DP 50%, pelunasan H-7 s/d H-10, Day Trip: Bayar 100% di awal (full payment).",
+      "answerEn": "Custom Trip – 20% deposit, balance due on the trip day; All‑In Package – 50% deposit, balance due 7–10 days before departure; Day Trip – 100% payment at booking.",
+      "answerRu": "Индивидуальный маршрут -  20% от всей стоимости, пакетный тур «All-in» - 50% от стоимости, остаток за 7-10 дней до выезда, однодневный тур - 100% предоплаты при бронировании."
     },
     {
       "id": 7,
@@ -76,7 +76,7 @@
       "id": 9,
       "questionId": "Apakah bisa sewa guide saja dan naik transportasi umum?",
       "questionEn": "Can I hire a guide only and use public transport?",
-      "questionRu": "Можно ли арендовать только гида и передвигаться на общественном транспорте?",
+      "questionRu": "Можно ли арендовать гида и передвигаться на общественном транспорте?",
       "answerId": "Bisa. Guide akan menemani selama 10 jam. Biaya makan dan transportasi guide ditanggung oleh tamu.",
       "answerEn": "Yes. Our guide will accompany you for 10 hours. Meals and transport for the guide are covered by the guest.",
       "answerRu": "Да. Наш гид будет сопровождать вас 10 часов. Гость оплачивает питание и проезд гида."
@@ -85,7 +85,7 @@
       "id": 10,
       "questionId": "Apakah SPT melayani Company Outing atau Incentive Trip?",
       "questionEn": "Does SPT organize Company Outings or Incentive Trips?",
-      "questionRu": "Организуете ли вы корпоративные туры или поощрительные поездки?",
+      "questionRu": "Организуете ли вы корпоративные туры?",
       "answerId": "Ya! Kami melayani B2B dan B2C. Sebagai first-hand tour operator, kami siap atur semua kebutuhan perusahaan Anda.",
       "answerEn": "Yes! We serve both B2B and B2C. As a first-hand tour operator, we're ready to handle your company's travel needs.",
       "answerRu": "Да! Мы работаем с B2B и B2C. Как прямой туроператор, мы организуем любые поездки для вашей компании."

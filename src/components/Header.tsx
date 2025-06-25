@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
 
   const navLinks = [
     { name: t('home'), href: '#home' },
-    { name: t('packages'), href: '#packages' },
+    { name: t('toppackages'), href: '#packages' },
     { name: t('about'), href: '#about' },
     { name: t('gallery'), href: '#gallery' },
     { name: t('faq'), href: '#faq' },

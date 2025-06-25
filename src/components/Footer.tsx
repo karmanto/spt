@@ -1,7 +1,7 @@
 import React from 'react';
 import { Phone, Mail } from 'lucide-react';
 import { Instagram as IgIcon } from 'lucide-react';
-import { SiYoutube, SiTiktok, SiFacebook } from 'react-icons/si';
+import { SiYoutube, SiTiktok, SiFacebook, SiLinkedin } from 'react-icons/si';
 import { useLanguage } from '../context/LanguageContext';
 // Import flag-icons CSS
 import 'flag-icons/css/flag-icons.min.css';
@@ -56,6 +56,15 @@ const Footer: React.FC = () => {
               >
                 <SiFacebook size={20} />
               </a>
+              <a
+                href="https://www.linkedin.com/in/abdul-rahman-simbolon-455814346"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t('subscribeYoutube')}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <SiLinkedin size={20} />
+              </a>
             </div>
           </div>
 
@@ -63,7 +72,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">{t('packages')}</h3>
             <ul className="space-y-2">
-              {[t('jbiLink'), t('phiPhiLink'), t('phuketCityLink')].map(item => (
+              {[t('jbiLink'), t('phiPhiLink'), t('rentalLink'), t('tourLink'), t('similianLink')].map(item => (
                 <li key={item}>
                   <a href="#packages" className="text-gray-400 hover:text-white transition-colors">
                     {item}
@@ -79,11 +88,8 @@ const Footer: React.FC = () => {
             <ul className="space-y-4" itemScope itemType="https://schema.org/TravelAgency">
               <li className="flex items-start" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
                 <span className="fi fi-th mr-2 h-5 w-5 flex-shrink-0 mt-1" aria-label="Thailand" />
-                <span className="text-gray-400">
-                  <span itemProp="streetAddress">128/73 Pracha Uthit Rd. Ratsada</span>,
-                  <span itemProp="addressLocality"> Mueang Phuket</span>,
-                  <span itemProp="addressCountry"> Thailand</span> -
-                  <span itemProp="postalCode">83000</span>
+                <span className="text-gray-400" itemProp="streetAddress">
+                  30 Baan Sukhothai Building 2, Ramkhamhaeng Soi. 30/1, Yaek 2, Huamark, Bangkapi, Bangkok, Thailand 10240
                 </span>
               </li>
               <li className="flex items-start" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
@@ -113,8 +119,8 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="mr-2 text-blue-400 flex-shrink-0" />
-                <a href="mailto:simbolonphukettour@gmail.com" className="text-gray-400 hover:text-white transition-colors" itemProp="email">
-                  simbolonphukettour@gmail.com
+                <a href="mailto:info@simbolonphukettour.com" className="text-gray-400 hover:text-white transition-colors" itemProp="email">
+                  info@simbolonphukettour.com
                 </a>
               </li>
             </ul>

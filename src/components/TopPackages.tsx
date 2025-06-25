@@ -1,92 +1,14 @@
 // src/components/TopPackages.tsx
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import React, { useState } from 'react';
-import Slider from 'react-slick';
+import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { packages } from '../data/packages.json';
-
-// Komponen Modal untuk Gallery
-const GalleryModal = ({ 
-  isOpen, 
-  onClose, 
-  images,
-  initialIndex
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  images: string[];
-  initialIndex: number;
-}) => {
-  if (!isOpen) return null;
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    initialSlide: initialIndex,
-    arrows: true,
-    adaptiveHeight: true
-  };
-
-  return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
-      onClick={onClose}
-    >
-      <div 
-        className="relative w-full max-w-4xl max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className="absolute -top-12 right-0 text-white text-4xl z-50 hover:text-gray-300 transition-colors"
-          aria-label={useLanguage().t('closeGallery')}
-        >
-          &times;
-        </button>
-        
-        <Slider {...settings}>
-          {images.map((img, index) => (
-            <div key={index} className="outline-none">
-              <div className="flex justify-center items-center h-[80vh]">
-                <img
-                  src={img}
-                  alt={`Gallery ${index + 1}`}
-                  className="max-h-full max-w-full object-contain"
-                />
-              </div>
-            </div>
-          ))}
-        </Slider>
-      </div>
-    </div>
-  );
-};
+import { MapPin, Clock, Users, Star } from 'lucide-react';
+import toursData from '../data/tours.json';
 
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [currentGallery, setCurrentGallery] = useState<string[]>([]);
-  const [initialSlideIndex, setInitialSlideIndex] = useState(0);
-
-  const openGallery = (gallery: string[], index: number = 0) => {
-    setCurrentGallery(gallery);
-    setInitialSlideIndex(index);
-    setIsGalleryOpen(true);
-  };
 
   return (
     <section id="packages" className="py-16 bg-white">
-      <GalleryModal
-        isOpen={isGalleryOpen}
-        onClose={() => setIsGalleryOpen(false)}
-        images={currentGallery}
-        initialIndex={initialSlideIndex}
-      />
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 
@@ -105,53 +27,81 @@ const TopPackages: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg) => {
-            const title = language === 'id' ? pkg.titleId : language === 'en' ? pkg.titleEn : pkg.titleRu;
-            const description = language === 'id' ? pkg.descriptionId : language === 'en' ? pkg.descriptionEn : pkg.descriptionRu;
-            const galleryImages = pkg.gallery || [];
-
-            return (
-              <div 
-                className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300"
-                key={pkg.id}
-              >
-                <div className="relative">
-                  <img
-                    src={pkg.image}
-                    alt={title}
-                    className="w-full h-full object-contain cursor-pointer"
-                    onClick={() => openGallery(
-                      [pkg.image, ...galleryImages], 
-                      0
-                    )}
-                  />
+          {toursData.map((tour) => (
+            <div
+              key={tour.id}
+              className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
+            >
+              {/* Image */}
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={tour.images[0]}
+                  alt={tour.name[language]}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                {tour.promotions && tour.promotions.discount && tour.promotions.discount > 0 && (
+                  <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {tour.promotions.discount}% OFF
+                  </div>
+                )}
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                    <span className="text-sm font-semibold">5</span>
+                  </div>
                 </div>
+              </div>
 
-                <div className="p-3">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{title}</h3>
-                  <p className="text-sm text-gray-600 mb-4 text-center">{description}</p>
+              {/* Content */}
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>{tour.location[language]}</span>
+                </div>
+                
+                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                  {tour.name[language]}
+                </h3>
+                
+                <p className="text-gray-600 mb-4 line-clamp-2">
+                  {tour.overview[language]}
+                </p>
 
-                  <div className="flex flex-col space-y-1 mb-5 text-center">
-                    <div className="flex items-center space-x-3 justify-center">
-                      <span className="text-3xl font-extrabold text-blue-700 tracking-tight">
-                        {pkg.price}
-                      </span>
-                      <span className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium text-black line-through decoration-2 decoration-red-500 decoration-solid">
-                        {pkg.oldPrice}
-                      </span>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{tour.duration[language]}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      <span>{t('groupTour')}</span>
                     </div>
                   </div>
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-white text-gray-800 py-1 px-3 rounded-xl font-medium text-lg border-2 border-blue-500 hover:bg-blue-50 transition-colors duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
-                    >
-                      {t('viewDetail')}
-                    </a>
-                  </div>
                 </div>
-            );
-          })}
+
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="flex items-center gap-2">
+                      <div className="text-2xl font-bold text-gray-900">
+                        ฿{tour.price.adult.toLocaleString()}
+                      </div>
+                      {tour.originalPrice && (
+                        <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
+                          ฿{tour.originalPrice.toLocaleString()}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-500">{t('perAdult')}</div>
+                  </div>
+                  
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 flex items-center gap-2 group/btn whitespace-nowrap">
+                    {t('viewDetails')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

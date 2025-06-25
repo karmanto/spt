@@ -12,7 +12,6 @@
       "price": "THB 2,200",
       "oldPrice": "THB 3,500",
       "gallery": [
-        "/package1/2.jpg",
         "/package1/3.jpg",
         "/package1/4.jpg",
         "/package1/5.jpg",
@@ -31,7 +30,6 @@
       "price": "THB 2,200",
       "oldPrice": "THB 3,500",
       "gallery": [
-        "/package2/2.jpg",
         "/package2/3.jpg",
         "/package2/4.jpg",
         "/package2/5.jpg",
@@ -40,17 +38,16 @@
     },
     {
       "id": 3,
-      "titleId": "Van Rental",
-      "titleEn": "Van Rental",
-      "titleRu": "Аренда микроавтобуса",
+      "titleId": "Rental Van VIP - Thailand",
+      "titleEn": "Rental Van VIP - Thailand",
+      "titleRu": "Прокат VIP-фургона - Таиланд",
       "descriptionId": "Rental van di Bangkok, Phuket & kota lain, nyaman keliling bareng supir ramah profesional!",
       "descriptionEn": "Rental van in Bangkok, Phuket & other cities, comfortable travel with friendly professional drivers!",
       "descriptionRu": "Аренда микроавтобуса в Бангкоке, Пхукете и других городах — комфортные поездки с дружелюбными и профессиональными водителями!",
       "image": "/package3/thumbnail.jpg",
-      "price": "THB 3,500",
-      "oldPrice": "THB 4,000",
+      "price": "THB 1,500",
+      "oldPrice": "THB 2,000",
       "gallery": [
-        "/package3/2.jpg",
         "/package3/3.jpg",
         "/package3/4.jpg",
         "/package3/5.jpg",

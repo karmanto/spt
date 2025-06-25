@@ -1,7 +1,7 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Slider from 'react-slick';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
@@ -23,30 +23,24 @@ interface GalleryCategory {
 const Gallery: React.FC = () => {
   const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<GalleryCategory | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const sliderRef = useRef<Slider>(null);
 
   const openSlideshow = (category: GalleryCategory) => {
     setSelectedCategory(category);
-    setSelectedIndex(0);
   };
 
   const closeSlideshow = () => {
     setSelectedCategory(null);
   };
 
-  const showNext = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!selectedCategory) return;
-    setSelectedIndex((prev) => (prev + 1) % selectedCategory.images.length);
+  const getCategoryName = (cat: GalleryCategory) => {
+    if (language === 'id') return cat.nameId;
+    if (language === 'ru') return cat.nameRu || cat.nameEn;
+    return cat.nameEn;
   };
 
-  const showPrev = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!selectedCategory) return;
-    setSelectedIndex((prev) => (prev - 1 + selectedCategory.images.length) % selectedCategory.images.length);
-  };
-
-  const sliderSettings = {
+  // Settings untuk slider utama (gallery thumbnail)
+  const gallerySliderSettings = {
     infinite: true,
     speed: 10000,
     slidesToShow: 3,
@@ -61,10 +55,17 @@ const Gallery: React.FC = () => {
     ],
   };
 
-  const getCategoryName = (cat: GalleryCategory) => {
-    if (language === 'id') return cat.nameId;
-    if (language === 'ru') return cat.nameRu || cat.nameEn;
-    return cat.nameEn;
+  // Settings untuk slideshow modal
+  const modalSliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 300,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    arrows: false,
+    swipeToSlide: true,
+    draggable: true,
   };
 
   return (
@@ -87,7 +88,7 @@ const Gallery: React.FC = () => {
         </div>
 
         <div data-aos="fade-up">
-          <Slider {...sliderSettings}>
+          <Slider {...gallerySliderSettings}>
             {galleryData.galleries.map((cat: GalleryCategory) => (
               <div key={cat.id} className="px-2">
                 <div
@@ -120,43 +121,84 @@ const Gallery: React.FC = () => {
             aria-modal="true"
             role="dialog"
           >
-            <div className="relative max-w-3xl max-h-screen p-4">
+            <div 
+              className="relative w-full max-w-4xl mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button - Di luar gambar */}
               <button
-                className="absolute top-4 right-4 text-white text-2xl"
+                className="absolute -top-12 right-0 text-white text-4xl z-20 md:top-0 md:-right-12"
                 onClick={closeSlideshow}
                 aria-label={t('close')}
               >
                 &times;
               </button>
 
+              {/* Slider untuk modal */}
               <div className="relative">
-                <img
-                  src={selectedCategory.images[selectedIndex].url}
-                  alt={getCategoryName(selectedCategory)}
-                  className="max-w-full max-h-[80vh] object-contain mx-auto"
-                />
-                <img
-                  src={sptLogo}
-                  alt="logo"
-                  className="absolute top-2 right-2 w-12 h-12 opacity-90 rounded-full bg-white"
-                />
+                <Slider ref={sliderRef} {...modalSliderSettings}>
+                  {selectedCategory.images.map((image) => (
+                    <div key={image.id} className="relative">
+                      <img
+                        src={image.url}
+                        alt={getCategoryName(selectedCategory)}
+                        className="w-full h-[70vh] object-contain"
+                      />
+                      <img
+                        src={sptLogo}
+                        alt="logo"
+                        className="absolute top-4 right-4 w-10 h-10 md:w-12 md:h-12 opacity-90 rounded-full bg-white"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+
+                {/* Navigation Buttons - Di luar gambar */}
+                <button
+                  className="absolute -left-12 top-1/2 transform -translate-y-1/2 text-white text-4xl hidden md:block"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sliderRef.current?.slickPrev();
+                  }}
+                  aria-label={t('previous')}
+                >
+                  ‹
+                </button>
+                <button
+                  className="absolute -right-12 top-1/2 transform -translate-y-1/2 text-white text-4xl hidden md:block"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sliderRef.current?.slickNext();
+                  }}
+                  aria-label={t('next')}
+                >
+                  ›
+                </button>
+
+                {/* Mobile Navigation - Di bawah gambar */}
+                <div className="flex justify-center mt-4 space-x-8 md:hidden">
+                  <button
+                    className="text-white text-3xl"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      sliderRef.current?.slickPrev();
+                    }}
+                    aria-label={t('previous')}
+                  >
+                    ‹
+                  </button>
+                  <button
+                    className="text-white text-3xl"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      sliderRef.current?.slickNext();
+                    }}
+                    aria-label={t('next')}
+                  >
+                    ›
+                  </button>
+                </div>
               </div>
-
-              <button
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
-                onClick={showPrev}
-                aria-label={t('previous')}
-              >
-                ‹
-              </button>
-
-              <button
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-4xl"
-                onClick={showNext}
-                aria-label={t('next')}
-              >
-                ›
-              </button>
             </div>
           </div>
         )}
