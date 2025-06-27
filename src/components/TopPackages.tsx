@@ -7,7 +7,7 @@ import { TourPackage } from '../utils/types';
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
 
-  const tours: TourPackage[] = toursData as unknown as TourPackage[];
+  const tours: TourPackage[] = toursData as TourPackage[];
 
   return (
     <section id="packages" className="py-16 bg-white">

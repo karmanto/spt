@@ -53,7 +53,6 @@ export interface TourPackage {
     title: LanguageContent;
     activities: LanguageContent[];
     meals: LanguageContent[];
-    accommodation?: LanguageContent;
   }[];
   included: LanguageContent[];
   excluded: LanguageContent[];
