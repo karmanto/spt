@@ -1,11 +1,13 @@
-// src/components/TopPackages.tsx
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { MapPin, Clock, Users, Star } from 'lucide-react';
 import toursData from '../data/tours.json';
+import { TourPackage } from '../utils/types'; 
 
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
+
+  const tours: TourPackage[] = toursData as unknown as TourPackage[];
 
   return (
     <section id="packages" className="py-16 bg-white">
@@ -27,15 +29,14 @@ const TopPackages: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {toursData.map((tour) => (
+          {tours.map((tour: TourPackage) => ( 
             <div
               key={tour.id}
               className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
             >
-              {/* Image */}
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={tour.images[0]}
+                  src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]}`}
                   alt={tour.name[language]}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -52,7 +53,6 @@ const TopPackages: React.FC = () => {
                 </div>
               </div>
 
-              {/* Content */}
               <div className="p-6">
                 <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
                   <MapPin className="w-4 h-4" />

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import PromoCard from './PromoCard';
-import { promos } from '../data/promos.json';
-import { CountdownState } from '../utils/types';
+import promosData from '../data/promos.json'; 
+import { CountdownState, PromoData } from '../utils/types'; 
 
 const PromoSection: React.FC = () => {
   const { t } = useLanguage();
   const [countdowns, setCountdowns] = useState<{ [key: number]: CountdownState }>({});
+
+  const promos: PromoData['promos'] = promosData.promos;
 
   useEffect(() => {
     const updateCountdowns = () => {
@@ -48,10 +50,10 @@ const PromoSection: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" data-aos="fade-up" data-aos-delay="200">
           {promos.map((promo) => (
-            <PromoCard 
-              key={promo.id} 
-              promo={promo} 
-              countdown={countdowns[promo.id]} 
+            <PromoCard
+              key={promo.id}
+              promo={promo}
+              countdown={countdowns[promo.id]}
             />
           ))}
         </div>

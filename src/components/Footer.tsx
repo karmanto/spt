@@ -3,7 +3,6 @@ import { Phone, Mail } from 'lucide-react';
 import { Instagram as IgIcon } from 'lucide-react';
 import { SiYoutube, SiTiktok, SiFacebook, SiLinkedin } from 'react-icons/si';
 import { useLanguage } from '../context/LanguageContext';
-// Import flag-icons CSS
 import 'flag-icons/css/flag-icons.min.css';
 
 const Footer: React.FC = () => {
@@ -14,11 +13,9 @@ const Footer: React.FC = () => {
     <footer id="contact" className="bg-gray-900 text-white" role="contentinfo" itemScope itemType="https://schema.org/WPFooter">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
           <div itemScope itemType="https://schema.org/Organization">
             <h3 className="text-xl font-bold mb-4" itemProp="name">Simbolon Phuket Tour</h3>
             <p className="text-gray-400 mb-4" itemProp="description">{t('footerTagline')}</p>
-            {/* Social media links */}
             <div className="flex space-x-4" itemProp="sameAs">
               <a
                 href="https://www.instagram.com/SimbolonPhuketTour"
@@ -68,7 +65,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div>
             <h3 className="text-xl font-bold mb-4">{t('packages')}</h3>
             <ul className="space-y-2">
@@ -82,7 +78,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact Info */}
           <div>
             <h3 className="text-xl font-bold mb-4">{t('contact')}</h3>
             <ul className="space-y-4" itemScope itemType="https://schema.org/TravelAgency">
@@ -98,7 +93,6 @@ const Footer: React.FC = () => {
                   Jl. Keramat Indah No.9, Medan Tenggara, Kec. Medan Denai, Kota Medan, Sumatera Utara 20228
                 </span>
               </li>
-              {/* Phone numbers with structured data */}
               <li className="flex items-center">
                 <Phone size={20} className="mr-2 text-blue-400 flex-shrink-0" />
                 <a href="tel:+6281363878631" className="text-gray-400 hover:text-white transition-colors" itemProp="telephone">
@@ -126,7 +120,6 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
           <div>
             <h3 className="text-xl font-bold mb-4">{t('newsletterTitle')}</h3>
             <p className="text-gray-400 mb-4">{t('newsletterDesc')}</p>

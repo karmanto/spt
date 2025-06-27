@@ -1,4 +1,3 @@
-// types.ts
 export interface CountdownState {
   days: number;
   hours: number;
@@ -21,11 +20,8 @@ export interface Promo {
   pdfUrl: string;
 }
 
-export interface CountdownState {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+export interface PromoData {
+  promos: Promo[];
 }
 
 export interface PromoCardProps {
@@ -39,7 +35,7 @@ export interface LanguageContent {
   ru: string;
 }
 
-export interface TranslatedTourPackage {
+export interface TourPackage {
   id: string;
   name: LanguageContent;
   duration: LanguageContent;
@@ -70,37 +66,60 @@ export interface TranslatedTourPackage {
     question: LanguageContent;
     answer: LanguageContent;
   }[];
+  originalPrice?: number;
 }
 
-export interface TourPackage {
-  id: string;
+export interface Advantage {
+  id: number;
+  titleKey: string;
+  descriptionKey: string;
+  iconName: string;
+}
+
+export interface HeroSlide {
+  image: string;
+  heroTitle: LanguageContent;
+  heroSubtitle: LanguageContent;
+}
+
+export interface FAQItem {
+  id: number;
+  questionId: string;
+  questionEn: string;
+  questionRu?: string;
+  answerId: string;
+  answerEn: string;
+  answerRu?: string;
+}
+
+export interface FAQData {
+  faqs: FAQItem[];
+}
+
+export interface GalleryImage {
+  id: number;
+  url: string;
+}
+
+export interface GalleryCategory {
+  id: number;
+  nameId: string;
+  nameEn: string;
+  nameRu?: string;
+  images: GalleryImage[];
+}
+
+export interface GalleryData {
+  galleries: GalleryCategory[];
+}
+
+export interface Testimonial {
+  id: number;
   name: string;
-  duration: string;
   location: string;
-  price: {
-    adult: number;
-    child: number;
-    infant: number;
-  };
-  images: string[];
-  overview: string;
-  highlights: string[];
-  itinerary: {
-    day: number;
-    title: string;
-    activities: string[];
-    meals: string[];
-    accommodation?: string;
-  }[];
-  included: string[];
-  excluded: string[];
-  promotions?: {
-    type: string;
-    discount: number;
-    validUntil: string;
-  };
-  faqs: {
-    question: string;
-    answer: string;
-  }[];
+  comment_id: string;
+  comment_en: string;
+  comment_ru?: string; 
+  rating: number;
+  image: string;
 }

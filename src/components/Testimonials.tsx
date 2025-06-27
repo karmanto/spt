@@ -4,19 +4,20 @@ import testimonialsData from '../data/testimonials.json';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Testimonial } from '../utils/types'; 
 
 const Testimonials: React.FC = () => {
   const { t, language } = useLanguage();
   const sliderRef = useRef<Slider>(null);
 
-  // Fix autoplay issue
+  const testimonials: Testimonial[] = testimonialsData as Testimonial[];
+
   useEffect(() => {
     if (sliderRef.current) {
       sliderRef.current.slickPlay();
     }
   }, []);
 
-  // Settings untuk slider testimonial
   const testimonialSliderSettings = {
     dots: false,
     infinite: true,
@@ -47,7 +48,6 @@ const Testimonials: React.FC = () => {
 
   return (
     <section className="py-16 bg-blue-50">
-      {/* CSS untuk membuat tinggi artikel seragam dan shadow tidak terpotong */}
       <style>{`
         .testimonial-slider .slick-track {
           display: flex;
@@ -93,16 +93,16 @@ const Testimonials: React.FC = () => {
             {...testimonialSliderSettings}
             className="testimonial-slider"
           >
-            {testimonialsData.map((testimonial) => (
+            {testimonials.map((testimonial: Testimonial) => ( 
               <div key={testimonial.id} className="px-2 h-full">
                 <article 
-                  className="bg-white p-6 rounded-lg shadow-lg h-full flex flex-col" //
+                  className="bg-white p-6 rounded-lg shadow-lg h-full flex flex-col" 
                   itemScope
                   itemType="https://schema.org/Review"
                 >
                   <div className="flex items-center mb-4">
                     <img 
-                      src={testimonial.image} 
+                      src={`${import.meta.env.VITE_BASE_URL}${testimonial.image}`} 
                       alt={`${testimonial.name} - Customer from ${testimonial.location}`} 
                       className="w-12 h-12 rounded-full object-cover mr-4"
                       loading="lazy"
@@ -131,7 +131,6 @@ const Testimonials: React.FC = () => {
                       </svg>
                     ))}
                   </div>
-                  {/* Bagian konten yang fleksibel */}
                   <div className="flex-grow mb-4">
                     <p className="text-gray-700 italic" itemProp="reviewBody">
                       "{
@@ -149,7 +148,6 @@ const Testimonials: React.FC = () => {
             ))}
           </Slider>
 
-          {/* Custom Navigation Buttons */}
           <button
             className="absolute top-1/2 -left-4 z-20 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-blue-100 transition-all hidden md:block"
             onClick={() => sliderRef.current?.slickPrev()}

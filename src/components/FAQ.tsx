@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import faqData from '../data/faq.json';
+import { FAQItem, FAQData } from '../utils/types';
 
 const FAQ: React.FC = () => {
   const { t, language } = useLanguage();
@@ -8,13 +9,15 @@ const FAQ: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
   const initialDisplayCount = 3;
 
+  const typedFaqData: FAQData = faqData;
+
+  const displayedFaqs: FAQItem[] = showAll ? typedFaqData.faqs : typedFaqData.faqs.slice(0, initialDisplayCount);
+
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const displayedFaqs = showAll ? faqData.faqs : faqData.faqs.slice(0, initialDisplayCount);
-
-  const getQuestion = (faq: typeof faqData.faqs[0]) => {
+  const getQuestion = (faq: FAQItem) => {
     switch (language) {
       case 'id':
         return faq.questionId;
@@ -25,7 +28,7 @@ const FAQ: React.FC = () => {
     }
   };
 
-  const getAnswer = (faq: typeof faqData.faqs[0]) => {
+  const getAnswer = (faq: FAQItem) => {
     switch (language) {
       case 'id':
         return faq.answerId;
@@ -40,13 +43,13 @@ const FAQ: React.FC = () => {
     <section id="faq" className="py-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 
+          <h2
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
           >
             {t('faqTitle')}
           </h2>
-          <p 
+          <p
             className="text-lg text-gray-600 max-w-2xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
@@ -56,7 +59,7 @@ const FAQ: React.FC = () => {
         </div>
         <div className="space-y-4" itemScope itemType="https://schema.org/FAQPage">
           {displayedFaqs.map((faq, index) => (
-            <div 
+            <div
               key={faq.id}
               className="border border-gray-200 rounded-lg overflow-hidden"
               data-aos="fade-up"
@@ -102,7 +105,7 @@ const FAQ: React.FC = () => {
             </div>
           ))}
         </div>
-        {faqData.faqs.length > initialDisplayCount && (
+        {typedFaqData.faqs.length > initialDisplayCount && (
           <div className="text-center mt-8">
             <button
               onClick={() => setShowAll(!showAll)}

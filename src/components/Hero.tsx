@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { heros as slides } from '../data/heros.json';
+import herosData from '../data/heros.json'; 
+import { HeroSlide } from '../utils/types'; 
 
-// Preload semua gambar saat aplikasi dimuat
+const slides: HeroSlide[] = herosData.heros;
+
 slides.forEach(slide => {
   const img = new Image();
-  img.src = slide.image;
+  img.src = `${import.meta.env.VITE_BASE_URL}${slide.image}`;
 });
 
 const Hero: React.FC = () => {
@@ -21,9 +23,8 @@ const Hero: React.FC = () => {
     return () => clearInterval(interval);
   }, [length]);
 
-  const slide = slides[current];
+  const slide: HeroSlide = slides[current]; 
 
-  // Menggunakan memoization untuk menghindari perhitungan ulang saat tidak diperlukan
   const title = useMemo(() => {
     return slide.heroTitle[language] || slide.heroTitle.en;
   }, [slide, language]);
@@ -32,15 +33,12 @@ const Hero: React.FC = () => {
     return slide.heroSubtitle[language] || slide.heroSubtitle.en;
   }, [slide, language]);
 
-  // Handler untuk menandai gambar yang sudah dimuat
   const handleImageLoad = (imageUrl: string) => {
     setLoadedImages(prev => ({ ...prev, [imageUrl]: true }));
   };
 
-  // Determine if Telegram button should be shown
   const isRussian = language === 'ru';
 
-  // Telegram link example (replace with your actual link)
   const telegramLink = 'https://t.me/torijark';
 
   return (
@@ -51,26 +49,26 @@ const Hero: React.FC = () => {
       itemScope
       itemType="https://schema.org/WebPage"
     >
-      {!loadedImages[slide.image] && (
+      {!`${import.meta.env.VITE_BASE_URL}${loadedImages[slide.image]}` && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
       )}
       
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-          loadedImages[slide.image] ? 'opacity-100' : 'opacity-0'
+          `${import.meta.env.VITE_BASE_URL}${loadedImages[slide.image]}` ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ backgroundImage: `url('${slide.image}')` }}
+        style={{ backgroundImage: `url('${import.meta.env.VITE_BASE_URL}${slide.image}')` }}
       >
         <img 
-          src={slide.image} 
+          src={`${import.meta.env.VITE_BASE_URL}${slide.image}`} 
           alt="" 
           className="hidden" 
-          onLoad={() => handleImageLoad(slide.image)} 
+          onLoad={() => handleImageLoad(`${import.meta.env.VITE_BASE_URL}${slide.image}`)} 
         />
       </div>
       
       <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${
-        loadedImages[slide.image] ? 'opacity-50' : 'opacity-20'
+        loadedImages[`${import.meta.env.VITE_BASE_URL}${slide.image}`] ? 'opacity-50' : 'opacity-20'
       }`} />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">

@@ -24,21 +24,18 @@ interface LanguageProviderProps {
 }
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>('id');
 
   const t = (key: string): string => {
-    // Pastikan key-nya sesuai salah satu kunci di translations.{id,en,ru}
     const translationKey = key as keyof typeof translations.id;
 
-    // 1. Cek di bahasa terpilih
     if (translations[language] && translations[language][translationKey]) {
       return translations[language][translationKey];
     }
-    // 2. Fallback ke bahasa Indonesia
     if (translations.id[translationKey]) {
       return translations.id[translationKey];
     }
-    // 3. Jika tidak ditemukan di mana pun, kembalikan key
+    
     return key;
   };
 

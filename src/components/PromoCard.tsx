@@ -20,7 +20,6 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const title = getTitle();
   const description = getDescription();
 
-  // Build WhatsApp message and link
   const whatsappNumber = '6281363878631';
   const rawMessage = (() => {
     switch (language) {
@@ -40,7 +39,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300">
       <div className="relative">
         <img
-          src={promo.image}
+          src={`${import.meta.env.VITE_BASE_URL}${promo.image}`}
           alt={title}
           className="w-full h-full object-contain"
         />

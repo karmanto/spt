@@ -5,25 +5,14 @@ import React, { useState, useRef } from 'react';
 import Slider from 'react-slick';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
-import sptLogo from '/spt_logo.png';
-
-interface GalleryImage {
-  id: number;
-  url: string;
-}
-
-interface GalleryCategory {
-  id: number;
-  nameId: string;
-  nameEn: string;
-  nameRu?: string;
-  images: GalleryImage[];
-}
+import { GalleryImage, GalleryCategory, GalleryData } from '../utils/types'; 
 
 const Gallery: React.FC = () => {
   const { t, language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<GalleryCategory | null>(null);
   const sliderRef = useRef<Slider>(null);
+
+  const typedGalleryData: GalleryData = galleryData;
 
   const openSlideshow = (category: GalleryCategory) => {
     setSelectedCategory(category);
@@ -39,7 +28,6 @@ const Gallery: React.FC = () => {
     return cat.nameEn;
   };
 
-  // Settings untuk slider utama (gallery thumbnail)
   const gallerySliderSettings = {
     infinite: true,
     speed: 10000,
@@ -55,7 +43,6 @@ const Gallery: React.FC = () => {
     ],
   };
 
-  // Settings untuk slideshow modal
   const modalSliderSettings = {
     dots: false,
     infinite: true,
@@ -89,19 +76,19 @@ const Gallery: React.FC = () => {
 
         <div data-aos="fade-up">
           <Slider {...gallerySliderSettings}>
-            {galleryData.galleries.map((cat: GalleryCategory) => (
+            {typedGalleryData.galleries.map((cat: GalleryCategory) => (
               <div key={cat.id} className="px-2">
                 <div
                   className="relative overflow-hidden rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
                   onClick={() => openSlideshow(cat)}
                 >
                   <img
-                    src={cat.images[0].url}
+                    src={`${import.meta.env.VITE_BASE_URL}${cat.images[0].url}`}
                     alt={getCategoryName(cat)}
                     className="w-full h-64 object-cover"
                   />
                   <img
-                    src={sptLogo}
+                    src={`${import.meta.env.VITE_BASE_URL}/spt_logo.png`}
                     alt="logo"
                     className="absolute top-2 right-2 w-8 h-8 opacity-90 rounded-full bg-white"
                   />
@@ -121,11 +108,10 @@ const Gallery: React.FC = () => {
             aria-modal="true"
             role="dialog"
           >
-            <div 
+            <div
               className="relative w-full max-w-4xl mx-4"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Close Button - Di luar gambar */}
               <button
                 className="absolute -top-12 right-0 text-white text-4xl z-20 md:top-0 md:-right-12"
                 onClick={closeSlideshow}
@@ -134,18 +120,17 @@ const Gallery: React.FC = () => {
                 &times;
               </button>
 
-              {/* Slider untuk modal */}
               <div className="relative">
                 <Slider ref={sliderRef} {...modalSliderSettings}>
-                  {selectedCategory.images.map((image) => (
+                  {selectedCategory.images.map((image: GalleryImage) => (
                     <div key={image.id} className="relative">
                       <img
-                        src={image.url}
+                        src={`${import.meta.env.VITE_BASE_URL}${image.url}`}
                         alt={getCategoryName(selectedCategory)}
                         className="w-full h-[70vh] object-contain"
                       />
                       <img
-                        src={sptLogo}
+                        src={`${import.meta.env.VITE_BASE_URL}/spt_logo.png`}
                         alt="logo"
                         className="absolute top-4 right-4 w-10 h-10 md:w-12 md:h-12 opacity-90 rounded-full bg-white"
                       />
@@ -153,7 +138,6 @@ const Gallery: React.FC = () => {
                   ))}
                 </Slider>
 
-                {/* Navigation Buttons - Di luar gambar */}
                 <button
                   className="absolute -left-12 top-1/2 transform -translate-y-1/2 text-white text-4xl hidden md:block"
                   onClick={(e) => {
@@ -175,7 +159,6 @@ const Gallery: React.FC = () => {
                   ›
                 </button>
 
-                {/* Mobile Navigation - Di bawah gambar */}
                 <div className="flex justify-center mt-4 space-x-8 md:hidden">
                   <button
                     className="text-white text-3xl"

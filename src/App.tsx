@@ -50,7 +50,7 @@ function App() {
     const hreflangRu = document.createElement('link');
     hreflangRu.rel = 'alternate';
     hreflangRu.hreflang = 'ru';
-    hreflangRu.href = 'https://simbolonphukettour.com/ru';  // sesuaikan jika ada path khusus
+    hreflangRu.href = 'https://simbolonphukettour.com/ru'; 
     document.head.appendChild(hreflangRu);
 
     // Default

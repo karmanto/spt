@@ -12,11 +12,11 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
   const { language, setLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
 
-  const logoUrl = '/spt_logo.png';
+  const logoUrl = `${import.meta.env.VITE_BASE_URL}/spt_logo.png`
 
   const navLinks = [
     { name: t('home'), href: '#home' },
-    { name: t('toppackages'), href: '#packages' },
+    { name: t('topPackages'), href: '#packages' },
     { name: t('about'), href: '#about' },
     { name: t('gallery'), href: '#gallery' },
     { name: t('faq'), href: '#faq' },
