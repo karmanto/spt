@@ -3,6 +3,10 @@ import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,25 +16,37 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-pro
 app.use(cors());
 app.use(express.json());
 
-// Database configuration
+// Database configuration with environment variables
 const dbConfig = {
-  host: 'srv1158.hstgr.io',
-  port: 3306,
-  user: 'u470982164_admin',
-  password: 'd5F2Xc;pZ/5',
-  database: 'u470982164_spt',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'spt_database',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true
 };
 
 // Create connection pool
-const pool = mysql.createPool(dbConfig);
+let pool;
 
-// Initialize database tables
+// Initialize database connection with retry logic
 async function initializeDatabase() {
   try {
+    console.log('Attempting to connect to database...');
+    console.log(`Host: ${dbConfig.host}:${dbConfig.port}`);
+    console.log(`Database: ${dbConfig.database}`);
+    
+    // Create connection pool
+    pool = mysql.createPool(dbConfig);
+    
+    // Test the connection
     const connection = await pool.getConnection();
+    console.log('Database connection established successfully');
     
     // Create users table if it doesn't exist
     await connection.execute(`
@@ -62,10 +78,37 @@ async function initializeDatabase() {
 
     connection.release();
     console.log('Database initialized successfully');
+    return true;
   } catch (error) {
-    console.error('Database initialization error:', error);
+    console.error('Database initialization error:', error.message);
+    console.error('Please check your database configuration in the .env file');
+    
+    // Don't exit the process, just log the error
+    // The server can still run without database connection for static content
+    return false;
   }
 }
+
+// Middleware to check database connection
+const checkDatabaseConnection = async (req, res, next) => {
+  if (!pool) {
+    return res.status(503).json({ 
+      error: 'Database connection not available. Please check server configuration.' 
+    });
+  }
+  
+  try {
+    // Test connection
+    const connection = await pool.getConnection();
+    connection.release();
+    next();
+  } catch (error) {
+    console.error('Database connection check failed:', error.message);
+    return res.status(503).json({ 
+      error: 'Database connection failed. Please try again later.' 
+    });
+  }
+};
 
 // Middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
@@ -87,8 +130,17 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 
+// Health check (doesn't require database)
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    database: pool ? 'Connected' : 'Disconnected'
+  });
+});
+
 // Login endpoint
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', checkDatabaseConnection, async (req, res) => {
   try {
     const { username, password } = req.body;
 
@@ -154,7 +206,7 @@ app.get('/api/verify', authenticateToken, (req, res) => {
 });
 
 // Protected dashboard data endpoint
-app.get('/api/dashboard', authenticateToken, async (req, res) => {
+app.get('/api/dashboard', authenticateToken, checkDatabaseConnection, async (req, res) => {
   try {
     // You can add dashboard-specific data here
     res.json({
@@ -177,13 +229,23 @@ app.post('/api/logout', authenticateToken, (req, res) => {
   res.json({ message: 'Logout successful' });
 });
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
 // Start server
 app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
-  await initializeDatabase();
+  console.log('Environment variables loaded:');
+  console.log(`- DB_HOST: ${process.env.DB_HOST || 'not set (using localhost)'}`);
+  console.log(`- DB_PORT: ${process.env.DB_PORT || 'not set (using 3306)'}`);
+  console.log(`- DB_NAME: ${process.env.DB_NAME || 'not set (using spt_database)'}`);
+  console.log(`- DB_USER: ${process.env.DB_USER || 'not set (using root)'}`);
+  
+  const dbConnected = await initializeDatabase();
+  
+  if (!dbConnected) {
+    console.log('\n⚠️  Server started but database connection failed.');
+    console.log('📝 To fix this:');
+    console.log('1. Copy .env.example to .env');
+    console.log('2. Update the database configuration in .env file');
+    console.log('3. Ensure your database server is running and accessible');
+    console.log('4. Restart the server\n');
+  }
 });
