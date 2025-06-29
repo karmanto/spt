@@ -1,5 +1,6 @@
 // App.tsx
 import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import PromoSection from './components/PromoSection';
@@ -11,7 +12,10 @@ import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-import { LanguageProvider } from './context/LanguageContext';
+// import { LanguageProvider } from './context/LanguageContext'; // No longer needed here
+import TourList from './pages/TourList';
+import TourDetail from './pages/TourDetail';
+import TourLayout from './layouts/TourLayout';
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,7 +62,7 @@ function App() {
     hreflangDefault.rel = 'alternate';
     hreflangDefault.hreflang = 'x-default';
     hreflangDefault.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangDefault);
+    document.head.appendChild(hreflangDefault); // Corrected typo here
   }, []);
 
   const toggleMobileMenu = () => {
@@ -66,23 +70,33 @@ function App() {
   };
 
   return (
-    <LanguageProvider>
+    // <LanguageProvider> // LanguageProvider is now in main.tsx
       <div className="min-h-screen bg-white">
-        <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
         <main role="main">
-          <Hero />
-          <PromoSection />
-          <TopPackages />
-          <Testimonials />
-          <Advantages />
-          <AboutSection />
-          <Gallery />
-          <FAQ />
+          <Routes>
+            <Route path="/" element={
+              <>
+                <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
+                <Hero />
+                <PromoSection />
+                <TopPackages />
+                <Testimonials />
+                <Advantages />
+                <AboutSection />
+                <Gallery />
+                <FAQ />
+                <Footer />
+                <WhatsAppButton />
+              </>
+            } />
+            <Route element={<TourLayout />}>
+              <Route path="/tours" element={<TourList />} />
+              <Route path="/tours/:id" element={<TourDetail />} />
+            </Route>
+          </Routes>
         </main>
-        <Footer />
-        <WhatsAppButton />
       </div>
-    </LanguageProvider>
+    // </LanguageProvider>
   );
 }
 

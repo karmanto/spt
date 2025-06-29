@@ -32,7 +32,7 @@ export interface PromoCardProps {
 export interface LanguageContent {
   en: string;
   id: string;
-  ru: string;
+  ru?: string; // Make Russian optional if not always present
 }
 
 export interface TourPackage {
@@ -66,6 +66,7 @@ export interface TourPackage {
     answer: LanguageContent;
   }[];
   originalPrice?: number;
+  tags?: string[]; // Pastikan properti ini ada
 }
 
 export interface Advantage {

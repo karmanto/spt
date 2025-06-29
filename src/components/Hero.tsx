@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import herosData from '../data/heros.json'; 
 import { HeroSlide } from '../utils/types'; 
+import { Link } from 'react-router-dom'; // Import Link
 
 const slides: HeroSlide[] = herosData.heros;
 
@@ -92,13 +93,13 @@ const Hero: React.FC = () => {
           data-aos="fade-up"
           data-aos-delay="200"
         >
-          <a
-            href="#packages"
+          <Link // Changed from <a> to Link
+            to="/tours" // Changed href to to="/tours"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300"
             aria-label={t('viewPackagesAria')}
           >
             {t('viewPackages')}
-          </a>
+          </Link>
           {isRussian ? (
             <a
               href={telegramLink}

@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
       <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-4">
         <div className="flex justify-between items-center md:space-x-4">
           <div className="flex justify-start">
-            <a href="#" aria-label="Simbolon Phuket Tour Homepage">
+            <a href="/" aria-label="Simbolon Phuket Tour Homepage">
               <img
                 src={logoUrl}
                 alt={t('heroTitle')}

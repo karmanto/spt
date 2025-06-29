@@ -109,7 +109,7 @@ const FAQ: React.FC = () => {
           <div className="text-center mt-8">
             <button
               onClick={() => setShowAll(!showAll)}
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors duration-300"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 transition-colors hover:-translate-y-1 hover:scale-105 duration-300"
               aria-label={showAll ? t('showLess') : t('showMore')}
             >
               {showAll ? t('showLess') : t('showMore')}

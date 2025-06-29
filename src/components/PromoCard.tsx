@@ -54,7 +54,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
             {t('startFrom')}
           </span>
           <div className="flex items-center space-x-3 justify-center">
-            <span className="text-3xl font-extrabold text-blue-700 tracking-tight">
+            <span className="text-3xl font-extrabold text-primary tracking-tight"> {/* Updated text color */}
               {promo.price}
             </span>
             <span className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium text-black line-through decoration-2 decoration-red-500 decoration-solid">
@@ -79,7 +79,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-1 px-3 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap"
+            className="w-full bg-blue-600 text-white py-1 px-3 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap"
             aria-label={t('bookNow')}
           >
             {t('bookNow')}
@@ -89,7 +89,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
             href={promo.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-white text-gray-800 py-1 px-3 rounded-xl font-medium text-lg border-2 border-blue-500 hover:bg-blue-50 transition-colors duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
+            className="w-full bg-white text-gray-800 py-1 px-3 rounded-xl font-medium text-lg border-2 border-primary hover:bg-purple-50 transition-colors duration-300 hover:-translate-y-0.5 shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
             aria-label={t('viewDetail')}
           >
             {t('viewDetail')}
