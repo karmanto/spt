@@ -12,10 +12,13 @@ import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-// import { LanguageProvider } from './context/LanguageContext'; // No longer needed here
 import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import TourLayout from './layouts/TourLayout';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -62,7 +65,7 @@ function App() {
     hreflangDefault.rel = 'alternate';
     hreflangDefault.hreflang = 'x-default';
     hreflangDefault.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangDefault); // Corrected typo here
+    document.head.appendChild(hreflangDefault);
   }, []);
 
   const toggleMobileMenu = () => {
@@ -70,7 +73,7 @@ function App() {
   };
 
   return (
-    // <LanguageProvider> // LanguageProvider is now in main.tsx
+    <AuthProvider>
       <div className="min-h-screen bg-white">
         <main role="main">
           <Routes>
@@ -93,10 +96,16 @@ function App() {
               <Route path="/tours" element={<TourList />} />
               <Route path="/tours/:id" element={<TourDetail />} />
             </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute requiredRole="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
       </div>
-    // </LanguageProvider>
+    </AuthProvider>
   );
 }
 
