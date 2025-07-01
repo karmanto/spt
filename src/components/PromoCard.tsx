@@ -1,20 +1,20 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { PromoCardProps } from '../utils/types';
+import { PromoCardProps } from '../lib/types';
 
 const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const { t, language } = useLanguage();
 
   const getTitle = () => {
-    if (language === 'id') return promo.titleId;
-    if (language === 'ru') return promo.titleRu || promo.titleEn;
-    return promo.titleEn;
+    if (language === 'id') return promo.title_id;
+    if (language === 'ru') return promo.title_ru || promo.title_en;
+    return promo.title_en;
   };
 
   const getDescription = () => {
-    if (language === 'id') return promo.descriptionId;
-    if (language === 'ru') return promo.descriptionRu || promo.descriptionEn;
-    return promo.descriptionEn;
+    if (language === 'id') return promo.description_id;
+    if (language === 'ru') return promo.description_ru || promo.description_en;
+    return promo.description_en;
   };
 
   const title = getTitle();
@@ -39,7 +39,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
     <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300">
       <div className="relative">
         <img
-          src={`${import.meta.env.VITE_BASE_URL}${promo.image}`}
+          src={`${import.meta.env.VITE_BASE_URL}/storage/${promo.image}`}
           alt={title}
           className="w-full h-full object-contain"
         />
@@ -54,12 +54,13 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
             {t('startFrom')}
           </span>
           <div className="flex items-center space-x-3 justify-center">
-            <span className="text-3xl font-extrabold text-primary tracking-tight"> {/* Updated text color */}
+            <span className="text-3xl font-extrabold text-primary tracking-tight">
               {promo.price}
             </span>
+            {promo.old_price && 
             <span className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium text-black line-through decoration-2 decoration-red-500 decoration-solid">
-              {promo.oldPrice}
-            </span>
+              {promo.old_price}
+            </span>}
           </div>
         </div>
 
@@ -86,7 +87,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
           </a>
 
           <a
-            href={promo.pdfUrl}
+            href={promo.pdf_url}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full bg-white text-gray-800 py-1 px-3 rounded-xl font-medium text-lg border-2 border-primary hover:bg-purple-50 transition-colors duration-300 hover:-translate-y-0.5 shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"

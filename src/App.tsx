@@ -12,10 +12,17 @@ import Gallery from './components/Gallery';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
-// import { LanguageProvider } from './context/LanguageContext'; // No longer needed here
+import Login from './pages/Login';
 import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import TourLayout from './layouts/TourLayout';
+import AdminLayout from './layouts/AdminLayout';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './pages/admin/Dashboard';
+import AdminPromos from './pages/admin/promos';
+import CreatePromo from './pages/admin/promos/create'; // Import CreatePromo
+import EditPromo from './pages/admin/promos/edit';     // Import EditPromo
+import ShowPromo from './pages/admin/promos/show';     // Import ShowPromo
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -62,7 +69,7 @@ function App() {
     hreflangDefault.rel = 'alternate';
     hreflangDefault.hreflang = 'x-default';
     hreflangDefault.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangDefault); // Corrected typo here
+    document.head.appendChild(hreflangDefault);
   }, []);
 
   const toggleMobileMenu = () => {
@@ -89,14 +96,39 @@ function App() {
                 <WhatsAppButton />
               </>
             } />
+
             <Route element={<TourLayout />}>
               <Route path="/tours" element={<TourList />} />
               <Route path="/tours/:id" element={<TourDetail />} />
             </Route>
+
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Dashboard />} />
+            </Route>
+            <Route 
+              path="/admin/promos"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminPromos />} />
+              <Route path="create" element={<CreatePromo />} /> 
+              <Route path="edit/:id" element={<EditPromo />} />  
+              <Route path=":id" element={<ShowPromo />} />       
+            </Route>
           </Routes>
         </main>
       </div>
-    // </LanguageProvider>
   );
 }
 

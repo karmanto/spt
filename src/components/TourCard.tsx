@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { TourPackage } from '../utils/types';
+import { TourPackage } from '../lib/types';
 import { MapPin, Clock, Users } from 'lucide-react'; 
 
 interface TourCardProps {

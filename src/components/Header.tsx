@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
   const { language, setLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
 
-  const logoUrl = `${import.meta.env.VITE_BASE_URL}/spt_logo.png`
+  const logoUrl = "/spt_logo.png"
 
   const navLinks = [
     { name: t('home'), href: '#home' },
@@ -21,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
     { name: t('gallery'), href: '#gallery' },
     { name: t('faq'), href: '#faq' },
     { name: t('contact'), href: '#contact' },
+    { name: t('admin'), href: '/admin' },
   ];
 
   const toggleLanguage = () => {
@@ -45,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
       role="banner"
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-4">
-        <div className="flex justify-between items-center md:space-x-4">
+        <div className="flex justify-between items-center lg:space-x-4">
           <div className="flex justify-start">
             <a href="/" aria-label="Simbolon Phuket Tour Homepage">
               <img
@@ -58,7 +59,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
             </a>
           </div>
 
-          <div className="flex items-center mr-2 md:hidden">
+          <div className="flex items-center mr-2 lg:hidden">
             <button
               onClick={toggleLanguage}
               className={`flex items-center p-2 mr-2 rounded-md transition-colors ${
@@ -85,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
             </button>
           </div>
 
-          <nav className="hidden md:flex space-x-8" role="navigation" aria-label="Main navigation">
+          <nav className="hidden lg:flex space-x-8" role="navigation" aria-label="Main navigation">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -102,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden lg:flex items-center">
             <button
               onClick={toggleLanguage}
               className={`flex items-center p-2 rounded-md transition-colors ${
@@ -119,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
         </div>
       </div>
 
-      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} md:hidden bg-white shadow-lg`}>
+      <div className={`${mobileMenuOpen ? 'block' : 'hidden'} lg:hidden bg-white shadow-lg`}>
         <nav className="pt-2 pb-4 space-y-1 px-4" role="navigation" aria-label="Mobile navigation">
           {navLinks.map((link) => (
             <a

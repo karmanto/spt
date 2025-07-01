@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { MapPin, Clock, Users } from 'lucide-react';
 import toursData from '../data/tours.json';
-import { TourPackage } from '../utils/types'; 
+import { TourPackage } from '../lib/types'; 
 import { Link } from 'react-router-dom'; // Ensure Link is imported
 
 const TopPackages: React.FC = () => {

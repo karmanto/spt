@@ -5,7 +5,7 @@ import React, { useState, useRef } from 'react';
 import Slider from 'react-slick';
 import { useLanguage } from '../context/LanguageContext';
 import galleryData from '../data/gallery.json';
-import { GalleryImage, GalleryCategory, GalleryData } from '../utils/types'; 
+import { GalleryImage, GalleryCategory, GalleryData } from '../lib/types'; 
 
 const Gallery: React.FC = () => {
   const { t, language } = useLanguage();
@@ -88,7 +88,7 @@ const Gallery: React.FC = () => {
                     className="w-full h-64 object-cover"
                   />
                   <img
-                    src={`${import.meta.env.VITE_BASE_URL}/spt_logo.png`}
+                    src="/spt_logo.png"
                     alt="logo"
                     className="absolute top-2 right-2 w-8 h-8 opacity-90 rounded-full bg-white"
                   />
@@ -130,7 +130,7 @@ const Gallery: React.FC = () => {
                         className="w-full h-[70vh] object-contain"
                       />
                       <img
-                        src={`${import.meta.env.VITE_BASE_URL}/spt_logo.png`}
+                        src="/spt_logo.png"
                         alt="logo"
                         className="absolute top-4 right-4 w-10 h-10 md:w-12 md:h-12 opacity-90 rounded-full bg-white"
                       />

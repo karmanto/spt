@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import faqData from '../data/faq.json';
-import { FAQItem, FAQData } from '../utils/types';
+import { FAQItem, FAQData } from '../lib/types';
 
 const FAQ: React.FC = () => {
   const { t, language } = useLanguage();

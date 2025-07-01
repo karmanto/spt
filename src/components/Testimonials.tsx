@@ -4,7 +4,7 @@ import testimonialsData from '../data/testimonials.json';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Testimonial } from '../utils/types'; 
+import { Testimonial } from '../lib/types'; 
 
 const Testimonials: React.FC = () => {
   const { t, language } = useLanguage();

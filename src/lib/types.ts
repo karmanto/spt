@@ -7,17 +7,21 @@ export interface CountdownState {
 
 export interface Promo {
   id: number;
-  titleId: string;
-  titleEn: string;
-  titleRu?: string;
-  descriptionId: string;
-  descriptionEn: string;
-  descriptionRu?: string;
+  title_id: string;
+  title_en: string;
+  title_ru: string;
+  description_id: string;
+  description_en: string;
+  description_ru: string;
   price: string;
-  oldPrice: string;
-  image: string;
-  endDate: string;
-  pdfUrl: string;
+  old_price?: string;
+  image: string; 
+  end_date: string;
+  pdf_url: string;
+}
+
+export interface PromoCreatePayload extends Omit<Promo, 'id' | 'image'> {
+  image?: File; 
 }
 
 export interface PromoData {
@@ -32,7 +36,7 @@ export interface PromoCardProps {
 export interface LanguageContent {
   en: string;
   id: string;
-  ru?: string; // Make Russian optional if not always present
+  ru: string; 
 }
 
 export interface TourPackage {
@@ -66,7 +70,7 @@ export interface TourPackage {
     answer: LanguageContent;
   }[];
   originalPrice?: number;
-  tags?: string[]; // Pastikan properti ini ada
+  tags?: string; // Diperbarui: dari string[] menjadi string
 }
 
 export interface Advantage {

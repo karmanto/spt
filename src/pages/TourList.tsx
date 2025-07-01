@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import toursData from '../data/tours.json';
-import { TourPackage } from '../utils/types';
+import { TourPackage } from '../lib/types';
 import TourCard from '../components/TourCard';
 
 interface OutletContext {
@@ -23,6 +23,7 @@ const TourList: React.FC = () => {
     const results = allTours.filter(tour => {
       const name = (tour.name[language] || tour.name.en).toLowerCase();
       const location = (tour.location[language] || tour.location.en).toLowerCase();
+      const tourTag = tour.tags ? tour.tags.toLowerCase() : ''; // Ambil tag sebagai string tunggal
 
       const matchesSearch = (
         name.includes(lowerCaseSearchTerm) ||
@@ -32,11 +33,11 @@ const TourList: React.FC = () => {
       if (selectedCategory === 'all') {
         return matchesSearch;
       } else if (selectedCategory === '1_day_trip') {
-        return matchesSearch && tour.tags?.includes('1_day_trip');
+        return matchesSearch && tourTag === '1_day_trip'; // Periksa kesamaan string
       } else if (selectedCategory === 'open_trip') {
-        return matchesSearch && tour.tags?.includes('open_trip');
+        return matchesSearch && tourTag === 'open_trip'; // Periksa kesamaan string
       } else if (selectedCategory === 'other') {
-        return matchesSearch && tour.tags?.includes('private_service');
+        return matchesSearch && tourTag === 'private_service'; // Periksa kesamaan string
       }
       return matchesSearch; 
     });

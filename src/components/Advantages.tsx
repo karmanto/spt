@@ -2,7 +2,7 @@ import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Globe } from 'lucide-react';
 import advantagesData from '../data/advantages.json';
-import { Advantage } from '../utils/types';
+import { Advantage } from '../lib/types';
 
 const getAdvantageIcon = (iconName: string) => {
   const iconClass = "w-8 h-8 text-primary";

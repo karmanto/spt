@@ -235,7 +235,7 @@
         }
       }
     ],
-    "tags": ["1_day_trip", "open_trip"]
+    "tags": "1_day_trip"
   },
   {
     "id": "2",
@@ -396,7 +396,7 @@
       {
         "en": "Hotel pickup and drop-off",
         "id": "Penjemputan dan pengantaran hotel",
-        "ru": "Трансфер из отеля и обратно"
+        "ru": "Трансfer dari отеля и обратно"
       },
       {
         "en": "Insurance",
@@ -452,7 +452,7 @@
         }
       }
     ],
-    "tags": ["1_day_trip", "open_trip"]
+    "tags": "open_trip"
   },
   {
     "id": "3",
@@ -613,7 +613,7 @@
       {
         "en": "Hotel pickup and drop-off",
         "id": "Penjemputan dan pengantaran hotel",
-        "ru": "Трансфер из отеля и обратно"
+        "ru": "Трансfer dari отеля dan kembali"
       },
       {
         "en": "Insurance coverage",
@@ -669,6 +669,6 @@
         }
       }
     ],
-    "tags": ["1_day_trip", "private_service"]
+    "tags": "private_service"
   }
 ]
