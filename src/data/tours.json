@@ -22,15 +22,7 @@
       "infant": 0
     },
     "originalPrice": 3500,
-    "promotions": {
-      "type": {
-        "en": "Early Bird",
-        "id": "Early Bird",
-        "ru": "Раннее бронирование"
-      },
-      "discount": 0,
-      "validUntil": "2024-03-31"
-    },
+    "rate": "4.9",
     "images": [
       "/package1/3.jpg",
       "/package1/4.jpg",
@@ -260,6 +252,7 @@
       "infant": 0
     },
     "originalPrice": 3500,
+    "rate": "4.9",
     "images": [
       "/package2/3.jpg",
       "/package2/4.jpg",
@@ -477,6 +470,7 @@
       "infant": 0
     },
     "originalPrice": 2000,
+    "rate": "4.9",
     "images": [
       "/package3/3.jpg",
       "/package3/4.jpg",

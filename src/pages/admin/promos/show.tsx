@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPromo, deletePromo } from '../../../lib/api';
 import { Promo } from '../../../lib/types';
 import { useState, useEffect } from 'react';
-import { FaEdit, FaTrash, FaArrowLeft } from 'react-icons/fa'; // Import icons
+import { FaEdit, FaTrash, FaArrowLeft } from 'react-icons/fa'; 
 
 const API_URL = import.meta.env.VITE_API_URL;
 

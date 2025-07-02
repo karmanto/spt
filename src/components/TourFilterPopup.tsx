@@ -43,7 +43,6 @@ const TourFilterPopup: React.FC<TourFilterPopupProps> = ({
 
         <h3 className="text-xl font-bold text-white mb-8 text-center">{t('filterTours')}</h3>
 
-        {/* Search Input */}
         <div className="relative w-full mb-8">
           <input
             type="text"
@@ -56,7 +55,6 @@ const TourFilterPopup: React.FC<TourFilterPopupProps> = ({
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white w-4 h-4" />
         </div>
 
-        {/* Category Filter Buttons */}
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {categories.map((category) => (
             <button

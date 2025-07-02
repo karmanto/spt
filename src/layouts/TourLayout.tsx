@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom'; // Import useMatch
 import TourFilterPopup from '../components/TourFilterPopup';
 import { useLanguage } from '../context/LanguageContext';
 import 'flag-icons/css/flag-icons.min.css';
@@ -11,6 +11,9 @@ const TourLayout: React.FC = () => {
   const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+
+  // Check if the current route matches the tour detail page pattern
+  const isTourDetailPage = useMatch('/tours/:id');
 
   const toggleLanguage = () => {
     const next = language === 'id' ? 'en' : language === 'en' ? 'ru' : 'id';
@@ -57,12 +60,15 @@ const TourLayout: React.FC = () => {
                 'text-black'
               }`}>{language.toUpperCase()}</span>
             </button>
-            <button
-              onClick={handleOpenFilterPopup}
-              className={`p-2 rounded-md transition-colors text-gray-700 hover:text-[#102D5E]`}
-            >
-              <Filter size={24} />
-            </button>
+            {/* Conditionally render the filter button */}
+            {!isTourDetailPage && (
+              <button
+                onClick={handleOpenFilterPopup}
+                className={`p-2 rounded-md transition-colors text-gray-700 hover:text-[#102D5E]`}
+              >
+                <Filter size={24} />
+              </button>
+            )}
           </div>
         </div>
       </header>

@@ -49,6 +49,7 @@ export interface TourPackage {
     child: number;
     infant: number;
   };
+  rate?: string;
   images: string[];
   overview: LanguageContent;
   highlights: LanguageContent[];
@@ -60,17 +61,12 @@ export interface TourPackage {
   }[];
   included: LanguageContent[];
   excluded: LanguageContent[];
-  promotions?: {
-    type: LanguageContent;
-    discount: number;
-    validUntil: string;
-  };
   faqs: {
     question: LanguageContent;
     answer: LanguageContent;
   }[];
   originalPrice?: number;
-  tags?: string; // Diperbarui: dari string[] menjadi string
+  tags?: string;
 }
 
 export interface Advantage {

@@ -23,7 +23,7 @@ const TourList: React.FC = () => {
     const results = allTours.filter(tour => {
       const name = (tour.name[language] || tour.name.en).toLowerCase();
       const location = (tour.location[language] || tour.location.en).toLowerCase();
-      const tourTag = tour.tags ? tour.tags.toLowerCase() : ''; // Ambil tag sebagai string tunggal
+      const tourTag = tour.tags ? tour.tags.toLowerCase() : '';
 
       const matchesSearch = (
         name.includes(lowerCaseSearchTerm) ||
@@ -33,18 +33,19 @@ const TourList: React.FC = () => {
       if (selectedCategory === 'all') {
         return matchesSearch;
       } else if (selectedCategory === '1_day_trip') {
-        return matchesSearch && tourTag === '1_day_trip'; // Periksa kesamaan string
+        return matchesSearch && tourTag === '1_day_trip';
       } else if (selectedCategory === 'open_trip') {
-        return matchesSearch && tourTag === 'open_trip'; // Periksa kesamaan string
+        return matchesSearch && tourTag === 'open_trip';
       } else if (selectedCategory === 'other') {
-        return matchesSearch && tourTag === 'private_service'; // Periksa kesamaan string
+        return matchesSearch && tourTag === 'private_service';
       }
       return matchesSearch; 
     });
     setFilteredTours(results);
   }, [searchTerm, language, selectedCategory]); 
+  
   return (
-    <section id="tour-list" className="py-16 min-h-screen">
+    <section id="tour-list" className="pt-16 min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-extrabold text-text mb-4 leading-tight" data-aos="fade-up">
@@ -67,6 +68,21 @@ const TourList: React.FC = () => {
             <p className="text-lg text-textSecondary mt-2">{t('tryDifferentSearch')}</p>
           </div>
         )}
+      </div>
+      
+      {/* Call to Action */}
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-16 mt-16">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            {t('tourList.cantFind')}
+          </h2>
+          <p className="text-xl mb-8 text-blue-100">
+            {t('tourList.customize')}
+          </p>
+          <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg">
+            {t('tourList.contactExperts')}
+          </button>
+        </div>
       </div>
     </section>
   );
