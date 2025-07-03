@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { MapPin, Clock, Tag, Star } from 'lucide-react';
-import { TourPackage } from '../lib/types';
+import { TourPackage, PriceDetails } from '../lib/types';
 import { Link } from 'react-router-dom';
-import { getTourPackages } from '../lib/api'; // Import the new API function
+import { getTourPackages } from '../lib/api'; 
 
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
@@ -15,9 +15,8 @@ const TopPackages: React.FC = () => {
     const fetchTours = async () => {
       try {
         setLoading(true);
-        // Fetch 3 packages with a minimum rate of 4.9 as per the example link
         const response = await getTourPackages({ per_page: 3, page: 1, min_rate: 4.9 });
-        setTours(response.data); // Access the 'data' array from the response
+        setTours(response.data); 
       } catch (err) {
         console.error("Failed to fetch tours:", err);
         setError("Failed to load tour packages. Please try again later.");
@@ -27,7 +26,7 @@ const TopPackages: React.FC = () => {
     };
 
     fetchTours();
-  }, []); // Empty dependency array to run once on mount
+  }, []); 
 
   const getLocalizedContent = (content: { en: string; id?: string; ru?: string }) => {
     if (language === 'id' && content.id) return content.id;
@@ -91,10 +90,29 @@ const TopPackages: React.FC = () => {
             const tourLocation = getLocalizedContent(tour.location);
             const tourOverview = getLocalizedContent(tour.overview);
 
-            // Parse original_price from string to number for calculation
             const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
-            const discountPercentage = originalPriceNum > tour.price.adult
-              ? Math.round(((originalPriceNum - tour.price.adult) / originalPriceNum) * 100)
+            
+            let adultPrice = 0;
+            let parsedPrice: PriceDetails | null = null;
+
+            if (typeof tour.price === 'string') {
+              try {
+                parsedPrice = JSON.parse(tour.price);
+              } catch (e) {
+                console.error("Failed to parse tour price string:", tour.price, e);
+              }
+            } else if (typeof tour.price === 'object' && tour.price !== null) {
+              parsedPrice = tour.price;
+            }
+
+            if (parsedPrice && typeof parsedPrice.adult === 'number') {
+              adultPrice = parsedPrice.adult;
+            } else {
+              console.warn("Adult price not found or invalid for tour:", tour.id, tour.price);
+            }
+
+            const discountPercentage = originalPriceNum > adultPrice
+              ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
               : 0;
 
             return (
@@ -105,7 +123,7 @@ const TopPackages: React.FC = () => {
                 <Link to={`/tours/${tour.id}`}>
                   <div className="relative h-64 overflow-hidden">
                     <img
-                      src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]?.path}`} // Use tour.images[0].path
+                      src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]?.path}`}
                       alt={tourName}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
@@ -115,7 +133,7 @@ const TopPackages: React.FC = () => {
                       </div>
                     )}
                     {tour.rate && (
-                      <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-md">
+                      <div className="absolute top-4 bg-white right-4 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-md">
                         <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
                         <span>{tour.rate}</span>
                       </div>
@@ -155,9 +173,9 @@ const TopPackages: React.FC = () => {
                       <div className="text-left">
                         <div className="flex items-center gap-2">
                           <div className="text-2xl font-bold text-gray-900">
-                            ฿{tour.price.adult.toLocaleString()}
+                            ฿{adultPrice.toLocaleString()}
                           </div>
-                          {originalPriceNum > tour.price.adult && (
+                          {originalPriceNum > adultPrice && (
                             <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
                               ฿{originalPriceNum.toLocaleString()}
                             </div>

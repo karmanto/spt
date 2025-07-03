@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText } from 'lucide-react';
-import { getPromos } from '../../lib/api';
+import { FileText, Globe } from 'lucide-react'; // Import Globe icon for tours
+import { getPromos, getTourPackages } from '../../lib/api'; // Import getTourPackages
 
 export default function Dashboard() {
   const [dataCounts, setDataCounts] = useState({
     promos: 0,
+    tours: 0, // Add tours count
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [articles] = await Promise.all([
+        const [promosResponse, toursResponse] = await Promise.all([ // Fetch both
           getPromos(),
+          getTourPackages({ per_page: 1 }), // Fetch one to get total count
         ]);
 
         setDataCounts({
-          promos: articles.length,
+          promos: promosResponse.length,
+          tours: toursResponse.pagination.total, // Get total from pagination
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -32,6 +35,12 @@ export default function Dashboard() {
       icon: FileText,
       link: '/admin/promos',
       count: dataCounts.promos,
+    },
+    {
+      title: 'Tour Packages', // New module for tours
+      icon: Globe, // Use Globe icon
+      link: '/admin/tours',
+      count: dataCounts.tours,
     },
   ];
 

@@ -1,9 +1,71 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, PriceDetails } from './types';
 
 const API_URL = import.meta.env.VITE_API_URL + "/api";
 interface FetchOptions extends RequestInit {
   body?: string;
 }
+
+// Helper function to safely parse JSON strings
+const safeJSONParse = <T>(jsonString: string | T): T | string => {
+  if (typeof jsonString === 'string') {
+    try {
+      return JSON.parse(jsonString) as T;
+    } catch (e) {
+      console.warn("Failed to parse JSON string:", jsonString, e);
+      return jsonString; // Return original string if parsing fails
+    }
+  }
+  return jsonString; // Return as is if not a string
+};
+
+// Helper function to parse a single TourPackage object
+const parseTourPackageData = (tour: TourPackage): TourPackage => {
+  const parsedTour = { ...tour };
+
+  // Parse LanguageContent fields
+  parsedTour.name = safeJSONParse<LanguageContent>(tour.name) as LanguageContent;
+  parsedTour.duration = safeJSONParse<LanguageContent>(tour.duration) as LanguageContent;
+  parsedTour.location = safeJSONParse<LanguageContent>(tour.location) as LanguageContent;
+  parsedTour.overview = safeJSONParse<LanguageContent>(tour.overview) as LanguageContent;
+
+  // Parse price field
+  parsedTour.price = safeJSONParse<PriceDetails>(tour.price) as PriceDetails;
+
+  // Parse highlights
+  parsedTour.highlights = tour.highlights.map(h => ({
+    ...h,
+    description: safeJSONParse<LanguageContent>(h.description) as LanguageContent
+  }));
+
+  // Parse itineraries and their nested activities/meals
+  parsedTour.itineraries = tour.itineraries.map(it => ({
+    ...it,
+    title: safeJSONParse<LanguageContent>(it.title) as LanguageContent,
+    activities: it.activities.map(act => ({
+      ...act,
+      description: safeJSONParse<LanguageContent>(act.description) as LanguageContent
+    })),
+    meals: it.meals.map(meal => ({
+      ...meal,
+      description: safeJSONParse<LanguageContent>(meal.description) as LanguageContent
+    }))
+  }));
+
+  // Parse included_excluded
+  parsedTour.included_excluded = tour.included_excluded.map(ie => ({
+    ...ie,
+    description: safeJSONParse<LanguageContent>(ie.description) as LanguageContent
+  }));
+
+  // Parse faqs
+  parsedTour.faqs = tour.faqs.map(faq => ({
+    ...faq,
+    question: safeJSONParse<LanguageContent>(faq.question) as LanguageContent,
+    answer: safeJSONParse<LanguageContent>(faq.answer) as LanguageContent
+  }));
+
+  return parsedTour;
+};
 
 // === Fungsi fetch untuk request JSON ===
 export const fetchData = async <T>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
@@ -17,8 +79,15 @@ export const fetchData = async <T>(endpoint: string, options: FetchOptions = {})
     ...options
   });
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || `API error: ${response.statusText}`);
+    // Try to parse error as JSON, fallback to text if not JSON
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `API error: ${response.statusText}`);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`API error: ${response.statusText}. Response: ${errorText.substring(0, 200)}...`);
+    }
   }
   return response.json();
 };
@@ -36,8 +105,15 @@ export const fetchMultipartData = async <T>(endpoint: string, options: RequestIn
     ...options
   });
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || `API error: ${response.statusText}`);
+    // Try to parse error as JSON, fallback to text if not JSON
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `API error: ${response.statusText}`);
+    } else {
+      const errorText = await response.text();
+      throw new Error(`API error: ${response.statusText}. Response: ${errorText.substring(0, 200)}...`);
+    }
   }
   return response.json();
 };
@@ -109,9 +185,106 @@ export const getTourPackages = async (params?: { per_page?: number; page?: numbe
 
   const queryString = query.toString();
   const endpoint = `packages${queryString ? `?${queryString}` : ''}`;
-  return fetchData<TourPackageResponse>(endpoint);
+  const response = await fetchData<TourPackageResponse>(endpoint);
+  // Parse each tour package in the response data
+  response.data = response.data.map(parseTourPackageData);
+  return response;
 };
 
 export const getTourPackageDetail = async (id: string) => {
-  return fetchData<TourPackage>(`packages/${id}`);
+  const tour = await fetchData<TourPackage>(`packages/${id}`);
+  // Parse the single tour package
+  return parseTourPackageData(tour);
+};
+
+export const addTourPackage = async (tour: TourPackageCreatePayload) => {
+  const payloadToSend = {
+    ...tour,
+    name: JSON.stringify(tour.name),
+    duration: JSON.stringify(tour.duration),
+    location: JSON.stringify(tour.location),
+    price: JSON.stringify(tour.price),
+    overview: JSON.stringify(tour.overview),
+    highlights: tour.highlights.map(h => ({
+      description: JSON.stringify(h.description)
+    })),
+    itineraries: tour.itineraries.map(it => ({
+      day: it.day,
+      title: JSON.stringify(it.title),
+      activities: it.activities.map(act => ({
+        time: act.time,
+        description: JSON.stringify(act.description)
+      })),
+      meals: it.meals.map(meal => ({
+        description: JSON.stringify(meal.description)
+      })),
+    })),
+    included_excluded: tour.included_excluded.map(ie => ({
+      type: ie.type,
+      description: JSON.stringify(ie.description)
+    })),
+    faqs: tour.faqs.map(faq => ({
+      question: JSON.stringify(faq.question),
+      answer: JSON.stringify(faq.answer)
+    })),
+  };
+
+  return fetchData<TourPackage>('packages', {
+    method: 'POST',
+    body: JSON.stringify(payloadToSend),
+  });
+};
+
+export const updateTourPackage = async (id: number, tour: TourPackageUpdatePayload) => {
+  const payloadToSend = {
+    ...tour,
+    // Only stringify if the field exists in the payload
+    ...(tour.name && { name: JSON.stringify(tour.name) }),
+    ...(tour.duration && { duration: JSON.stringify(tour.duration) }),
+    ...(tour.location && { location: JSON.stringify(tour.location) }),
+    ...(tour.price && { price: JSON.stringify(tour.price) }),
+    ...(tour.overview && { overview: JSON.stringify(tour.overview) }),
+    ...(tour.highlights && { highlights: tour.highlights.map(h => ({
+      description: JSON.stringify(h.description)
+    })) }),
+    ...(tour.itineraries && { itineraries: tour.itineraries.map(it => ({
+      day: it.day,
+      title: JSON.stringify(it.title),
+      activities: it.activities.map(act => ({
+        time: act.time,
+        description: JSON.stringify(act.description)
+      })),
+      meals: it.meals.map(meal => ({
+        description: JSON.stringify(meal.description)
+      })),
+    })) }),
+    ...(tour.included_excluded && { included_excluded: tour.included_excluded.map(ie => ({
+      type: ie.type,
+      description: JSON.stringify(ie.description)
+    })) }),
+    ...(tour.faqs && { faqs: tour.faqs.map(faq => ({
+      question: JSON.stringify(faq.question),
+      answer: JSON.stringify(faq.answer)
+    })) }),
+  };
+
+  return fetchData<TourPackage>(`packages/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payloadToSend),
+  });
+};
+
+export const deleteTourPackage = async (id: number) => {
+  return fetchData<void>(`packages/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+export const uploadTourImage = async (imageFile: File): Promise<{ path: string; full_url: string }> => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+  return fetchMultipartData<{ path: string; full_url: string }>('packages/upload-image', {
+    method: 'POST',
+    body: formData,
+  });
 };

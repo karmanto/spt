@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { TourPackage } from '../lib/types';
+import { TourPackage, PriceDetails } from '../lib/types';
 import { MapPin, Clock, Tag, Star } from 'lucide-react'; // Changed Users to Tag icon
 
 interface TourCardProps {
@@ -23,8 +23,29 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
   const tourLocation = getLocalizedContent(tour.location);
   const tourOverview = getLocalizedContent(tour.overview);
 
-  const discountPercentage = tour.originalPrice && tour.originalPrice > tour.price.adult
-    ? Math.round(((tour.originalPrice - tour.price.adult) / tour.originalPrice) * 100)
+  const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
+              
+  let adultPrice = 0;
+  let parsedPrice: PriceDetails | null = null;
+
+  if (typeof tour.price === 'string') {
+    try {
+      parsedPrice = JSON.parse(tour.price);
+    } catch (e) {
+      console.error("Failed to parse tour price string:", tour.price, e);
+    }
+  } else if (typeof tour.price === 'object' && tour.price !== null) {
+    parsedPrice = tour.price;
+  }
+
+  if (parsedPrice && typeof parsedPrice.adult === 'number') {
+    adultPrice = parsedPrice.adult;
+  } else {
+    console.warn("Adult price not found or invalid for tour:", tour.id, tour.price);
+  }
+
+  const discountPercentage = originalPriceNum > adultPrice
+    ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
     : 0;
 
   return (
@@ -32,7 +53,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
       <Link to={`/tours/${tour.id}`}>
         <div className="relative h-64 overflow-hidden">
           <img
-            src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]}`}
+            src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]?.path}`}
             alt={tourName}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
@@ -42,7 +63,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
             </div>
           )}
           {tour.rate && (
-            <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-md">
+            <div className="absolute top-4 bg-white right-4 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 shadow-md">
               <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
               <span>{tour.rate}</span>
             </div>
@@ -71,8 +92,8 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
               </div>
               {tour.code && (
                 <div className="flex items-center gap-1">
-                  <Tag className="w-4 h-4" /> {/* Replaced Users with Tag */}
-                  <span>{tour.code}</span> {/* Display tour code here */}
+                  <Tag className="w-4 h-4" /> 
+                  <span>{tour.code}</span> 
                 </div>
               )}
             </div>
@@ -82,11 +103,11 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
             <div className="text-left">
               <div className="flex items-center gap-2">
                 <div className="text-2xl font-bold text-gray-900">
-                  ฿{tour.price.adult.toLocaleString()}
+                  ฿{adultPrice.toLocaleString()}
                 </div>
-                {tour.originalPrice && tour.originalPrice > tour.price.adult && (
+                {originalPriceNum > adultPrice && (
                   <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
-                    ฿{tour.originalPrice.toLocaleString()}
+                    ฿{originalPriceNum.toLocaleString()}
                   </div>
                 )}
               </div>

@@ -104,6 +104,13 @@ export interface TourFAQ {
   updated_at: string;
 }
 
+// Define the structure for the price object
+export interface PriceDetails {
+  adult: number;
+  child: number;
+  infant: number;
+}
+
 // Updated TourPackage interface to match API response
 export interface TourPackage {
   id: number;
@@ -111,11 +118,7 @@ export interface TourPackage {
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  price: {
-    adult: number;
-    child: number;
-    infant: number;
-  };
+  price: string | PriceDetails; // Updated to allow string or PriceDetails object
   original_price?: string; // API returns as string
   rate?: string;
   images: TourImage[];
@@ -139,6 +142,36 @@ export interface TourPackageResponse {
     last_page: number;
   };
 }
+
+// Payload for creating a new TourPackage
+export interface TourPackageCreatePayload {
+  code?: string;
+  name: LanguageContent;
+  duration: LanguageContent;
+  location: LanguageContent;
+  price: {
+    adult: number;
+    child: number;
+    infant: number;
+  };
+  original_price?: number; // Assuming number for input, API might convert to string
+  rate?: number; // Assuming number for input, API might convert to string
+  images: { path: string; order: number }[]; // For payload, sending paths
+  overview: LanguageContent;
+  highlights: { description: LanguageContent }[]; // For payload, only description
+  itineraries: {
+    day: number;
+    title: LanguageContent;
+    activities: { time: string; description: LanguageContent }[];
+    meals: { description: LanguageContent }[];
+  }[];
+  included_excluded: { type: 'included' | 'excluded'; description: LanguageContent }[];
+  faqs: { question: LanguageContent; answer: LanguageContent }[];
+  tags?: string;
+}
+
+// Payload for updating a TourPackage (all fields optional)
+export interface TourPackageUpdatePayload extends Partial<TourPackageCreatePayload> {}
 
 export interface Advantage {
   id: number;

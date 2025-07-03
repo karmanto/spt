@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
+import { LayoutDashboard, Gift, Globe } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
   const { t } = useLanguage();
@@ -8,7 +9,7 @@ const AdminLayout: React.FC = () => {
   const logoUrl = "/spt_logo.png"
 
   return (
-    <div className="min-h-screen text-text">
+    <div className="min-h-screen text-text bg-gray-100">
       <header className="bg-white shadow-md px-4 sm:px-6 lg:px-8 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex justify-start">
@@ -24,6 +25,31 @@ const AdminLayout: React.FC = () => {
           </div>
         </div>
       </header>
+      <nav className="bg-surface shadow-sm py-3 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex flex-wrap gap-4 text-sm font-medium">
+          <Link
+            to="/admin"
+            className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
+          >
+            <LayoutDashboard className="h-4 w-4 mr-2" />
+            Dashboard
+          </Link>
+          <Link
+            to="/admin/promos"
+            className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
+          >
+            <Gift className="h-4 w-4 mr-2" />
+            Kelola Promo
+          </Link>
+          <Link
+            to="/admin/tours"
+            className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
+          >
+            <Globe className="h-4 w-4 mr-2" />
+            Kelola Tur
+          </Link>
+        </div>
+      </nav>
       <Outlet /> 
     </div>
   );

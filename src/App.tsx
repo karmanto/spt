@@ -23,6 +23,10 @@ import AdminPromos from './pages/admin/promos';
 import CreatePromo from './pages/admin/promos/create'; // Import CreatePromo
 import EditPromo from './pages/admin/promos/edit';     // Import EditPromo
 import ShowPromo from './pages/admin/promos/show';     // Import ShowPromo
+import AdminTours from './pages/admin/tours';          // Import AdminTours
+import CreateTour from './pages/admin/tours/create';   // Import CreateTour
+import EditTour from './pages/admin/tours/edit';       // Import EditTour
+import ShowTour from './pages/admin/tours/show';       // Import ShowTour
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -125,6 +129,19 @@ function App() {
               <Route path="create" element={<CreatePromo />} /> 
               <Route path="edit/:id" element={<EditPromo />} />  
               <Route path=":id" element={<ShowPromo />} />       
+            </Route>
+            <Route 
+              path="/admin/tours"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminTours />} />
+              <Route path="create" element={<CreateTour />} /> 
+              <Route path="edit/:id" element={<EditTour />} />  
+              <Route path=":id" element={<ShowTour />} />       
             </Route>
           </Routes>
         </main>

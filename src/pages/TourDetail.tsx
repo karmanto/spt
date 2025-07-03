@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
-import { TourPackage, LanguageContent } from '../lib/types';
+import { TourPackage, LanguageContent, PriceDetails } from '../lib/types'; // Import PriceDetails
 import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
@@ -79,9 +79,18 @@ const TourDetail: React.FC = () => {
     { id: 'booking', label: t('booking') }
   ];
 
-  const discountPercentage = tour.original_price && parseFloat(tour.original_price) > tour.price.adult
-    ? Math.round(((parseFloat(tour.original_price) - tour.price.adult) / parseFloat(tour.original_price)) * 100)
+  // --- Start of Price Handling Logic ---
+  // After parsing in api.ts, tour.price will always be PriceDetails object
+  const priceDetails = tour.price as PriceDetails; // Cast to PriceDetails
+  const adultPrice = priceDetails.adult || 0;
+  const childPrice = priceDetails.child || 0;
+  // Infant price is handled as 'free', so no need to extract from parsedPrice for display
+
+  const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
+  const discountPercentage = originalPriceNum > adultPrice
+    ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
     : 0;
+  // --- End of Price Handling Logic ---
 
   return (
     <div className="min-h-screen bg-white">
@@ -269,14 +278,14 @@ const TourDetail: React.FC = () => {
                         <td className="py-4 px-6 font-medium text-gray-900">{t('adult')}</td>
                         <td className="py-4 px-6 text-center text-gray-600">{t('ageRangeAdult')}</td>
                         <td className="py-4 px-6 text-right text-xl font-bold text-gray-900">
-                          ฿{tour.price.adult.toLocaleString()}
+                          ฿{adultPrice.toLocaleString()} {/* Use parsed adultPrice */}
                         </td>
                       </tr>
                       <tr className="border-b border-gray-100">
                         <td className="py-4 px-6 font-medium text-gray-900">{t('child')}</td>
                         <td className="py-4 px-6 text-center text-gray-600">{t('ageRangeChild')}</td>
                         <td className="py-4 px-6 text-right text-xl font-bold text-gray-900">
-                          ฿{tour.price.child.toLocaleString()}
+                          ฿{childPrice.toLocaleString()} {/* Use parsed childPrice */}
                         </td>
                       </tr>
                       <tr>

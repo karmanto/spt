@@ -11,10 +11,15 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
   const { t, language } = useLanguage();
 
   const getLocalizedContent = (content: any) => {
-    if (typeof content === 'object' && content[language]) {
+    // Ensure content is an object before trying to access properties
+    if (typeof content === 'object' && content !== null && content[language]) {
       return content[language];
     }
-    return content;
+    // Fallback to English if current language content is not available or content is not an object
+    if (typeof content === 'object' && content !== null && content.en) {
+      return content.en;
+    }
+    return content; // Return as is if not an object or no localized content found
   };
 
   // Add a check to ensure tour.itineraries is an array before mapping
@@ -31,7 +36,7 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('itinerary')}</h2>
       <div className="space-y-8">
         {tour.itineraries.map((dayPlan, index) => ( // Changed from tour.itinerary to tour.itineraries
-          <div key={index} className="relative pl-8 border-l-2 border-blue-200">
+          <div key={dayPlan.id || index} className="relative pl-8 border-l-2 border-blue-200"> {/* Use dayPlan.id for key */}
             <div className="absolute -left-3 top-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
               {dayPlan.day}
             </div>
@@ -40,7 +45,7 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
             </h3>
             <ul className="space-y-2 text-gray-700">
               {dayPlan.activities.map((activity, idx) => (
-                <li key={idx} className="flex items-start gap-2">
+                <li key={activity.id || idx} className="flex items-start gap-2"> {/* Use activity.id for key */}
                   <Clock className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                   <span>
                     <span className="font-semibold">{activity.time}</span> - {getLocalizedContent(activity.description)}
@@ -53,7 +58,7 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
                 <h4 className="text-md font-semibold text-gray-800">{t('mealsIncluded')}:</h4>
                 <ul className="list-disc list-inside text-gray-600 text-sm">
                   {dayPlan.meals.map((meal, idx) => (
-                    <li key={idx}>{getLocalizedContent(meal)}</li>
+                    <li key={meal.id || idx}>{getLocalizedContent(meal.description)}</li> 
                   ))}
                 </ul>
               </div>
