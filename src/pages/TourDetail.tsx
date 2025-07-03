@@ -1,34 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
-import toursData from '../data/tours.json';
 import { TourPackage, LanguageContent } from '../lib/types';
 import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
+import { getTourPackageDetail } from '../lib/api'; // Import API function
 
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t, language: currentLanguage } = useLanguage();
   const [tour, setTour] = useState<TourPackage | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview'); 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
 
   useEffect(() => {
-    const foundTour = toursData.find((t) => t.id === id);
-    if (foundTour) {
-      setTour(foundTour);
-    } else {
-      navigate('/tours'); 
-    }
-  }, [id, navigate]);
+    const fetchTourDetail = async () => {
+      if (!id) {
+        navigate('/tours'); // Redirect if no ID is present
+        return;
+      }
+      try {
+        setLoading(true);
+        setError(null);
+        const foundTour = await getTourPackageDetail(id);
+        setTour(foundTour);
+      } catch (err) {
+        console.error("Failed to fetch tour detail:", err);
+        setError(t('failedToLoadTourDetails') || 'Failed to load tour details. Please try again later.');
+        navigate('/tours'); // Redirect to tours list on error
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!tour) {
+    fetchTourDetail();
+  }, [id, navigate, t]); // Re-fetch if ID changes or language context changes
+
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-50">
         <p className="text-base text-gray-700">{t('loadingTourDetails')}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-red-50">
+        <p className="text-base text-red-700">{error}</p>
+      </div>
+    );
+  }
+
+  if (!tour) {
+    // This case should ideally be handled by the navigate in useEffect, but as a fallback
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-50">
+        <p className="text-base text-gray-700">{t('tourNotFound') || 'Tour not found.'}</p>
       </div>
     );
   }
@@ -46,8 +79,8 @@ const TourDetail: React.FC = () => {
     { id: 'booking', label: t('booking') }
   ];
 
-  const discountPercentage = tour.originalPrice && tour.originalPrice > tour.price.adult
-    ? Math.round(((tour.originalPrice - tour.price.adult) / tour.originalPrice) * 100)
+  const discountPercentage = tour.original_price && parseFloat(tour.original_price) > tour.price.adult
+    ? Math.round(((parseFloat(tour.original_price) - tour.price.adult) / parseFloat(tour.original_price)) * 100)
     : 0;
 
   return (
@@ -72,7 +105,7 @@ const TourDetail: React.FC = () => {
               </div>
             )}
             <img
-              src={`${import.meta.env.VITE_BASE_URL}${tour.images[selectedImageIndex]}`}
+              src={`${import.meta.env.VITE_BASE_URL}${tour.images[selectedImageIndex]?.path}`} 
               alt={getLocalizedContent(tour.name)}
               className="w-full h-96 object-cover rounded-2xl shadow-lg mb-4"
             />
@@ -84,14 +117,14 @@ const TourDetail: React.FC = () => {
             <div className="flex gap-2 overflow-x-auto pb-2">
               {tour.images.map((image, index) => (
                 <button
-                  key={index}
+                  key={image.id} // Use image.id as key
                   onClick={() => setSelectedImageIndex(index)}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                     selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                   }`}
                 >
                   <img
-                    src={`${import.meta.env.VITE_BASE_URL}${image}`}
+                    src={`${import.meta.env.VITE_BASE_URL}${image.path}`} // Use .path
                     alt={`${getLocalizedContent(tour.name)} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -130,10 +163,10 @@ const TourDetail: React.FC = () => {
             <div className="bg-blue-50 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
               <ul className="space-y-2">
-                {tour.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-start gap-2">
+                {tour.highlights.map((highlight) => (
+                  <li key={highlight.id} className="flex items-start gap-2"> {/* Use highlight.id as key */}
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{getLocalizedContent(highlight)}</span>
+                    <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> {/* Use .description */}
                   </li>
                 ))}
               </ul>
@@ -182,12 +215,14 @@ const TourDetail: React.FC = () => {
                     {t('whatsIncluded')}
                   </h3>
                   <ul className="space-y-3">
-                    {tour.included.map((item, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">{getLocalizedContent(item)}</span>
-                      </li>
-                    ))}
+                    {tour.included_excluded
+                      .filter(item => item.type === 'included')
+                      .map((item) => (
+                        <li key={item.id} className="flex items-start gap-3"> {/* Use item.id as key */}
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span> {/* Use .description */}
+                        </li>
+                      ))}
                   </ul>
                 </div>
 
@@ -197,12 +232,14 @@ const TourDetail: React.FC = () => {
                     {t('whatsNotIncluded')}
                   </h3>
                   <ul className="space-y-3">
-                    {tour.excluded.map((item, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">{getLocalizedContent(item)}</span>
-                      </li>
-                    ))}
+                    {tour.included_excluded
+                      .filter(item => item.type === 'excluded')
+                      .map((item) => (
+                        <li key={item.id} className="flex items-start gap-3"> {/* Use item.id as key */}
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span> {/* Use .description */}
+                        </li>
+                      ))}
                   </ul>
                 </div>
               </div>
@@ -258,8 +295,8 @@ const TourDetail: React.FC = () => {
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
                 <div className="space-y-6">
-                  {tour.faqs.map((faq, index) => (
-                    <div key={index} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+                  {tour.faqs.map((faq) => (
+                    <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> {/* Use faq.id as key */}
                       <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
                       <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
                     </div>

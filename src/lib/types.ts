@@ -15,13 +15,13 @@ export interface Promo {
   description_ru: string;
   price: string;
   old_price?: string;
-  image: string; 
+  image: string;
   end_date: string;
   pdf_url: string;
 }
 
 export interface PromoCreatePayload extends Omit<Promo, 'id' | 'image'> {
-  image?: File; 
+  image?: File;
 }
 
 export interface PromoData {
@@ -35,13 +35,79 @@ export interface PromoCardProps {
 
 export interface LanguageContent {
   en: string;
-  id: string;
-  ru: string; 
+  id?: string;
+  ru?: string;
 }
 
+// New interfaces for TourPackage nested data based on API response
+export interface TourImage {
+  id: number;
+  imageable_type: string;
+  imageable_id: number;
+  path: string;
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TourHighlight {
+  id: number;
+  package_id: number;
+  description: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TourActivity {
+  id: number;
+  itinerary_id: number;
+  time: string;
+  description: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TourMeal {
+  id: number;
+  itinerary_id: number;
+  description: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TourItinerary {
+  id: number;
+  package_id: number;
+  day: number;
+  title: LanguageContent;
+  created_at: string;
+  updated_at: string;
+  activities: TourActivity[];
+  meals: TourMeal[];
+}
+
+export interface TourIncludedExcluded {
+  id: number;
+  package_id: number;
+  type: 'included' | 'excluded';
+  description: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TourFAQ {
+  id: number;
+  package_id: number;
+  question: LanguageContent;
+  answer: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
+// Updated TourPackage interface to match API response
 export interface TourPackage {
-  id: string;
-  code?: string; // Added code field
+  id: number;
+  code?: string;
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
@@ -50,27 +116,28 @@ export interface TourPackage {
     child: number;
     infant: number;
   };
+  original_price?: string; // API returns as string
   rate?: string;
-  images: string[];
+  images: TourImage[];
   overview: LanguageContent;
-  highlights: LanguageContent[];
-  itinerary: {
-    day: number;
-    title: LanguageContent;
-    activities: {
-      time: string;
-      description: LanguageContent;
-    }[];
-    meals: LanguageContent[];
-  }[];
-  included: LanguageContent[];
-  excluded: LanguageContent[];
-  faqs: {
-    question: LanguageContent;
-    answer: LanguageContent;
-  }[];
-  originalPrice?: number;
+  highlights: TourHighlight[];
+  itineraries: TourItinerary[]; // Changed from 'itinerary' to 'itineraries'
+  included_excluded: TourIncludedExcluded[]; // Combines included and excluded
+  faqs: TourFAQ[];
   tags?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// New interface for the API response wrapper for tour lists
+export interface TourPackageResponse {
+  data: TourPackage[];
+  pagination: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+  };
 }
 
 export interface Advantage {
@@ -123,7 +190,7 @@ export interface Testimonial {
   location: string;
   comment_id: string;
   comment_en: string;
-  comment_ru?: string; 
+  comment_ru?: string;
   rating: number;
   image: string;
 }

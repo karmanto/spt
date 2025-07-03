@@ -1,4 +1,4 @@
-import { Promo, PromoCreatePayload } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse } from './types';
 
 const API_URL = import.meta.env.VITE_API_URL + "/api";
 interface FetchOptions extends RequestInit {
@@ -11,11 +11,15 @@ export const fetchData = async <T>(endpoint: string, options: FetchOptions = {})
   if (options.method && options.method !== 'GET') {
     headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
   }
-  
+
   const response = await fetch(`${API_URL}/${endpoint}`, {
     headers,
     ...options
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || `API error: ${response.statusText}`);
+  }
   return response.json();
 };
 
@@ -26,11 +30,15 @@ export const fetchMultipartData = async <T>(endpoint: string, options: RequestIn
   if (options.method && options.method !== 'GET') {
     headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
   }
-  
+
   const response = await fetch(`${API_URL}/${endpoint}`, {
     headers,
     ...options
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || `API error: ${response.statusText}`);
+  }
   return response.json();
 };
 
@@ -38,7 +46,7 @@ export const fetchMultipartData = async <T>(endpoint: string, options: RequestIn
 export const getPromos = async () => fetchData<Promo[]>('promos');
 export const getPromo = async (id: string) => fetchData<Promo>(`promos/${id}`);
 
-export const addPromo = async (promo: PromoCreatePayload) => { // Menggunakan PromoCreatePayload di sini
+export const addPromo = async (promo: PromoCreatePayload) => { 
   const formData = new FormData();
   formData.append('title_id', promo.title_id);
   formData.append('title_en', promo.title_en);
@@ -76,7 +84,7 @@ export const updatePromo = async (
   if (promo.image) {
     formData.append('image', promo.image);
   }
- 
+
   formData.append('_method', 'PUT');
 
   return fetchMultipartData<Promo>(`promos/${id}`, {
@@ -87,3 +95,23 @@ export const updatePromo = async (
 
 export const deletePromo = async (id: number) =>
   fetchData<void>(`promos/${id}`, { method: 'DELETE' });
+
+// ==== API Tour Packages ====
+export const getTourPackages = async (params?: { per_page?: number; page?: number; min_rate?: number; search?: string; tags?: string; }) => {
+  const query = new URLSearchParams();
+  if (params?.per_page) query.append('per_page', params.per_page.toString());
+  if (params?.page) query.append('page', params.page.toString());
+  if (params?.min_rate) query.append('min_rate', params.min_rate.toString());
+  if (params?.search) query.append('search', params.search); 
+  if (params?.tags && params.tags !== 'all') { 
+    query.append('tags', params.tags === 'other' ? 'private_service' : params.tags); 
+  }
+
+  const queryString = query.toString();
+  const endpoint = `packages${queryString ? `?${queryString}` : ''}`;
+  return fetchData<TourPackageResponse>(endpoint);
+};
+
+export const getTourPackageDetail = async (id: string) => {
+  return fetchData<TourPackage>(`packages/${id}`);
+};

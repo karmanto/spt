@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { MapPin, Clock, Tag, Star } from 'lucide-react'; 
-import toursData from '../data/tours.json';
-import { TourPackage } from '../lib/types'; 
-import { Link } from 'react-router-dom'; 
+import { MapPin, Clock, Tag, Star } from 'lucide-react';
+import { TourPackage } from '../lib/types';
+import { Link } from 'react-router-dom';
+import { getTourPackages } from '../lib/api'; // Import the new API function
 
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
+  const [tours, setTours] = useState<TourPackage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const tours: TourPackage[] = toursData as TourPackage[];
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        setLoading(true);
+        // Fetch 3 packages with a minimum rate of 4.9 as per the example link
+        const response = await getTourPackages({ per_page: 3, page: 1, min_rate: 4.9 });
+        setTours(response.data); // Access the 'data' array from the response
+      } catch (err) {
+        console.error("Failed to fetch tours:", err);
+        setError("Failed to load tour packages. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTours();
+  }, []); // Empty dependency array to run once on mount
 
   const getLocalizedContent = (content: { en: string; id?: string; ru?: string }) => {
     if (language === 'id' && content.id) return content.id;
@@ -16,17 +35,47 @@ const TopPackages: React.FC = () => {
     return content.en;
   };
 
+  if (loading) {
+    return (
+      <section id="packages" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-600">{t('loadingPackages') || 'Loading tour packages...'}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="packages" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-red-500">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (tours.length === 0) {
+    return (
+      <section id="packages" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-600">{t('noPackagesFound') || 'No tour packages found.'}</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="packages" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 
+          <h2
             className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4"
             data-aos="fade-up"
           >
             {t('topPackages')}
           </h2>
-          <p 
+          <p
             className="text-lg text-gray-600 max-w-3xl mx-auto"
             data-aos="fade-up"
             data-aos-delay="100"
@@ -34,7 +83,7 @@ const TopPackages: React.FC = () => {
             {t('topPackagesDetail')}
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {tours.map((tour: TourPackage) => {
             const tourName = getLocalizedContent(tour.name);
@@ -42,8 +91,10 @@ const TopPackages: React.FC = () => {
             const tourLocation = getLocalizedContent(tour.location);
             const tourOverview = getLocalizedContent(tour.overview);
 
-            const discountPercentage = tour.originalPrice && tour.originalPrice > tour.price.adult
-              ? Math.round(((tour.originalPrice - tour.price.adult) / tour.originalPrice) * 100)
+            // Parse original_price from string to number for calculation
+            const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
+            const discountPercentage = originalPriceNum > tour.price.adult
+              ? Math.round(((originalPriceNum - tour.price.adult) / originalPriceNum) * 100)
               : 0;
 
             return (
@@ -51,10 +102,10 @@ const TopPackages: React.FC = () => {
                 key={tour.id}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
               >
-                <Link to={`/tours/${tour.id}`}> {/* Wrap the entire card with Link */}
+                <Link to={`/tours/${tour.id}`}>
                   <div className="relative h-64 overflow-hidden">
                     <img
-                      src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]}`}
+                      src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]?.path}`} // Use tour.images[0].path
                       alt={tourName}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
@@ -76,11 +127,11 @@ const TopPackages: React.FC = () => {
                       <MapPin className="w-4 h-4" />
                       <span>{tourLocation}</span>
                     </div>
-                    
+
                     <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">
                       {tourName}
                     </h3>
-                    
+
                     <p className="text-gray-600 mb-4 line-clamp-2">
                       {tourOverview}
                     </p>
@@ -93,8 +144,8 @@ const TopPackages: React.FC = () => {
                         </div>
                         {tour.code && (
                           <div className="flex items-center gap-1">
-                            <Tag className="w-4 h-4" /> 
-                            <span>{tour.code}</span> 
+                            <Tag className="w-4 h-4" />
+                            <span>{tour.code}</span>
                           </div>
                         )}
                       </div>
@@ -106,15 +157,15 @@ const TopPackages: React.FC = () => {
                           <div className="text-2xl font-bold text-gray-900">
                             ฿{tour.price.adult.toLocaleString()}
                           </div>
-                          {tour.originalPrice && tour.originalPrice > tour.price.adult && (
+                          {originalPriceNum > tour.price.adult && (
                             <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
-                              ฿{tour.originalPrice.toLocaleString()}
+                              ฿{originalPriceNum.toLocaleString()}
                             </div>
                           )}
                         </div>
                         <div className="text-sm text-gray-500">{t('perAdult')}</div>
                       </div>
-                      
+
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 flex items-center gap-2 group/btn whitespace-nowrap">
                         {t('viewDetails')}
                       </button>

@@ -17,11 +17,20 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
     return content;
   };
 
+  // Add a check to ensure tour.itineraries is an array before mapping
+  if (!tour || !Array.isArray(tour.itineraries)) {
+    return (
+      <div className="bg-white rounded-2xl p-8 shadow-sm text-center text-gray-600">
+        <p>{t('noItineraryAvailable') || 'No itinerary available for this tour.'}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-2xl p-8 shadow-sm">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('itinerary')}</h2>
       <div className="space-y-8">
-        {tour.itinerary.map((dayPlan, index) => (
+        {tour.itineraries.map((dayPlan, index) => ( // Changed from tour.itinerary to tour.itineraries
           <div key={index} className="relative pl-8 border-l-2 border-blue-200">
             <div className="absolute -left-3 top-0 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
               {dayPlan.day}
