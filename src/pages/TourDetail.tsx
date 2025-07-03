@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
 import toursData from '../data/tours.json';
 import { TourPackage, LanguageContent } from '../lib/types';
-import { MapPin, Clock, Users, Star, Camera, CheckCircle, XCircle } from 'lucide-react'; 
+import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react'; // Added Tag icon
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
@@ -106,7 +106,7 @@ const TourDetail: React.FC = () => {
                 <MapPin className="w-4 h-4" />
                 <span>{getLocalizedContent(tour.location)}</span>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
                 {getLocalizedContent(tour.name)}
               </h1>
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
@@ -114,10 +114,12 @@ const TourDetail: React.FC = () => {
                   <Clock className="w-4 h-4" />
                   <span>{getLocalizedContent(tour.duration)}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Users className="w-4 h-4" />
-                  <span>{t('groupTour')}</span>
-                </div>
+                {tour.code && (
+                  <div className="flex items-center gap-1">
+                    <Tag className="w-4 h-4" /> {/* Replaced Users with Tag */}
+                    <span>{tour.code}</span> {/* Display tour code here */}
+                  </div>
+                )}
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 text-yellow-400 fill-current" />
                   <span>{tour.rate}</span>

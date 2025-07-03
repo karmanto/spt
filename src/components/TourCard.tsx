@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { TourPackage } from '../lib/types';
-import { MapPin, Clock, Users, Star } from 'lucide-react'; // Import Star icon
+import { MapPin, Clock, Tag, Star } from 'lucide-react'; // Changed Users to Tag icon
 
 interface TourCardProps {
   tour: TourPackage;
@@ -55,7 +55,7 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
             <span>{tourLocation}</span>
           </div>
           
-          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+          <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">
             {tourName}
           </h3>
           
@@ -69,10 +69,12 @@ const TourCard: React.FC<TourCardProps> = ({ tour }) => {
                 <Clock className="w-4 h-4" />
                 <span>{tourDuration}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <Users className="w-4 h-4" />
-                <span>{t('groupTour')}</span>
-              </div>
+              {tour.code && (
+                <div className="flex items-center gap-1">
+                  <Tag className="w-4 h-4" /> {/* Replaced Users with Tag */}
+                  <span>{tour.code}</span> {/* Display tour code here */}
+                </div>
+              )}
             </div>
           </div>
 

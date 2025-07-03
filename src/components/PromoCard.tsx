@@ -33,68 +33,80 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   })();
 
   const encodedMessage = encodeURIComponent(rawMessage);
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+  const whatsappLink = (() => {
+    switch (language) {
+      case 'ru':
+        return `https://t.me/torijark?text=${encodedMessage}`;
+      default:
+        return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    }
+  })();
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300">
-      <div className="relative">
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer">
+      <div className="relative h-64 overflow-hidden">
         <img
           src={`${import.meta.env.VITE_BASE_URL}/storage/${promo.image}`}
           alt={title}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
       </div>
 
-      <div className="p-3">
-        <h3 className="text-xl font-bold text-gray-900 mb-2 text-center">{title}</h3>
-        <p className="text-sm text-gray-600 mb-3 text-center">{description}</p>
-
-        <div className="flex flex-col space-y-1 mb-2 text-center">
-          <span className="text-xs uppercase tracking-wider text-gray-500 pl-1">
-            {t('startFrom')}
-          </span>
-          <div className="flex items-center space-x-3 justify-center">
-            <span className="text-3xl font-extrabold text-primary tracking-tight">
-              {promo.price}
-            </span>
-            {promo.old_price && 
-            <span className="px-2 py-0.5 bg-gray-100 rounded-full text-sm font-medium text-black line-through decoration-2 decoration-red-500 decoration-solid">
-              {promo.old_price}
-            </span>}
-          </div>
-        </div>
-
-        {countdown && (
-          <div className="mb-4">
-            <div className="text-center">
-              <div className="bg-gray-100 rounded p-1 w-auto">
-                <span className="text-md font-bold mr-1">{countdown.days}</span>
-                <span className="text-xs text-gray-600">{t('dayRemaining')}</span>
-              </div>
+      {countdown && (
+        <div className="mb-2">
+          <div className="text-center">
+            <div className="bg-red-500 p-1 w-full inline-block"> 
+              <span className="text-lg font-bold mr-1 text-white">{countdown.days}</span>
+              <span className="text-xs text-white">{t('dayRemaining')}</span>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        <div className={`flex gap-4 ${language === 'ru' ? 'flex-col' : 'flex-row'}`}>
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full bg-blue-600 text-white py-1 px-3 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center gap-2 whitespace-nowrap"
-            aria-label={t('bookNow')}
-          >
-            {t('bookNow')}
-          </a>
+      <div className="px-6"> 
 
-          <a
-            href={promo.pdf_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full bg-white text-gray-800 py-1 px-3 rounded-xl font-medium text-lg border-2 border-primary hover:bg-purple-50 transition-colors duration-300 hover:-translate-y-0.5 shadow-md hover:shadow-lg flex items-center justify-center gap-2 whitespace-nowrap"
-            aria-label={t('viewDetail')}
-          >
-            {t('viewDetail')}
-          </a>
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 mb-4 line-clamp-2"> 
+          {description}
+        </p>
+
+        <div className="flex-col items-center justify-between mb-4"> 
+          <div className="text-left mb-2">
+            <span className="text-sm text-gray-500">{t('startFrom')}</span> 
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-gray-900"> 
+                {promo.price}
+              </span>
+              {promo.old_price && 
+              <span className="text-md text-gray-400 line-through decoration-red-500 decoration-2"> 
+                {promo.old_price}
+              </span>}
+            </div>
+          </div>
+          
+          <div className={`flex gap-2`}> 
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-base hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap" 
+              aria-label={t('bookNow')}
+            >
+              {t('bookNow')}
+            </a>
+
+            <a
+              href={promo.pdf_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-gray-800 px-6 py-3 rounded-xl font-medium text-base border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap"
+              aria-label={t('viewDetail')}
+            >
+              {t('viewDetail')}
+            </a>
+          </div>
         </div>
       </div>
     </div>

@@ -41,6 +41,7 @@ export interface LanguageContent {
 
 export interface TourPackage {
   id: string;
+  code?: string; // Added code field
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;

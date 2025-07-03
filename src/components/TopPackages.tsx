@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { MapPin, Clock, Users, Star } from 'lucide-react'; 
+import { MapPin, Clock, Tag, Star } from 'lucide-react'; 
 import toursData from '../data/tours.json';
 import { TourPackage } from '../lib/types'; 
 import { Link } from 'react-router-dom'; 
@@ -77,7 +77,7 @@ const TopPackages: React.FC = () => {
                       <span>{tourLocation}</span>
                     </div>
                     
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                    <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">
                       {tourName}
                     </h3>
                     
@@ -91,10 +91,12 @@ const TopPackages: React.FC = () => {
                           <Clock className="w-4 h-4" />
                           <span>{tourDuration}</span>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          <span>{t('groupTour')}</span>
-                        </div>
+                        {tour.code && (
+                          <div className="flex items-center gap-1">
+                            <Tag className="w-4 h-4" /> 
+                            <span>{tour.code}</span> 
+                          </div>
+                        )}
                       </div>
                     </div>
 

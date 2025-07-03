@@ -1,6 +1,7 @@
 [
   {
     "id": "1",
+    "code": "TOUR-PHIPHI",
     "name": {
       "en": "⁠Phi Phi Islands + Bamboo Islands",
       "id": "⁠Phi Phi Islands + Bamboo Islands",
@@ -231,6 +232,7 @@
   },
   {
     "id": "2",
+    "code": "TOUR-JBOND",
     "name": {
       "en": "⁠James Bond Islands",
       "id": "⁠James Bond Islands",
@@ -389,7 +391,7 @@
       {
         "en": "Hotel pickup and drop-off",
         "id": "Penjemputan dan pengantaran hotel",
-        "ru": "Трансfer dari отеля и обратно"
+        "ru": "Трансfer dari отеля dan обратно"
       },
       {
         "en": "Insurance",
@@ -449,6 +451,7 @@
   },
   {
     "id": "3",
+    "code": "TOUR-VAN",
     "name": {
       "en": "Rental Van VIP - Thailand",
       "id": "Rental Van VIP - Thailand",
