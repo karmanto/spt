@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TourPackage, TourPackageResponse } from '../../../lib/types';
+import { TourPackage, TourPackageResponse, PriceDetails } from '../../../lib/types';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTourPackages, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+// Type guard function to check if price is PriceDetails
+function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
+  return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
+}
 
 export default function AdminTours() {
   const [tours, setTours] = useState<TourPackage[]>([]);
@@ -112,7 +117,7 @@ export default function AdminTours() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {tour.images && tour.images.length > 0 ? (
                           <img
-                            src={`${API_URL}/storage/${tour.images[0].path}`}
+                            src={`${API_URL}${tour.images[0].path}`} 
                             alt={tour.name.id || tour.name.en}
                             className="h-16 w-16 rounded object-cover"
                           />
@@ -127,7 +132,11 @@ export default function AdminTours() {
                         <div className="text-sm text-gray-900">{tour.location.id || tour.location.en}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        Rp {tour.price.adult.toLocaleString('id-ID')}
+                        {isPriceDetails(tour.price) ? (
+                          `Rp ${tour.price.adult.toLocaleString('id-ID')}`
+                        ) : (
+                          `Rp ${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-3">

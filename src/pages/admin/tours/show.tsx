@@ -1,11 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { TourPackage, LanguageContent } from '../../../lib/types';
+import { TourPackage, LanguageContent, PriceDetails } from '../../../lib/types';
 import { getTourPackageDetail } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { MapPin, Clock, DollarSign, Star, Image as ImageIcon, List, CheckCircle, XCircle, HelpCircle } from 'lucide-react';
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+// Type guard function to check if price is PriceDetails
+function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
+  return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
+}
 
 const LanguageContentDisplay: React.FC<{ content: LanguageContent }> = ({ content }) => (
   <div className="text-sm text-gray-700">
@@ -92,9 +97,9 @@ export default function ShowTour() {
               <p className="text-gray-600"><strong>Tags:</strong> {tour.tags || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-gray-600 flex items-center"><DollarSign className="h-5 w-5 mr-2 text-primary" /> <strong>Harga Dewasa:</strong> Rp {tour.price.adult.toLocaleString('id-ID')}</p>
-              <p className="text-gray-600"><strong>Harga Anak:</strong> Rp {tour.price.child.toLocaleString('id-ID')}</p>
-              <p className="text-gray-600"><strong>Harga Bayi:</strong> Rp {tour.price.infant.toLocaleString('id-ID')}</p>
+              <p className="text-gray-600 flex items-center"><DollarSign className="h-5 w-5 mr-2 text-primary" /> <strong>Harga Dewasa:</strong> {isPriceDetails(tour.price) ? `Rp ${tour.price.adult.toLocaleString('id-ID')}` : `Rp ${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`}</p>
+              <p className="text-gray-600"><strong>Harga Anak:</strong> {isPriceDetails(tour.price) ? `Rp ${tour.price.child.toLocaleString('id-ID')}` : 'N/A'}</p>
+              <p className="text-gray-600"><strong>Harga Bayi:</strong> {isPriceDetails(tour.price) ? `Rp ${tour.price.infant.toLocaleString('id-ID')}` : 'N/A'}</p>
               {tour.original_price && <p className="text-gray-600"><strong>Harga Asli:</strong> Rp {parseInt(tour.original_price).toLocaleString('id-ID')}</p>}
             </div>
           </div>
@@ -117,7 +122,7 @@ export default function ShowTour() {
               tour.images.map((image) => (
                 <div key={image.id} className="relative group">
                   <img
-                    src={`${API_URL}/storage/${image.path}`}
+                    src={`${API_URL}${image.path}`}
                     alt={`Tour Image ${image.order}`}
                     className="w-full h-32 object-cover rounded-lg shadow-sm"
                   />
