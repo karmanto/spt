@@ -57,7 +57,10 @@ export interface TourPackage {
   itinerary: {
     day: number;
     title: LanguageContent;
-    activities: LanguageContent[];
+    activities: {
+      time: string;
+      description: LanguageContent;
+    }[];
     meals: LanguageContent[];
   }[];
   included: LanguageContent[];

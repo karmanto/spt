@@ -33,7 +33,9 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
               {dayPlan.activities.map((activity, idx) => (
                 <li key={idx} className="flex items-start gap-2">
                   <Clock className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
-                  <span>{getLocalizedContent(activity)}</span>
+                  <span>
+                    <span className="font-semibold">{activity.time}</span> - {getLocalizedContent(activity.description)}
+                  </span>
                 </li>
               ))}
             </ul>

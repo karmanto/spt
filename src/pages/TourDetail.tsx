@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
 import toursData from '../data/tours.json';
 import { TourPackage, LanguageContent } from '../lib/types';
-import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react'; // Added Tag icon
+import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
@@ -116,8 +116,8 @@ const TourDetail: React.FC = () => {
                 </div>
                 {tour.code && (
                   <div className="flex items-center gap-1">
-                    <Tag className="w-4 h-4" /> {/* Replaced Users with Tag */}
-                    <span>{tour.code}</span> {/* Display tour code here */}
+                    <Tag className="w-4 h-4" />
+                    <span>{tour.code}</span>
                   </div>
                 )}
                 <div className="flex items-center gap-1">

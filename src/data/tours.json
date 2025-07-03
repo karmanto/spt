@@ -72,49 +72,76 @@
         },
         "activities": [
           {
-            "en": "07:00 - Hotel pickup",
-            "id": "07:00 - Penjemputan hotel",
-            "ru": "07:00 - Трансфер из отеля"
+            "time": "07:00",
+            "description": {
+              "en": "Hotel pickup",
+              "id": "Penjemputan hotel",
+              "ru": "Трансфер из отеля"
+            }
           },
           {
-            "en": "08:30 - Departure by premium speedboat",
-            "id": "08:30 - Keberangkatan dengan speedboat premium",
-            "ru": "08:30 - Отправление на премиум скоростном катере"
+            "time": "08:30",
+            "description": {
+              "en": "Departure by premium speedboat",
+              "id": "Keberangkatan dengan speedboat premium",
+              "ru": "Отправление на премиум скоростном катере"
+            }
           },
           {
-            "en": "10:00 - Arrive at Surin Islands",
-            "id": "10:00 - Tiba di Kepulauan Surin",
-            "ru": "10:00 - Прибытие на острова Сурин"
+            "time": "10:00",
+            "description": {
+              "en": "Arrive at Surin Islands",
+              "id": "Tiba di Kepulauan Surin",
+              "ru": "Прибытие на острова Сурин"
+            }
           },
           {
-            "en": "10:30 - Snorkeling at coral reefs",
-            "id": "10:30 - Snorkeling di terumbu karang",
-            "ru": "10:30 - Снорклинг у коралловых рифов"
+            "time": "10:30",
+            "description": {
+              "en": "Snorkeling at coral reefs",
+              "id": "Snorkeling di terumbu karang",
+              "ru": "Снорклинг у коралловых рифов"
+            }
           },
           {
-            "en": "12:00 - Lunch at Chong Khad Beach",
-            "id": "12:00 - Makan siang di Pantai Chong Khad",
-            "ru": "12:00 - Обед на пляже Чонг Кхад"
+            "time": "12:00",
+            "description": {
+              "en": "Lunch at Chong Khad Beach",
+              "id": "Makan siang di Pantai Chong Khad",
+              "ru": "Обед на пляже Чонг Кхад"
+            }
           },
           {
-            "en": "14:00 - Visit Moken village",
-            "id": "14:00 - Kunjungi desa Moken",
-            "ru": "14:00 - Посещение деревни Мокен"
+            "time": "14:00",
+            "description": {
+              "en": "Visit Moken village",
+              "id": "Kunjungi desa Moken",
+              "ru": "Посещение деревни Мокен"
+            }
           },
           {
-            "en": "15:30 - Free time and relaxation",
-            "id": "15:30 - Waktu bebas dan relaksasi",
-            "ru": "15:30 - Свободное время и отдых"
+            "time": "15:30",
+            "description": {
+              "en": "Free time and relaxation",
+              "id": "Waktu bebas dan relaksasi",
+              "ru": "Свободное время и отдых"
+            }
           },
           {
-            "en": "16:30 - Return journey",
-            "id": "16:30 - Perjalanan kembali",
-            "ru": "16:30 - Обратный путь"
+            "time": "16:30",
+            "description": {
+              "en": "Return journey",
+              "id": "Perjalanan kembali",
+              "ru": "Обратный путь"
+            }
           },
           {
-            "en": "18:00 - Arrive back to Phuket",
-            "id": "18:00 - Tiba kembali di Phuket",
-            "ru": "18:00 - Возвращение в Пхукет"
+            "time": "18:00",
+            "description": {
+              "en": "Arrive back to Phuket",
+              "id": "Tiba kembali di Phuket",
+              "ru": "Возвращение в Пхукет"
+            }
           }
         ],
         "meals": [
@@ -303,49 +330,76 @@
         },
         "activities": [
           {
-            "en": "07:30 - Hotel pickup",
-            "id": "07:30 - Penjemputan hotel",
-            "ru": "07:30 - Трансфер из отеля"
+            "time": "07:30",
+            "description": {
+              "en": "Hotel pickup",
+              "id": "Penjemputan hotel",
+              "ru": "Трансфер из отеля"
+            }
           },
           {
-            "en": "09:00 - Departure by big boat",
-            "id": "09:00 - Keberangkatan dengan kapal besar",
-            "ru": "09:00 - Отправление на большом катере"
+            "time": "09:00",
+            "description": {
+              "en": "Departure by big boat",
+              "id": "Keberangkatan dengan kapal besar",
+              "ru": "Отправление на большом катере"
+            }
           },
           {
-            "en": "10:30 - Arrive at Maya Bay",
-            "id": "10:30 - Tiba di Maya Bay",
-            "ru": "10:30 - Прибытие в бухту Майя"
+            "time": "10:30",
+            "description": {
+              "en": "Arrive at Maya Bay",
+              "id": "Tiba di Maya Bay",
+              "ru": "Прибытие в бухту Майя"
+            }
           },
           {
-            "en": "11:30 - Snorkeling at Bamboo Island",
-            "id": "11:30 - Snorkeling di Pulau Bamboo",
-            "ru": "11:30 - Снорклинг у острова Бамбу"
+            "time": "11:30",
+            "description": {
+              "en": "Snorkeling at Bamboo Island",
+              "id": "Snorkeling di Pulau Bamboo",
+              "ru": "Снорклинг у острова Бамбу"
+            }
           },
           {
-            "en": "12:30 - Buffet lunch on board",
-            "id": "12:30 - Makan siang prasmanan di kapal",
-            "ru": "12:30 - Обед-шведский стол на борту"
+            "time": "12:30",
+            "description": {
+              "en": "Buffet lunch on board",
+              "id": "Makan siang prasmanan di kapal",
+              "ru": "Обед-шведский стол на борту"
+            }
           },
           {
-            "en": "14:00 - Visit Monkey Beach",
-            "id": "14:00 - Kunjungi Pantai Monyet",
-            "ru": "14:00 - Посещение Обезьяньего пляжа"
+            "time": "14:00",
+            "description": {
+              "en": "Visit Monkey Beach",
+              "id": "Kunjungi Pantai Monyet",
+              "ru": "Посещение Обезьяньего пляжа"
+            }
           },
           {
-            "en": "15:00 - Swimming at Pileh Lagoon",
-            "id": "15:00 - Berenang di Laguna Pileh",
-            "ru": "15:00 - Плавание в лагуне Пиле"
+            "time": "15:00",
+            "description": {
+              "en": "Swimming at Pileh Lagoon",
+              "id": "Berenang di Laguna Pileh",
+              "ru": "Плавание в лагуне Пиле"
+            }
           },
           {
-            "en": "16:00 - Return journey",
-            "id": "16:00 - Perjalanan kembali",
-            "ru": "16:00 - Обратный путь"
+            "time": "16:00",
+            "description": {
+              "en": "Return journey",
+              "id": "Perjalanan kembali",
+              "ru": "Обратный путь"
+            }
           },
           {
-            "en": "17:30 - Arrive back to Phuket",
-            "id": "17:30 - Tiba kembali di Phuket",
-            "ru": "17:30 - Возвращение в Пхукет"
+            "time": "17:30",
+            "description": {
+              "en": "Arrive back to Phuket",
+              "id": "Tiba kembali di Phuket",
+              "ru": "Возвращение в Пхукет"
+            }
           }
         ],
         "meals": [
@@ -522,49 +576,76 @@
         },
         "activities": [
           {
-            "en": "08:00 - Hotel pickup",
-            "id": "08:00 - Penjemputan hotel",
-            "ru": "08:00 - Трансфер из отеля"
+            "time": "08:00",
+            "description": {
+              "en": "Hotel pickup",
+              "id": "Penjemputan hotel",
+              "ru": "Трансфер из отеля"
+            }
           },
           {
-            "en": "09:30 - Arrive at Phang Nga Bay",
-            "id": "09:30 - Tiba di Teluk Phang Nga",
-            "ru": "09:30 - Прибытие в залив Пханг Нга"
+            "time": "09:30",
+            "description": {
+              "en": "Arrive at Phang Nga Bay",
+              "id": "Tiba di Teluk Phang Nga",
+              "ru": "Прибытие в залив Пханг Нга"
+            }
           },
           {
-            "en": "10:00 - Longtail boat to James Bond Island",
-            "id": "10:00 - Perahu longtail ke Pulau James Bond",
-            "ru": "10:00 - Длиннохвостая лодка к острову Джеймса Бонда"
+            "time": "10:00",
+            "description": {
+              "en": "Longtail boat to James Bond Island",
+              "id": "Perahu longtail ke Pulau James Bond",
+              "ru": "Длиннохвостая лодка к острову Джеймса Бонда"
+            }
           },
           {
-            "en": "11:30 - Cave exploration by kayak",
-            "id": "11:30 - Eksplorasi gua dengan kayak",
-            "ru": "11:30 - Исследование пещер на каяке"
+            "time": "11:30",
+            "description": {
+              "en": "Cave exploration by kayak",
+              "id": "Eksplorasi gua dengan kayak",
+              "ru": "Исследование пещер на каяке"
+            }
           },
           {
-            "en": "12:30 - Lunch at floating restaurant",
-            "id": "12:30 - Makan siang di restoran terapung",
-            "ru": "12:30 - Обед в плавучем ресторане"
+            "time": "12:30",
+            "description": {
+              "en": "Lunch at floating restaurant",
+              "id": "Makan siang di restoran terapung",
+              "ru": "Обед в плавучем ресторане"
+            }
           },
           {
-            "en": "14:00 - Visit fishing village",
-            "id": "14:00 - Kunjungi desa nelayan",
-            "ru": "14:00 - Посещение рыбацкой деревни"
+            "time": "14:00",
+            "description": {
+              "en": "Visit fishing village",
+              "id": "Kunjungi desa nelayan",
+              "ru": "Посещение рыбацкой деревни"
+            }
           },
           {
-            "en": "15:30 - Shopping at local market",
-            "id": "15:30 - Berbelanja di pasar lokal",
-            "ru": "15:30 - Покупки на местном рынке"
+            "time": "15:30",
+            "description": {
+              "en": "Shopping at local market",
+              "id": "Berbelanja di pasar lokal",
+              "ru": "Покупки на местном рынке"
+            }
           },
           {
-            "en": "16:00 - Return journey",
-            "id": "16:00 - Perjalanan kembali",
-            "ru": "16:00 - Обратный путь"
+            "time": "16:00",
+            "description": {
+              "en": "Return journey",
+              "id": "Perjalanan kembali",
+              "ru": "Обратный путь"
+            }
           },
           {
-            "en": "17:30 - Arrive back to hotel",
-            "id": "17:30 - Tiba kembali di hotel",
-            "ru": "17:30 - Возвращение в отель"
+            "time": "17:30",
+            "description": {
+              "en": "Arrive back to hotel",
+              "id": "Tiba kembali di hotel",
+              "ru": "Возвращение в отель"
+            }
           }
         ],
         "meals": [
