@@ -123,7 +123,10 @@ const TopPackages: React.FC = () => {
                 <Link to={`/tours/${tour.id}`}>
                   <div className="relative h-64 overflow-hidden">
                     <img
-                      src={`${import.meta.env.VITE_BASE_URL}${tour.images[0]?.path}`}
+                      src={
+                        `${import.meta.env.VITE_BASE_URL}` +
+                        (tour.images.find(img => img.order === 0)?.path ?? '/placeholder.jpg')
+                      }
                       alt={tourName}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />

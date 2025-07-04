@@ -45,7 +45,7 @@ export default function AdminPromos() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Kelola Promo</h1>
           <Link
             to="/admin/promos/create"
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors flex items-center shadow-md"
+            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center shadow-md"
           >
             <Plus className="h-5 w-5 mr-2" />
             Tambah Promo

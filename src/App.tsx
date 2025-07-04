@@ -1,6 +1,6 @@
 // App.tsx
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom'; 
 import Header from './components/Header';
 import Hero from './components/Hero';
 import PromoSection from './components/PromoSection';
@@ -20,22 +20,22 @@ import AdminLayout from './layouts/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/admin/Dashboard';
 import AdminPromos from './pages/admin/promos';
-import CreatePromo from './pages/admin/promos/create'; // Import CreatePromo
-import EditPromo from './pages/admin/promos/edit';     // Import EditPromo
-import ShowPromo from './pages/admin/promos/show';     // Import ShowPromo
-import AdminTours from './pages/admin/tours';          // Import AdminTours
-import CreateTour from './pages/admin/tours/create';   // Import CreateTour
-import EditTour from './pages/admin/tours/edit';       // Import EditTour
-import ShowTour from './pages/admin/tours/show';       // Import ShowTour
+import CreatePromo from './pages/admin/promos/create';
+import EditPromo from './pages/admin/promos/edit';
+import ShowPromo from './pages/admin/promos/show';
+import AdminTours from './pages/admin/tours';
+import CreateTour from './pages/admin/tours/create';
+import EditTour from './pages/admin/tours/edit';
+import ShowTour from './pages/admin/tours/show';
+import { setAuthErrorHandler } from './lib/auth'; 
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Set page title dynamically
     document.title = 'Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi';
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
@@ -44,44 +44,42 @@ function App() {
       );
     }
 
-    // Remove any existing hreflang links
     document.querySelectorAll('link[hreflang]').forEach(link => link.remove());
 
-    // English
     const hreflangEn = document.createElement('link');
     hreflangEn.rel = 'alternate';
     hreflangEn.hreflang = 'en';
     hreflangEn.href = 'https://simbolonphukettour.com/';
     document.head.appendChild(hreflangEn);
 
-    // Indonesian
     const hreflangId = document.createElement('link');
     hreflangId.rel = 'alternate';
     hreflangId.hreflang = 'id';
     hreflangId.href = 'https://simbolonphukettour.com/';
     document.head.appendChild(hreflangId);
 
-    // Russian
     const hreflangRu = document.createElement('link');
     hreflangRu.rel = 'alternate';
     hreflangRu.hreflang = 'ru';
     hreflangRu.href = 'https://simbolonphukettour.com/ru'; 
     document.head.appendChild(hreflangRu);
 
-    // Default
     const hreflangDefault = document.createElement('link');
     hreflangDefault.rel = 'alternate';
     hreflangDefault.hreflang = 'x-default';
     hreflangDefault.href = 'https://simbolonphukettour.com/';
     document.head.appendChild(hreflangDefault);
-  }, []);
+
+    setAuthErrorHandler(() => {
+      navigate('/login', { replace: true }); 
+    });
+  }, [navigate]); 
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
-    // <LanguageProvider> // LanguageProvider is now in main.tsx
       <div className="min-h-screen bg-white">
         <main role="main">
           <Routes>

@@ -8,7 +8,7 @@ import { Plus, Trash2, Image as ImageIcon, ChevronDown } from 'lucide-react';
 const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' };
 
 interface ImagePreviewItem {
-  id?: number;
+  id?: number | string; // Allow string for temporary new image IDs
   file?: File;
   path: string;
   order: number;
@@ -24,6 +24,7 @@ export default function EditTour() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [imagePreviews, setImagePreviews] = useState<ImagePreviewItem[]>([]);
+  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(null); // State for drag-and-drop
 
   useEffect(() => {
     if (id) {
@@ -51,9 +52,15 @@ export default function EditTour() {
         name: data.name,
         duration: data.duration,
         location: data.location,
-        price: { adult: 0, child: 0, infant: 0 },
-        original_price: data.original_price ? parseFloat(data.original_price) : undefined,
-        rate: data.rate ? parseFloat(data.rate) : undefined,
+        price: typeof data.price === 'object' && data.price !== null
+        ? {
+            adult: Number('adult' in data.price ? data.price.adult : 0) || 0,
+            child: Number('child' in data.price ? data.price.child : 0) || 0,
+            infant: Number('infant' in data.price ? data.price.infant : 0) || 0,
+          }
+        : { adult: 0, child: 0, infant: 0 },
+        original_price: data.original_price ? Number(data.original_price) : undefined,
+        rate: data.rate ? Number(data.rate) : undefined,
         overview: data.overview,
         highlights: data.highlights.map(h => ({ description: h.description })),
         itineraries: data.itineraries.map(it => ({
@@ -114,8 +121,13 @@ export default function EditTour() {
         ...prev!,
         price: {
           ...prev!.price!,
-          [priceKey]: parseFloat(value) || 0,
+          [priceKey]: Number(value) || 0, // Menggunakan Number() untuk konversi yang lebih langsung
         },
+      }));
+    } else if (name === 'original_price' || name === 'rate') {
+      setFormData((prev) => ({
+        ...prev!,
+        [name]: Number(value) || undefined, // Menggunakan Number() untuk konversi
       }));
     } else {
       setFormData((prev) => ({ ...prev!, [name]: value }));
@@ -200,17 +212,21 @@ export default function EditTour() {
   const handleImageFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const newImageItems: ImagePreviewItem[] = files.map((file, idx) => ({
+      const newImageItems: ImagePreviewItem[] = files.map((file) => ({
         file,
         path: '',
-        order: imagePreviews.length + idx,
+        order: 0, // Will be updated by map later
         previewUrl: URL.createObjectURL(file),
         isNew: true,
+        id: `new-${Date.now()}-${Math.random()}`, // Temporary unique ID for new files
       }));
-      setImagePreviews((prev) => [...prev, ...newImageItems]);
-      e.target.value = '';
+      setImagePreviews((prev) => {
+        const combined = [...prev, ...newImageItems];
+        return combined.map((item, idx) => ({ ...item, order: idx })); // Ensure order is correct after adding
+      });
+      e.target.value = ''; // Clear the input
     }
-  }, [imagePreviews.length]);
+  }, []);
 
   const handleRemoveImage = useCallback((indexToRemove: number) => {
     setImagePreviews((prev) => {
@@ -218,17 +234,51 @@ export default function EditTour() {
       if (removedImage.isNew && removedImage.previewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(removedImage.previewUrl);
       }
-      return prev.filter((_, index) => index !== indexToRemove);
+      const updatedImages = prev.filter((_, index) => index !== indexToRemove);
+      return updatedImages.map((item, idx) => ({ ...item, order: idx })); // Re-order after removal
     });
   }, []);
 
-  const handleImageOrderChange = useCallback((index: number, newOrder: number) => {
+  // Drag-and-drop handlers
+  const handleDragStart = useCallback((index: number) => {
+    setDraggedImageIndex(index);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); // Necessary to allow dropping
+    const target = e.currentTarget as HTMLElement;
+    if (target && !target.classList.contains('drag-over')) {
+      target.classList.add('drag-over');
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    if (target && target.classList.contains('drag-over')) {
+      target.classList.remove('drag-over');
+    }
+  }, []);
+
+  const handleDrop = useCallback((dropIndex: number) => {
+    if (draggedImageIndex === null || draggedImageIndex === dropIndex) {
+      setDraggedImageIndex(null);
+      document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+      return;
+    }
+
     setImagePreviews((prev) => {
-      const updatedImages = [...prev];
-      const [movedItem] = updatedImages.splice(index, 1);
-      updatedImages.splice(newOrder, 0, movedItem);
-      return updatedImages.map((item, idx) => ({ ...item, order: idx }));
+      const newImages = [...prev];
+      const [draggedItem] = newImages.splice(draggedImageIndex, 1);
+      newImages.splice(dropIndex, 0, draggedItem);
+      return newImages.map((item, idx) => ({ ...item, order: idx }));
     });
+    setDraggedImageIndex(null);
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  }, [draggedImageIndex]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedImageIndex(null);
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
   }, []);
 
   const handleSubmit = useCallback(
@@ -519,7 +569,7 @@ export default function EditTour() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Gambar Tur</h2>
-            <p className="text-sm text-gray-600 mb-4">Pilih gambar untuk tur. Gambar akan diunggah ke server.</p>
+            <p className="text-sm text-gray-600 mb-4">Pilih gambar untuk tur. Gambar akan diunggah ke server. Seret dan lepas gambar untuk mengubah urutan.</p>
             <div className="mb-6">
               <label htmlFor="image-upload" className="sr-only">Unggah Gambar Baru</label>
               <input
@@ -540,7 +590,18 @@ export default function EditTour() {
             {imagePreviews.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
                 {imagePreviews.map((image, index) => (
-                  <div key={image.id || index} className="relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+                  <div
+                    key={image.id} // Use unique ID for key
+                    draggable="true"
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={handleDragOver}
+                    onDrop={() => handleDrop(index)}
+                    onDragLeave={handleDragLeave} 
+                    onDragEnd={handleDragEnd}
+                    className={`relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white cursor-grab
+                                ${draggedImageIndex === index ? 'opacity-50 border-primary ring-2 ring-primary ring-opacity-50' : ''}
+                                transition-all duration-200 ease-in-out`}
+                  >
                     <img
                       src={image.previewUrl}
                       alt={`Preview ${index + 1}`}
@@ -555,17 +616,6 @@ export default function EditTour() {
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
-                    </div>
-                    <div className="p-3 bg-gray-50 border-t border-gray-200">
-                      <label htmlFor={`image-order-${index}`} className="block text-xs font-medium text-gray-600 mb-1">Urutan</label>
-                      <input
-                        type="number"
-                        id={`image-order-${index}`}
-                        value={image.order}
-                        onChange={(e) => handleImageOrderChange(index, parseInt(e.target.value))}
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-1.5"
-                        min="0"
-                      />
                     </div>
                   </div>
                 ))}

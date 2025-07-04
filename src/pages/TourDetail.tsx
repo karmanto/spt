@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
-import { TourPackage, LanguageContent, PriceDetails } from '../lib/types'; // Import PriceDetails
+import { TourPackage, LanguageContent, PriceDetails } from '../lib/types'; 
 import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
-import { getTourPackageDetail } from '../lib/api'; // Import API function
+import { getTourPackageDetail } from '../lib/api'; 
 
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +21,7 @@ const TourDetail: React.FC = () => {
   useEffect(() => {
     const fetchTourDetail = async () => {
       if (!id) {
-        navigate('/tours'); // Redirect if no ID is present
+        navigate('/tours'); 
         return;
       }
       try {
@@ -32,14 +32,14 @@ const TourDetail: React.FC = () => {
       } catch (err) {
         console.error("Failed to fetch tour detail:", err);
         setError(t('failedToLoadTourDetails') || 'Failed to load tour details. Please try again later.');
-        navigate('/tours'); // Redirect to tours list on error
+        navigate('/tours'); 
       } finally {
         setLoading(false);
       }
     };
 
     fetchTourDetail();
-  }, [id, navigate, t]); // Re-fetch if ID changes or language context changes
+  }, [id, navigate, t]); 
 
   if (loading) {
     return (
@@ -58,7 +58,6 @@ const TourDetail: React.FC = () => {
   }
 
   if (!tour) {
-    // This case should ideally be handled by the navigate in useEffect, but as a fallback
     return (
       <div className="flex justify-center items-center h-screen bg-gray-50">
         <p className="text-base text-gray-700">{t('tourNotFound') || 'Tour not found.'}</p>
@@ -72,6 +71,12 @@ const TourDetail: React.FC = () => {
     return content.en;
   };
 
+  const sortedImages = [...tour.images].sort((a, b) => {
+    const orderA = a.order ?? 0;
+    const orderB = b.order ?? 0;
+    return orderA - orderB;
+  });
+
   const tabs = [
     { id: 'overview', label: t('overview') },
     { id: 'itinerary', label: t('itinerary') },
@@ -79,22 +84,17 @@ const TourDetail: React.FC = () => {
     { id: 'booking', label: t('booking') }
   ];
 
-  // --- Start of Price Handling Logic ---
-  // After parsing in api.ts, tour.price will always be PriceDetails object
-  const priceDetails = tour.price as PriceDetails; // Cast to PriceDetails
+  const priceDetails = tour.price as PriceDetails; 
   const adultPrice = priceDetails.adult || 0;
   const childPrice = priceDetails.child || 0;
-  // Infant price is handled as 'free', so no need to extract from parsedPrice for display
 
   const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
   const discountPercentage = originalPriceNum > adultPrice
     ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
     : 0;
-  // --- End of Price Handling Logic ---
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Bagian utama dengan max-width */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="flex justify-between items-center mb-8">
           <button
@@ -114,26 +114,26 @@ const TourDetail: React.FC = () => {
               </div>
             )}
             <img
-              src={`${import.meta.env.VITE_BASE_URL}${tour.images[selectedImageIndex]?.path}`} 
+              src={`${import.meta.env.VITE_BASE_URL}${sortedImages[selectedImageIndex]?.path}`}
               alt={getLocalizedContent(tour.name)}
               className="w-full h-96 object-cover rounded-2xl shadow-lg mb-4"
             />
             <div className="absolute bottom-6 right-6 bg-black bg-opacity-50 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1">
               <Camera className="w-4 h-4" />
-              {selectedImageIndex + 1} / {tour.images.length}
+              {selectedImageIndex + 1} / {sortedImages.length}
             </div>
 
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {tour.images.map((image, index) => (
+              {sortedImages.map((image, index) => (
                 <button
-                  key={image.id} // Use image.id as key
+                  key={image.id}
                   onClick={() => setSelectedImageIndex(index)}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
                     selectedImageIndex === index ? 'border-blue-500' : 'border-gray-200'
                   }`}
                 >
                   <img
-                    src={`${import.meta.env.VITE_BASE_URL}${image.path}`} // Use .path
+                    src={`${import.meta.env.VITE_BASE_URL}${image.path}`}
                     alt={`${getLocalizedContent(tour.name)} ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -173,9 +173,9 @@ const TourDetail: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
               <ul className="space-y-2">
                 {tour.highlights.map((highlight) => (
-                  <li key={highlight.id} className="flex items-start gap-2"> {/* Use highlight.id as key */}
+                  <li key={highlight.id} className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> {/* Use .description */}
+                    <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> 
                   </li>
                 ))}
               </ul>
@@ -184,7 +184,6 @@ const TourDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Navigation - full width */}
       <div className="w-full border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8" aria-label="Tabs">
@@ -203,12 +202,10 @@ const TourDetail: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Content - full width background */}
       <div className="w-full bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
           {activeTab === 'overview' && (
             <div className="space-y-8">
-              {/* Overview */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('tourOverview')}</h2>
                 <p className="text-gray-700 leading-relaxed">
@@ -216,7 +213,6 @@ const TourDetail: React.FC = () => {
                 </p>
               </div>
 
-              {/* What's Included/Excluded */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-2xl p-8 shadow-sm">
                   <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
@@ -261,7 +257,6 @@ const TourDetail: React.FC = () => {
 
           {activeTab === 'pricing' && (
             <div className="space-y-8">
-              {/* Pricing Table */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('pricingInfo')}</h2>
                 <div className="overflow-x-auto">
@@ -300,7 +295,6 @@ const TourDetail: React.FC = () => {
                 </div>
               </div>
 
-              {/* FAQ */}
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
                 <div className="space-y-6">
@@ -313,7 +307,6 @@ const TourDetail: React.FC = () => {
                 </div>
               </div>
 
-              {/* Cancellation Policy */}
               <div className="bg-yellow-50 rounded-2xl p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">{t('cancellationPolicy')}</h2>
                 <ul className="space-y-2 text-gray-700">

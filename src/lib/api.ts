@@ -1,43 +1,38 @@
 import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, PriceDetails } from './types';
+import { handleAuthError } from './auth'; // Import fungsi handleAuthError
 
 const API_URL = import.meta.env.VITE_API_URL + "/api";
 interface FetchOptions extends RequestInit {
   body?: string;
 }
 
-// Helper function to safely parse JSON strings
 const safeJSONParse = <T>(jsonString: string | T): T | string => {
   if (typeof jsonString === 'string') {
     try {
       return JSON.parse(jsonString) as T;
     } catch (e) {
       console.warn("Failed to parse JSON string:", jsonString, e);
-      return jsonString; // Return original string if parsing fails
+      return jsonString; 
     }
   }
-  return jsonString; // Return as is if not a string
+  return jsonString; 
 };
 
-// Helper function to parse a single TourPackage object
 const parseTourPackageData = (tour: TourPackage): TourPackage => {
   const parsedTour = { ...tour };
 
-  // Parse LanguageContent fields
   parsedTour.name = safeJSONParse<LanguageContent>(tour.name) as LanguageContent;
   parsedTour.duration = safeJSONParse<LanguageContent>(tour.duration) as LanguageContent;
   parsedTour.location = safeJSONParse<LanguageContent>(tour.location) as LanguageContent;
   parsedTour.overview = safeJSONParse<LanguageContent>(tour.overview) as LanguageContent;
 
-  // Parse price field
   parsedTour.price = safeJSONParse<PriceDetails>(tour.price) as PriceDetails;
 
-  // Parse highlights
   parsedTour.highlights = tour.highlights.map(h => ({
     ...h,
     description: safeJSONParse<LanguageContent>(h.description) as LanguageContent
   }));
 
-  // Parse itineraries and their nested activities/meals
   parsedTour.itineraries = tour.itineraries.map(it => ({
     ...it,
     title: safeJSONParse<LanguageContent>(it.title) as LanguageContent,
@@ -51,13 +46,11 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
     }))
   }));
 
-  // Parse included_excluded
   parsedTour.included_excluded = tour.included_excluded.map(ie => ({
     ...ie,
     description: safeJSONParse<LanguageContent>(ie.description) as LanguageContent
   }));
 
-  // Parse faqs
   parsedTour.faqs = tour.faqs.map(faq => ({
     ...faq,
     question: safeJSONParse<LanguageContent>(faq.question) as LanguageContent,
@@ -70,16 +63,22 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
 // === Fungsi fetch untuk request JSON ===
 export const fetchData = async <T>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
   const headers: HeadersInit = { 'Content-Type': 'application/json' };
-  if (options.method && options.method !== 'GET') {
-    headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+  const token = localStorage.getItem('token'); 
+  if (token) { 
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_URL}/${endpoint}`, {
     headers,
     ...options
   });
+
   if (!response.ok) {
-    // Try to parse error as JSON, fallback to text if not JSON
+    if (response.status === 401) { 
+      handleAuthError();
+      throw new Error('Unauthorized: Token expired or invalid.'); 
+    }
+
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const errorData = await response.json();
@@ -89,23 +88,34 @@ export const fetchData = async <T>(endpoint: string, options: FetchOptions = {})
       throw new Error(`API error: ${response.statusText}. Response: ${errorText.substring(0, 200)}...`);
     }
   }
+
+  const contentType = response.headers.get("content-type");
+  if (response.status === 204 || !contentType || !contentType.includes("application/json")) {
+    return null as T; 
+  }
+
   return response.json();
 };
 
 // === Fungsi fetch untuk request multipart/form-data (upload file) ===
 export const fetchMultipartData = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
-  // Jangan set Content-Type karena browser akan mengatur boundary-nya secara otomatis
   const headers: HeadersInit = {};
-  if (options.method && options.method !== 'GET') {
-    headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+  const token = localStorage.getItem('token'); 
+  if (token) { 
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_URL}/${endpoint}`, {
     headers,
     ...options
   });
+
   if (!response.ok) {
-    // Try to parse error as JSON, fallback to text if not JSON
+    if (response.status === 401) { 
+      handleAuthError();
+      throw new Error('Unauthorized: Token expired or invalid.'); 
+    }
+
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const errorData = await response.json();
@@ -115,6 +125,12 @@ export const fetchMultipartData = async <T>(endpoint: string, options: RequestIn
       throw new Error(`API error: ${response.statusText}. Response: ${errorText.substring(0, 200)}...`);
     }
   }
+
+  const contentType = response.headers.get("content-type");
+  if (response.status === 204 || !contentType || !contentType.includes("application/json")) {
+    return null as T; 
+  }
+
   return response.json();
 };
 
@@ -186,14 +202,12 @@ export const getTourPackages = async (params?: { per_page?: number; page?: numbe
   const queryString = query.toString();
   const endpoint = `packages${queryString ? `?${queryString}` : ''}`;
   const response = await fetchData<TourPackageResponse>(endpoint);
-  // Parse each tour package in the response data
   response.data = response.data.map(parseTourPackageData);
   return response;
 };
 
 export const getTourPackageDetail = async (id: string) => {
   const tour = await fetchData<TourPackage>(`packages/${id}`);
-  // Parse the single tour package
   return parseTourPackageData(tour);
 };
 
@@ -238,7 +252,6 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
 export const updateTourPackage = async (id: number, tour: TourPackageUpdatePayload) => {
   const payloadToSend = {
     ...tour,
-    // Only stringify if the field exists in the payload
     ...(tour.name && { name: JSON.stringify(tour.name) }),
     ...(tour.duration && { duration: JSON.stringify(tour.duration) }),
     ...(tour.location && { location: JSON.stringify(tour.location) }),

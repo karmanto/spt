@@ -5,6 +5,19 @@ export interface User {
   password: string;
 }
 
+let authErrorHandler: (() => void) | null = null;
+
+export const setAuthErrorHandler = (handler: () => void) => {
+  authErrorHandler = handler;
+};
+
+export const handleAuthError = () => {
+  localStorage.removeItem('token');
+  if (authErrorHandler) {
+    authErrorHandler(); 
+  }
+};
+
 export const login = async (username: string, password: string): Promise<boolean> => {
   try {
     const response = await fetch(`${API_URL}/users/login`, {
@@ -65,6 +78,11 @@ export const getCurrentUser = async (): Promise<any | null> => {
     });
 
     if (!response.ok) {
+      // Jika respons 401, panggil handler kesalahan autentikasi
+      if (response.status === 401) {
+        handleAuthError();
+        return null; 
+      }
       throw new Error('Failed to fetch user');
     }
 

@@ -76,8 +76,13 @@ export default function CreateTour() {
         ...prev,
         price: {
           ...prev.price,
-          [priceKey]: parseFloat(value) || 0,
+          [priceKey]: Number(value) || 0, // Menggunakan Number() untuk konversi yang lebih langsung
         },
+      }));
+    } else if (name === 'original_price' || name === 'rate') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: Number(value) || undefined, // Menggunakan Number() untuk konversi
       }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));

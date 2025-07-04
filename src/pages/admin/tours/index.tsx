@@ -133,9 +133,9 @@ export default function AdminTours() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {isPriceDetails(tour.price) ? (
-                          `Rp ${tour.price.adult.toLocaleString('id-ID')}`
+                          `฿${tour.price.adult.toLocaleString('id-ID')}`
                         ) : (
-                          `Rp ${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`
+                          `฿${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
