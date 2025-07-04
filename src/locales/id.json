@@ -176,5 +176,14 @@
   "numberOfParticipants": "Jumlah Peserta",
   "bookingFormSubmitted": "Formulir pemesanan telah dikirim!",
   "tourOverview": "Ringkasan Tur",
-  "tourHighlights": "Sorotan Tur"
+  "tourHighlights": "Sorotan Tur",
+  "bookingErrorInvalidTour": "Kesalahan Pemesanan: Tur tidak valid.",
+  "hello": "Halo",
+  "iWantToBookTour": "Saya ingin memesan tur ini.",
+  "tourName": "Nama Tur",
+  "myWhatsappNumber": "Nomor WhatsApp Saya",
+  "lookingForwardToConfirmation": "Menantikan konfirmasi Anda.",
+  "whatsappNumber": "Nomor WhatsApp",
+  "enterWhatsappNumber": "Masukkan nomor WhatsApp Anda",
+  "contactUsWhatsapp": "6281234567890"
 }

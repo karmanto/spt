@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { getPromos, deletePromo } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function AdminPromos() {
   const [promos, setPromos] = useState<Promo[]>([]);
   const navigate = useNavigate();
@@ -88,7 +86,7 @@ export default function AdminPromos() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {promo.image ? (
                           <img
-                            src={`${API_URL}/storage/${promo.image}`}
+                            src={`/storage/${promo.image}`}
                             alt={promo.title_id}
                             className="h-16 w-16 rounded object-cover"
                           />

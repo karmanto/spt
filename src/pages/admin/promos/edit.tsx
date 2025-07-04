@@ -4,8 +4,6 @@ import { Promo } from '../../../lib/types';
 import { useState, useEffect } from 'react';
 import { FaSave, FaArrowLeft } from 'react-icons/fa'; // Import icons
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function EditPromo() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -127,7 +125,7 @@ export default function EditPromo() {
             <div className="mt-2">
               <p className="text-sm text-gray-500">Gambar saat ini:</p>
               <img
-                src={`${API_URL}/storage/${promo.image}`}
+                src={`/storage/${promo.image}`}
                 alt="Current Promo Image"
                 className="h-20 w-20 rounded object-cover"
               />

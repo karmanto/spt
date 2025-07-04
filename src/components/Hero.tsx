@@ -8,7 +8,7 @@ const slides: HeroSlide[] = herosData.heros;
 
 slides.forEach(slide => {
   const img = new Image();
-  img.src = `${import.meta.env.VITE_BASE_URL}${slide.image}`;
+  img.src = `${slide.image}`;
 });
 
 const Hero: React.FC = () => {
@@ -46,26 +46,26 @@ const Hero: React.FC = () => {
       itemScope
       itemType="https://schema.org/WebPage"
     >
-      {!`${import.meta.env.VITE_BASE_URL}${loadedImages[slide.image]}` && (
+      {!`${loadedImages[slide.image]}` && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
       )}
       
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-          `${import.meta.env.VITE_BASE_URL}${loadedImages[slide.image]}` ? 'opacity-100' : 'opacity-0'
+          `${loadedImages[slide.image]}` ? 'opacity-100' : 'opacity-0'
         }`}
-        style={{ backgroundImage: `url('${import.meta.env.VITE_BASE_URL}${slide.image}')` }}
+        style={{ backgroundImage: `url('${slide.image}')` }}
       >
         <img 
-          src={`${import.meta.env.VITE_BASE_URL}${slide.image}`} 
+          src={`${slide.image}`} 
           alt="" 
           className="hidden" 
-          onLoad={() => handleImageLoad(`${import.meta.env.VITE_BASE_URL}${slide.image}`)} 
+          onLoad={() => handleImageLoad(`${slide.image}`)} 
         />
       </div>
       
       <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${
-        loadedImages[`${import.meta.env.VITE_BASE_URL}${slide.image}`] ? 'opacity-50' : 'opacity-20'
+        loadedImages[`${slide.image}`] ? 'opacity-50' : 'opacity-20'
       }`} />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">

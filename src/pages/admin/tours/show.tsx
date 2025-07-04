@@ -5,8 +5,6 @@ import { getTourPackageDetail, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Image as ImageIcon, Edit, Trash2, ChevronDown } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 // Type guard function to check if price is PriceDetails
 function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
   return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
@@ -243,7 +241,7 @@ export default function ShowTour() {
                     className="relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white"
                   >
                     <img
-                      src={`${API_URL}${image.path}`}
+                      src={`${image.path}`}
                       alt={`Tour Image ${image.order}`}
                       className="w-full h-36 object-cover"
                     />

@@ -102,7 +102,7 @@ const Testimonials: React.FC = () => {
                 >
                   <div className="flex items-center mb-4">
                     <img 
-                      src={`${import.meta.env.VITE_BASE_URL}${testimonial.image}`} 
+                      src={`${testimonial.image}`} 
                       alt={`${testimonial.name} - Customer from ${testimonial.location}`} 
                       className="w-12 h-12 rounded-full object-cover mr-4"
                       loading="lazy"

@@ -177,5 +177,14 @@
   "numberOfParticipants": "Количество участников",
   "bookingFormSubmitted": "Ваша форма бронирования отправлена!",
   "tourOverview": "Обзор тура",
-  "tourHighlights": "Основные моменты тура"
+  "tourHighlights": "Основные моменты тура",
+  "bookingErrorInvalidTour": "Ошибка бронирования: Неверный тур.",
+  "hello": "Здравствуйте",
+  "iWantToBookTour": "Я хочу забронировать этот тур.",
+  "tourName": "Название тура",
+  "myWhatsappNumber": "Мой номер WhatsApp",
+  "lookingForwardToConfirmation": "Жду вашего подтверждения.",
+  "whatsappNumber": "Номер WhatsApp",
+  "enterWhatsappNumber": "Введите ваш номер WhatsApp",
+  "contactUsWhatsapp": "79123456789"
 }

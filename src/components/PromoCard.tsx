@@ -55,7 +55,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
       {countdown && (
         <div className="mb-2">
           <div className="text-center">
-            <div className="bg-red-500 p-1 w-full inline-block"> 
+            <div className="bg-orange-500 p-1 w-full inline-block"> 
               <span className="text-lg font-bold mr-1 text-white">{countdown.days}</span>
               <span className="text-xs text-white">{t('dayRemaining')}</span>
             </div>
@@ -91,7 +91,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-base hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap" 
+              className="bg-blue-600 text-white px-6 py-2 rounded-xl font-semibold text-base hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap" 
               aria-label={t('bookNow')}
             >
               {t('bookNow')}
@@ -101,7 +101,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
               href={promo.pdf_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white text-gray-800 px-6 py-3 rounded-xl font-medium text-base border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap"
+              className="bg-white text-gray-800 px-6 py-2 rounded-xl font-medium text-base border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center gap-2 group/btn whitespace-nowrap"
               aria-label={t('viewDetail')}
             >
               {t('viewDetail')}

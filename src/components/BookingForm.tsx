@@ -1,5 +1,5 @@
-import React from 'react';
-import { TourPackage } from '../lib/types';
+import React, { useState, useEffect } from 'react';
+import { TourPackage, PriceDetails } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
 
 interface BookingFormProps {
@@ -9,11 +9,68 @@ interface BookingFormProps {
 const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const { t, language } = useLanguage();
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [date, setDate] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [infants, setInfants] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+
+  const getMinDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1); 
+    return today.toISOString().split('T')[0]; 
+  };
+
+  useEffect(() => {
+    setDate(getMinDate()); 
+  }, []);
+
+  useEffect(() => {
+    if (tour && typeof tour.price !== 'string') {
+      const priceDetails = tour.price as PriceDetails;
+      const calculatedTotal =
+        (adults * (priceDetails.adult || 0)) +
+        (children * (priceDetails.child || 0)) +
+        (infants * (priceDetails.infant || 0));
+      setTotalCost(calculatedTotal);
+    }
+  }, [adults, children, infants, tour]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(t('bookingFormSubmitted'));
-    console.log('Booking form submitted for tour:', tour.name[language]);
-    // In a real application, you would handle form submission here
+
+    if (!tour || typeof tour.price === 'string') {
+      alert(t('bookingErrorInvalidTour'));
+      return;
+    }
+
+    const tourName = tour.name[language] || tour.name.en;
+    const tourCode = tour.code || 'N/A';
+    const whatsappContact = "6281363878631"; 
+
+    const message = `
+      ${t('hello')}! ${t('iWantToBookTour')}
+
+      ${t('tourName')}: ${tourName} (${tourCode})
+      ${t('fullName')}: ${name}
+      ${t('emailAddress')}: ${email}
+      ${t('dateOfTour')}: ${date}
+      ${t('adults')}: ${adults}
+      ${t('children')}: ${children}
+      ${t('infants')}: ${infants}
+      ${t('totalCost')}: ฿${totalCost.toLocaleString()}
+      ${t('myWhatsappNumber')}: ${whatsappNumber}
+
+      ${t('lookingForwardToConfirmation')}
+    `.trim(); 
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${whatsappContact}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -27,8 +84,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
           <input
             type="text"
             id="name"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
             placeholder={t('enterFullName')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
           />
         </div>
@@ -39,8 +98,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
           <input
             type="email"
             id="email"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
             placeholder={t('enterEmail')}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="whatsappNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            {t('whatsappNumber')}
+          </label>
+          <input
+            type="tel" 
+            id="whatsappNumber"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            placeholder={t('enterWhatsappNumber')}
+            value={whatsappNumber}
+            onChange={(e) => setWhatsappNumber(e.target.value)}
             required
           />
         </div>
@@ -51,22 +126,60 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
           <input
             type="date"
             id="date"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            min={getMinDate()}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             required
           />
         </div>
-        <div>
-          <label htmlFor="participants" className="block text-sm font-medium text-gray-700 mb-1">
-            {t('numberOfParticipants')}
-          </label>
-          <input
-            type="number"
-            id="participants"
-            min="1"
-            defaultValue="1"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            required
-          />
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <label htmlFor="adults" className="block text-sm font-medium text-gray-700 mb-1">
+              {t('adult')}
+            </label>
+            <input
+              type="number"
+              id="adults"
+              min="1"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+              value={adults}
+              onChange={(e) => setAdults(Math.max(1, parseInt(e.target.value) || 1))}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="children" className="block text-sm font-medium text-gray-700 mb-1">
+              {t('child')}
+            </label>
+            <input
+              type="number"
+              id="children"
+              min="0"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+              value={children}
+              onChange={(e) => setChildren(Math.max(0, parseInt(e.target.value) || 0))}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="infants" className="block text-sm font-medium text-gray-700 mb-1">
+              {t('infant')}
+            </label>
+            <input
+              type="number"
+              id="infants"
+              min="0"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+              value={infants}
+              onChange={(e) => setInfants(Math.max(0, parseInt(e.target.value) || 0))}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg">
+          <span className="text-lg font-semibold text-gray-900">{t('totalCost')}:</span>
+          <span className="text-2xl font-bold text-blue-600">฿{totalCost.toLocaleString()}</span>
         </div>
         <button
           type="submit"

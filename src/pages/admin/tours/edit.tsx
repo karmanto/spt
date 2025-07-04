@@ -78,7 +78,7 @@ export default function EditTour() {
         id: img.id,
         path: img.path,
         order: img.order,
-        previewUrl: `${import.meta.env.VITE_API_URL}${img.path}`,
+        previewUrl: `${img.path}`,
         isNew: false,
       })).sort((a, b) => a.order - b.order));
     } catch (err) {

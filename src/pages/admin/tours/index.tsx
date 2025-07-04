@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { getTourPackages, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 // Type guard function to check if price is PriceDetails
 function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
   return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
@@ -117,7 +115,7 @@ export default function AdminTours() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {tour.images && tour.images.length > 0 ? (
                           <img
-                            src={`${API_URL}${tour.images[0].path}`} 
+                            src={`${tour.images[0].path}`} 
                             alt={tour.name.id || tour.name.en}
                             className="h-16 w-16 rounded object-cover"
                           />

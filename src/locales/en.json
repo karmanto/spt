@@ -177,5 +177,14 @@
   "numberOfParticipants": "Number of Participants",
   "bookingFormSubmitted": "Your booking form has been submitted!",
   "tourOverview": "Tour Overview",
-  "tourHighlights": "Tour Highlights"
+  "tourHighlights": "Tour Highlights",
+  "bookingErrorInvalidTour": "Booking Error: Invalid tour.",
+  "hello": "Hello",
+  "iWantToBookTour": "I want to book this tour.",
+  "tourName": "Tour Name",
+  "myWhatsappNumber": "My WhatsApp Number",
+  "lookingForwardToConfirmation": "Looking forward to your confirmation.",
+  "whatsappNumber": "WhatsApp Number",
+  "enterWhatsappNumber": "Enter your WhatsApp number",
+  "contactUsWhatsapp": "1234567890"
 }

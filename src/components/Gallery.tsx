@@ -83,7 +83,7 @@ const Gallery: React.FC = () => {
                   onClick={() => openSlideshow(cat)}
                 >
                   <img
-                    src={`${import.meta.env.VITE_BASE_URL}${cat.images[0].url}`}
+                    src={`${cat.images[0].url}`}
                     alt={getCategoryName(cat)}
                     className="w-full h-64 object-cover"
                   />
@@ -125,7 +125,7 @@ const Gallery: React.FC = () => {
                   {selectedCategory.images.map((image: GalleryImage) => (
                     <div key={image.id} className="relative">
                       <img
-                        src={`${import.meta.env.VITE_BASE_URL}${image.url}`}
+                        src={`${image.url}`}
                         alt={getCategoryName(selectedCategory)}
                         className="w-full h-[70vh] object-contain"
                       />

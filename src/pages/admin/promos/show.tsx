@@ -4,8 +4,6 @@ import { Promo } from '../../../lib/types';
 import { useState, useEffect, useCallback } from 'react';
 import { FaEdit, FaTrash, FaArrowLeft } from 'react-icons/fa';
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export default function ShowPromo() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -205,7 +203,7 @@ export default function ShowPromo() {
             {promo.image ? (
               <div className="relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
                 <img
-                  src={`${API_URL}/storage/${promo.image}`}
+                  src={`/storage/${promo.image}`}
                   alt={`Gambar Promo: ${promo.title_id}`}
                   className="w-full h-64 object-cover"
                 />

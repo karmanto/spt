@@ -1,7 +1,7 @@
 import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, PriceDetails } from './types';
 import { handleAuthError } from './auth'; // Import fungsi handleAuthError
 
-const API_URL = import.meta.env.VITE_API_URL + "/api";
+const API_URL = import.meta.env.VITE_API_URL;
 interface FetchOptions extends RequestInit {
   body?: string;
 }
