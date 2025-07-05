@@ -5,6 +5,10 @@ import { PromoCardProps } from '../lib/types';
 const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const { t, language } = useLanguage();
 
+  // Get environment variables
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
+
   const getTitle = () => {
     if (language === 'id') return promo.title_id;
     if (language === 'ru') return promo.title_ru || promo.title_en;
@@ -20,7 +24,6 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const title = getTitle();
   const description = getDescription();
 
-  const whatsappNumber = '6281363878631';
   const rawMessage = (() => {
     switch (language) {
       case 'id':
@@ -36,7 +39,7 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const whatsappLink = (() => {
     switch (language) {
       case 'ru':
-        return `https://t.me/torijark?text=${encodedMessage}`;
+        return `https://t.me/${telegramUsername}?text=${encodedMessage}`;
       default:
         return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
     }

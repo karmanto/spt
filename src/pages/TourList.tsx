@@ -3,7 +3,9 @@ import { useOutletContext } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { TourPackage } from '../lib/types';
 import TourCard from '../components/TourCard';
-import { getTourPackages } from '../lib/api'; // Import API function
+import { getTourPackages } from '../lib/api';
+import LoadingSpinner from '../components/LoadingSpinner'; 
+import ErrorDisplay from '../components/ErrorDisplay';     
 
 interface OutletContext {
   searchTerm: string;
@@ -11,7 +13,7 @@ interface OutletContext {
 }
 
 const TourList: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage(); // Destructure language here
   const { searchTerm, selectedCategory } = useOutletContext<OutletContext>();
   
   const [tours, setTours] = useState<TourPackage[]>([]);
@@ -21,10 +23,14 @@ const TourList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10; 
 
+  // Environment variables for contact
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
+
   const fetchTours = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null);
+      setError(null); // Clear any previous errors
       const response = await getTourPackages({
         page: currentPage,
         per_page: itemsPerPage,
@@ -54,6 +60,19 @@ const TourList: React.FC = () => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleContactExperts = () => {
+    const isRussian = language === 'ru';
+    const whatsappMessage = encodeURIComponent(t('whatsappMessage'));
+    
+    let url = '';
+    if (isRussian) {
+      url = `https://t.me/${telegramUsername}?text=${whatsappMessage}`;
+    } else {
+      url = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+    }
+    window.open(url, '_blank', 'noopener noreferrer');
   };
 
   // Pagination controls rendering
@@ -141,13 +160,9 @@ const TourList: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-20">
-            <p className="text-2xl text-textSecondary">{t('loadingTours') || 'Loading tours...'}</p>
-          </div>
+          <LoadingSpinner />
         ) : error ? (
-          <div className="text-center py-20">
-            <p className="text-2xl text-red-500">{error}</p>
-          </div>
+          <ErrorDisplay message={error} onRetry={fetchTours} />
         ) : tours.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -174,7 +189,10 @@ const TourList: React.FC = () => {
           <p className="text-xl mb-8 text-blue-100">
             {t('tourList.customize')}
           </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg">
+          <button 
+            onClick={handleContactExperts} // Added onClick handler
+            className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg"
+          >
             {t('tourList.contactExperts')}
           </button>
         </div>

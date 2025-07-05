@@ -12,11 +12,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
-  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [whatsappNumberInput, setWhatsappNumberInput] = useState(''); // Renamed to avoid conflict
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [infants, setInfants] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
+
+  // Get environment variables
+  const whatsappContactNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 
   const getMinDate = () => {
     const today = new Date();
@@ -49,7 +53,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
 
     const tourName = tour.name[language] || tour.name.en;
     const tourCode = tour.code || 'N/A';
-    const whatsappContact = "6281363878631"; 
 
     const message = `
       ${t('hello')}! ${t('iWantToBookTour')}
@@ -62,13 +65,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
       ${t('children')}: ${children}
       ${t('infants')}: ${infants}
       ${t('totalCost')}: ฿${totalCost.toLocaleString()}
-      ${t('myWhatsappNumber')}: ${whatsappNumber}
+      ${t('myWhatsappNumber')}: ${whatsappNumberInput}
 
       ${t('lookingForwardToConfirmation')}
     `.trim(); 
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsappContact}?text=${encodedMessage}`;
+    const whatsappUrl = `https://${language === 'ru' ? `t.me/${telegramUsername}` : `wa.me/${whatsappContactNumber}`}?text=${encodedMessage}`;
 
     window.open(whatsappUrl, '_blank');
   };
@@ -114,8 +117,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
             id="whatsappNumber"
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
             placeholder={t('enterWhatsappNumber')}
-            value={whatsappNumber}
-            onChange={(e) => setWhatsappNumber(e.target.value)}
+            value={whatsappNumberInput}
+            onChange={(e) => setWhatsappNumberInput(e.target.value)}
             required
           />
         </div>

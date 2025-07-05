@@ -7,6 +7,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
 import { getTourPackageDetail } from '../lib/api'; 
+import LoadingSpinner from '../components/LoadingSpinner'; // Import LoadingSpinner
+import ErrorDisplay from '../components/ErrorDisplay';     // Import ErrorDisplay
 
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,48 +20,48 @@ const TourDetail: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview'); 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
 
-  useEffect(() => {
-    const fetchTourDetail = async () => {
-      if (!id) {
-        navigate('/tours'); 
-        return;
-      }
-      try {
-        setLoading(true);
-        setError(null);
-        const foundTour = await getTourPackageDetail(id);
-        setTour(foundTour);
-      } catch (err) {
-        console.error("Failed to fetch tour detail:", err);
-        setError(t('failedToLoadTourDetails') || 'Failed to load tour details. Please try again later.');
-        navigate('/tours'); 
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTourDetail = async () => {
+    if (!id) {
+      navigate('/tours'); 
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null); // Clear any previous errors
+      const foundTour = await getTourPackageDetail(id);
+      setTour(foundTour);
+    } catch (err) {
+      console.error("Failed to fetch tour detail:", err);
+      setError(t('failedToLoadTourDetails') || 'Failed to load tour details. Please try again later.');
+      // Removed direct navigation on error, let ErrorDisplay handle it or user retry
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTourDetail();
   }, [id, navigate, t]); 
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
-        <p className="text-base text-gray-700">{t('loadingTourDetails')}</p>
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
+        <LoadingSpinner /> {/* Use LoadingSpinner */}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen bg-red-50">
-        <p className="text-base text-red-700">{error}</p>
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
+        <ErrorDisplay message={error} onRetry={fetchTourDetail} /> {/* Use ErrorDisplay with retry */}
       </div>
     );
   }
 
   if (!tour) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-50">
+      <div className="min-h-screen flex justify-center items-center bg-gray-50">
         <p className="text-base text-gray-700">{t('tourNotFound') || 'Tour not found.'}</p>
       </div>
     );
@@ -173,7 +175,7 @@ const TourDetail: React.FC = () => {
               <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
               <ul className="space-y-2">
                 {tour.highlights.map((highlight) => (
-                  <li key={highlight.id} className="flex items-start gap-2">
+                  <li key={highlight.id} className="flex items-start gap-2"> {/* Use item.id as key */}
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> 
                   </li>
@@ -186,7 +188,7 @@ const TourDetail: React.FC = () => {
 
       <div className="w-full border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8" aria-label="Tabs">
+          <nav className="flex space-x-8 overflow-scroll" aria-label="Tabs">
             {tabs.map((tab) => (
               <button
                 key={tab.id}

@@ -6,10 +6,14 @@ const WhatsAppButton: React.FC = () => {
   
   const isRussian = language === 'ru';
   
+  // Use environment variables for contact numbers
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
+
   const whatsappMessage = encodeURIComponent(t('whatsappMessage'));
-  const whatsappUrl = `https://wa.me/6281363878631?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
   
-  const telegramUrl = `https://t.me/torijark?text=${whatsappMessage}`;
+  const telegramUrl = `https://t.me/${telegramUsername}?text=${whatsappMessage}`;
 
   return (
     <a

@@ -59,6 +59,10 @@ const getAdvantageIcon = (iconName: string) => {
 const Advantages: React.FC = () => {
   const { t, language } = useLanguage();
 
+  // Get environment variables
+  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
+  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
+
   const advantages: Advantage[] = advantagesData;
 
   return (
@@ -103,7 +107,7 @@ const Advantages: React.FC = () => {
 
           {language === 'ru' ? (
             <a
-              href="https://t.me/torijark?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%20Simbolon%20Phuket%20Tour%2C%20%D1%8F%20%D0%B7%D0%B0%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%20%D0%B2%D0%B0%D1%88%D0%B8%D0%BC%20%D1%82%D1%83%D1%80%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%BC."
+              href={`https://t.me/${telegramUsername}?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D0%B0%D0%B4%D0%BC%D0%B8%D0%BD%D0%B8%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%BE%D1%80%20Simbolon%20Phuket%20Tour%2C%20%D1%8F%20%D0%B7%D0%B0%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%20%D0%B2%D0%B0%D1%88%D0%B8%D0%BC%20%D1%82%D1%83%D1%80%D0%B8%D1%81%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%BC%20%D0%BF%D0%B0%D0%BA%D0%B5%D1%82%D0%BE%D0%BC."`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-[#0088cc] hover:bg-[#006699] transition-colors duration-300"
@@ -111,19 +115,9 @@ const Advantages: React.FC = () => {
             >
               {t('freeConsultation')}
             </a>
-          ) : language === 'en' ? (
-            <a
-              href="https://wa.me/6281363878631?text=Hello%20Admin%20Simbolon%20Phuket%20Tour%2C%20I%20am%20interested%20in%20your%20tour%20package."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-[#25d366] hover:bg-[#13a033] transition-colors duration-300"
-              aria-label={t('contactAdminAria')}
-            >
-              {t('freeConsultation')}
-            </a>
           ) : (
             <a
-              href="https://wa.me/6281363878631?text=Halo%20Admin%20Simbolon%20Phuket%20Tour%2C%20saya%20tertarik%20dengan%20paket%20tour%20Anda"
+              href={`https://wa.me/${whatsappNumber}?text=Hello%20Admin%20Simbolon%20Phuket%20Tour%2C%20I%20am%20interested%20in%20your%20tour%20package."`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-[#25d366] hover:bg-[#13a033] transition-colors duration-300"
