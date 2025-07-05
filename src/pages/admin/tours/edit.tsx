@@ -71,7 +71,7 @@ export default function EditTour() {
         })),
         included_excluded: data.included_excluded.map(ie => ({ type: ie.type, description: ie.description })),
         faqs: data.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
-        tags: data.tags || '',
+        tags: data.tags || '', // Ensure tags is initialized
       });
 
       setImagePreviews(data.images.map(img => ({
@@ -89,7 +89,7 @@ export default function EditTour() {
     }
   }, []);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (!formData) return;
 
@@ -479,16 +479,19 @@ export default function EditTour() {
                 />
               </div>
               <div>
-                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">Tags (pisahkan dengan koma)</label>
-                <input
-                  type="text"
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label>
+                <select
                   id="tags"
                   name="tags"
                   value={formData.tags || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
-                  placeholder="contoh: adventure,beach,family"
-                />
+                >
+                  <option value="">Pilih Tipe Tur</option>
+                  <option value="1_day_trip">Day Trip</option>
+                  <option value="open_trip">Open Trip</option>
+                  <option value="private_service">Other</option>
+                </select>
               </div>
             </div>
 

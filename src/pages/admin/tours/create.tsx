@@ -29,6 +29,7 @@ export default function CreateTour() {
     itineraries: [],
     included_excluded: [],
     faqs: [],
+    tags: '', // Initialize tags as empty string
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export default function CreateTour() {
     };
   }, [imagePreviews]);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name.includes('.')) {
       const [parent, child, grandChild] = name.split('.');
@@ -235,6 +236,7 @@ export default function CreateTour() {
           itineraries: [],
           included_excluded: [],
           faqs: [],
+          tags: '', // Reset tags
         });
         setImagePreviews([]); // Reset image previews
         navigate('/admin/tours'); // Redirect to tour list
@@ -373,16 +375,19 @@ export default function CreateTour() {
                 />
               </div>
               <div>
-                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">Tags (pisahkan dengan koma)</label>
-                <input
-                  type="text"
+                <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label>
+                <select
                   id="tags"
                   name="tags"
                   value={formData.tags || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
-                  placeholder="contoh: adventure,beach,family"
-                />
+                >
+                  <option value="">Pilih Tipe Tur</option>
+                  <option value="1_day_trip">Day Trip</option>
+                  <option value="open_trip">Open Trip</option>
+                  <option value="private_service">Other</option>
+                </select>
               </div>
             </div>
 
