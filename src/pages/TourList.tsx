@@ -181,7 +181,7 @@ const TourList: React.FC = () => {
       </div>
       
       {/* Call to Action */}
-      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-16 mt-16">
+      <div className="bg-gray-900 text-white py-16 mt-16">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             {t('tourList.cantFind')}
@@ -190,8 +190,8 @@ const TourList: React.FC = () => {
             {t('tourList.customize')}
           </p>
           <button 
-            onClick={handleContactExperts} // Added onClick handler
-            className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200 text-lg"
+            onClick={handleContactExperts} 
+            className={`inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white ${language ==="ru" ? "bg-[#0088cc] hover:bg-[#006699]" : "bg-[#25d366] hover:bg-[#13a033]"} transition-colors duration-300`}
           >
             {t('tourList.contactExperts')}
           </button>
