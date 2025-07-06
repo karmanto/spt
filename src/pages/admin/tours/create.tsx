@@ -29,6 +29,7 @@ export default function CreateTour() {
     itineraries: [],
     included_excluded: [],
     faqs: [],
+    cancellation_policies: [], // Initialize cancellation policies
     tags: '', // Initialize tags as empty string
   });
   const [loading, setLoading] = useState(false);
@@ -221,6 +222,7 @@ export default function CreateTour() {
           original_price: formData.original_price ? Number(formData.original_price) : undefined,
           rate: formData.rate ? Number(formData.rate) : undefined,
           images: uploadedImagePaths.sort((a, b) => a.order - b.order), // Sort images by order before sending
+          cancellation_policies: formData.cancellation_policies.map(cp => ({ description: cp.description })), // Ensure policies are mapped
         };
 
         await addTourPackage(payload);
@@ -236,6 +238,7 @@ export default function CreateTour() {
           itineraries: [],
           included_excluded: [],
           faqs: [],
+          cancellation_policies: [], // Reset cancellation policies
           tags: '', // Reset tags
         });
         setImagePreviews([]); // Reset image previews
@@ -727,9 +730,9 @@ export default function CreateTour() {
                           <button
                             type="button"
                             onClick={() => {
-                              const newItineraries = [...formData.itineraries];
+                              const newItineraries = [...formData.itineraries!];
                               newItineraries[dayIndex].activities.splice(activityIndex, 1);
-                              setFormData({ ...formData, itineraries: newItineraries });
+                              setFormData({ ...formData!, itineraries: newItineraries });
                             }}
                             className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex-shrink-0"
                             title="Hapus Aktivitas"
@@ -742,9 +745,9 @@ export default function CreateTour() {
                     <button
                       type="button"
                       onClick={() => {
-                        const newItineraries = [...formData.itineraries];
+                        const newItineraries = [...formData.itineraries!];
                         newItineraries[dayIndex].activities.push({ time: '', description: { ...initialLanguageContent } });
-                        setFormData({ ...formData, itineraries: newItineraries });
+                        setFormData({ ...formData!, itineraries: newItineraries });
                       }}
                       className="mt-4 bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition-colors flex items-center text-sm shadow-md"
                     >
@@ -794,9 +797,9 @@ export default function CreateTour() {
                           <button
                             type="button"
                             onClick={() => {
-                              const newItineraries = [...formData.itineraries];
+                              const newItineraries = [...formData.itineraries!];
                               newItineraries[dayIndex].meals.splice(mealIndex, 1);
-                              setFormData({ ...formData, itineraries: newItineraries });
+                              setFormData({ ...formData!, itineraries: newItineraries });
                             }}
                             className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors flex-shrink-0"
                             title="Hapus Makanan"
@@ -809,9 +812,9 @@ export default function CreateTour() {
                     <button
                       type="button"
                       onClick={() => {
-                        const newItineraries = [...formData.itineraries];
+                        const newItineraries = [...formData.itineraries!];
                         newItineraries[dayIndex].meals.push({ description: { ...initialLanguageContent } });
-                        setFormData({ ...formData, itineraries: newItineraries });
+                        setFormData({ ...formData!, itineraries: newItineraries });
                       }}
                       className="mt-4 bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary/90 transition-colors flex items-center text-sm shadow-md"
                     >
@@ -823,7 +826,7 @@ export default function CreateTour() {
             </div>
             <button
               type="button"
-              onClick={() => addNestedItem('itineraries', { day: formData.itineraries.length + 1, title: { ...initialLanguageContent }, activities: [], meals: [] })}
+              onClick={() => addNestedItem('itineraries', { day: (formData.itineraries?.length || 0) + 1, title: { ...initialLanguageContent }, activities: [], meals: [] })}
               className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
             >
               <Plus className="h-5 w-5 mr-2" /> Tambah Hari Itinerary
@@ -833,7 +836,7 @@ export default function CreateTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Termasuk & Tidak Termasuk</h2>
             <div className="space-y-4">
-              {formData.included_excluded.map((item, index) => (
+              {formData.included_excluded?.map((item, index) => (
                 <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
                     <h3 className="text-lg font-medium text-gray-800">Item {index + 1} ({item.type === 'included' ? 'Termasuk' : 'Tidak Termasuk'})</h3>
@@ -914,7 +917,7 @@ export default function CreateTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">FAQ</h2>
             <div className="space-y-4">
-              {formData.faqs.map((faq, index) => (
+              {formData.faqs?.map((faq, index) => (
                 <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
                     <h3 className="text-lg font-medium text-gray-800">FAQ {index + 1}</h3>
@@ -1020,6 +1023,76 @@ export default function CreateTour() {
               className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
             >
               <Plus className="h-5 w-5 mr-2" /> Tambah FAQ
+            </button>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Kebijakan Pembatalan</h2>
+            <div className="space-y-4">
+              {formData.cancellation_policies?.map((policy, index) => (
+                <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
+                  <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
+                    <h3 className="text-lg font-medium text-gray-800">Kebijakan {index + 1}</h3>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); removeNestedItem('cancellation_policies', index); }}
+                        className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                        title="Hapus Kebijakan"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                      <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
+                    </div>
+                  </summary>
+                  <div className="p-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Deskripsi Kebijakan</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label htmlFor={`policy-desc-en-${index}`} className="block text-xs font-medium text-gray-500">English</label>
+                        <textarea
+                          id={`policy-desc-en-${index}`}
+                          value={policy.description.en}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'en')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="English"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`policy-desc-id-${index}`} className="block text-xs font-medium text-gray-500">Indonesian</label>
+                        <textarea
+                          id={`policy-desc-id-${index}`}
+                          value={policy.description.id || ''}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'id')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="Indonesian (opsional)"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`policy-desc-ru-${index}`} className="block text-xs font-medium text-gray-500">Russian</label>
+                        <textarea
+                          id={`policy-desc-ru-${index}`}
+                          value={policy.description.ru || ''}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'ru')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="Russian (opsional)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addNestedItem('cancellation_policies', { description: { ...initialLanguageContent } })}
+              className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
+            >
+              <Plus className="h-5 w-5 mr-2" /> Tambah Kebijakan Pembatalan
             </button>
           </section>
 

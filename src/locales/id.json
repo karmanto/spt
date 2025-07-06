@@ -185,5 +185,13 @@
   "lookingForwardToConfirmation": "Menantikan konfirmasi Anda.",
   "whatsappNumber": "Nomor WhatsApp",
   "enterWhatsappNumber": "Masukkan nomor WhatsApp Anda",
-  "contactUsWhatsapp": "6281234567890"
+  "contactUsWhatsapp": "6281234567890",
+  "failedToLoadTourDetails": "Gagal memuat detail tur. Silakan coba lagi nanti.",
+  "tourNotFound": "Tur tidak ditemukan.",
+  "noIncludedItems": "Tidak ada item yang termasuk.",
+  "noExcludedItems": "Tidak ada item yang tidak termasuk.",
+  "noItineraryAvailable": "Tidak ada itinerary tersedia untuk tur ini.",
+  "noFaqsAvailable": "Tidak ada FAQ tersedia untuk tur ini.",
+  "noCancellationPolicy": "Tidak ada kebijakan pembatalan yang tersedia.",
+  "noHighlightsAvailable": "Tidak ada sorotan tersedia untuk tur ini."
 }

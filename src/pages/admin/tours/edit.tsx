@@ -71,6 +71,7 @@ export default function EditTour() {
         })),
         included_excluded: data.included_excluded.map(ie => ({ type: ie.type, description: ie.description })),
         faqs: data.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
+        cancellation_policies: data.cancellation_policies.map(cp => ({ description: cp.description })), // Initialize cancellation policies
         tags: data.tags || '', // Ensure tags is initialized
       });
 
@@ -78,7 +79,7 @@ export default function EditTour() {
         id: img.id,
         path: img.path,
         order: img.order,
-        previewUrl: `${img.path}`,
+        previewUrl: `${import.meta.env.VITE_BASE_URL}${img.path}`, // Use VITE_BASE_URL for existing images
         isNew: false,
       })).sort((a, b) => a.order - b.order));
     } catch (err) {
@@ -312,6 +313,7 @@ export default function EditTour() {
           original_price: formData.original_price ? Number(formData.original_price) : undefined,
           rate: formData.rate ? Number(formData.rate) : undefined,
           images: finalImagesPayload.sort((a, b) => a.order - b.order),
+          cancellation_policies: formData.cancellation_policies?.map(cp => ({ description: cp.description })) || [], // Ensure policies are mapped
         };
 
         await updateTourPackage(parseInt(id), payload);
@@ -1124,6 +1126,76 @@ export default function EditTour() {
               className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
             >
               <Plus className="h-5 w-5 mr-2" /> Tambah FAQ
+            </button>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Kebijakan Pembatalan</h2>
+            <div className="space-y-4">
+              {formData.cancellation_policies?.map((policy, index) => (
+                <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
+                  <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
+                    <h3 className="text-lg font-medium text-gray-800">Kebijakan {index + 1}</h3>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); removeNestedItem('cancellation_policies', index); }}
+                        className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                        title="Hapus Kebijakan"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                      <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
+                    </div>
+                  </summary>
+                  <div className="p-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Deskripsi Kebijakan</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label htmlFor={`policy-desc-en-${index}`} className="block text-xs font-medium text-gray-500">English</label>
+                        <textarea
+                          id={`policy-desc-en-${index}`}
+                          value={policy.description.en}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'en')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="English"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`policy-desc-id-${index}`} className="block text-xs font-medium text-gray-500">Indonesian</label>
+                        <textarea
+                          id={`policy-desc-id-${index}`}
+                          value={policy.description.id || ''}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'id')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="Indonesian (opsional)"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`policy-desc-ru-${index}`} className="block text-xs font-medium text-gray-500">Russian</label>
+                        <textarea
+                          id={`policy-desc-ru-${index}`}
+                          value={policy.description.ru || ''}
+                          onChange={(e) => handleArrayItemPropertyChange('cancellation_policies', index, 'description', e.target.value, 'ru')}
+                          rows={3}
+                          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                          placeholder="Russian (opsional)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addNestedItem('cancellation_policies', { description: { ...initialLanguageContent } })}
+              className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
+            >
+              <Plus className="h-5 w-5 mr-2" /> Tambah Kebijakan Pembatalan
             </button>
           </section>
 

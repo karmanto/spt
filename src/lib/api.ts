@@ -57,6 +57,12 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
     answer: safeJSONParse<LanguageContent>(faq.answer) as LanguageContent
   }));
 
+  // Parse cancellation_policies
+  parsedTour.cancellation_policies = tour.cancellation_policies.map(cp => ({
+    ...cp,
+    description: safeJSONParse<LanguageContent>(cp.description) as LanguageContent
+  }));
+
   return parsedTour;
 };
 
@@ -241,6 +247,10 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
       question: JSON.stringify(faq.question),
       answer: JSON.stringify(faq.answer)
     })),
+    // Stringify cancellation_policies descriptions
+    cancellation_policies: tour.cancellation_policies.map(cp => ({
+      description: JSON.stringify(cp.description)
+    })),
   };
 
   return fetchData<TourPackage>('packages', {
@@ -278,6 +288,10 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
     ...(tour.faqs && { faqs: tour.faqs.map(faq => ({
       question: JSON.stringify(faq.question),
       answer: JSON.stringify(faq.answer)
+    })) }),
+    // Stringify cancellation_policies descriptions for update
+    ...(tour.cancellation_policies && { cancellation_policies: tour.cancellation_policies.map(cp => ({
+      description: JSON.stringify(cp.description)
     })) }),
   };
 

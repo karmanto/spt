@@ -104,6 +104,15 @@ export interface TourFAQ {
   updated_at: string;
 }
 
+// New interface for Tour Cancellation Policy
+export interface TourCancellationPolicy {
+  id: number;
+  package_id: number; // Optional, if linked to package in DB
+  description: LanguageContent;
+  created_at: string;
+  updated_at: string;
+}
+
 // Define the structure for the price object
 export interface PriceDetails {
   adult: number;
@@ -127,6 +136,7 @@ export interface TourPackage {
   itineraries: TourItinerary[]; // Changed from 'itinerary' to 'itineraries'
   included_excluded: TourIncludedExcluded[]; // Combines included and excluded
   faqs: TourFAQ[];
+  cancellation_policies: TourCancellationPolicy[]; // New field for per-tour cancellation policies
   tags?: string;
   created_at: string;
   updated_at: string;
@@ -167,6 +177,7 @@ export interface TourPackageCreatePayload {
   }[];
   included_excluded: { type: 'included' | 'excluded'; description: LanguageContent }[];
   faqs: { question: LanguageContent; answer: LanguageContent }[];
+  cancellation_policies: { description: LanguageContent }[]; // New field for payload
   tags?: string;
 }
 

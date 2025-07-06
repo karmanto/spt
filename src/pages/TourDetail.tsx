@@ -173,14 +173,18 @@ const TourDetail: React.FC = () => {
 
             <div className="bg-blue-50 rounded-xl p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
-              <ul className="space-y-2">
-                {tour.highlights.map((highlight) => (
-                  <li key={highlight.id} className="flex items-start gap-2"> {/* Use item.id as key */}
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> 
-                  </li>
-                ))}
-              </ul>
+              {tour.highlights && tour.highlights.length > 0 ? (
+                <ul className="space-y-2">
+                  {tour.highlights.map((highlight) => (
+                    <li key={highlight.id} className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> 
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-600 italic">{t('noHighlightsAvailable') || 'No highlights available for this tour.'}</p>
+              )}
             </div>
           </div>
         </div>
@@ -221,16 +225,20 @@ const TourDetail: React.FC = () => {
                     <CheckCircle className="w-6 h-6 text-green-500" />
                     {t('whatsIncluded')}
                   </h3>
-                  <ul className="space-y-3">
-                    {tour.included_excluded
-                      .filter(item => item.type === 'included')
-                      .map((item) => (
-                        <li key={item.id} className="flex items-start gap-3"> {/* Use item.id as key */}
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span> {/* Use .description */}
-                        </li>
-                      ))}
-                  </ul>
+                  {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
+                    <ul className="space-y-3">
+                      {tour.included_excluded
+                        .filter(item => item.type === 'included')
+                        .map((item) => (
+                          <li key={item.id} className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noIncludedItems') || 'No included items available.'}</p>
+                  )}
                 </div>
 
                 <div className="bg-white rounded-2xl p-8 shadow-sm">
@@ -238,23 +246,33 @@ const TourDetail: React.FC = () => {
                     <XCircle className="w-6 h-6 text-red-500" />
                     {t('whatsNotIncluded')}
                   </h3>
-                  <ul className="space-y-3">
-                    {tour.included_excluded
-                      .filter(item => item.type === 'excluded')
-                      .map((item) => (
-                        <li key={item.id} className="flex items-start gap-3"> {/* Use item.id as key */}
-                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span> {/* Use .description */}
-                        </li>
-                      ))}
-                  </ul>
+                  {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
+                    <ul className="space-y-3">
+                      {tour.included_excluded
+                        .filter(item => item.type === 'excluded')
+                        .map((item) => (
+                          <li key={item.id} className="flex items-start gap-2">
+                            <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noExcludedItems') || 'No excluded items available.'}</p>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
           {activeTab === 'itinerary' && (
-            <ItineraryDocument tour={tour} />
+            tour.itineraries.length > 0 ? (
+              <ItineraryDocument tour={tour} />
+            ) : (
+              <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
+                <p className="text-gray-600 italic">{t('noItineraryAvailable') || 'No itinerary available for this tour.'}</p>
+              </div>
+            )
           )}
 
           {activeTab === 'pricing' && (
@@ -299,25 +317,33 @@ const TourDetail: React.FC = () => {
 
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
-                <div className="space-y-6">
-                  {tour.faqs.map((faq) => (
-                    <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> {/* Use faq.id as key */}
-                      <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
-                      <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
-                    </div>
-                  ))}
-                </div>
+                {tour.faqs.length > 0 ? (
+                  <div className="space-y-6">
+                    {tour.faqs.map((faq) => (
+                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> {/* Use faq.id as key */}
+                        <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
+                        <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-600 italic">{t('noFaqsAvailable') || 'No FAQs available for this tour.'}</p>
+                )}
               </div>
 
               <div className="bg-yellow-50 rounded-2xl p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">{t('cancellationPolicy')}</h2>
-                <ul className="space-y-2 text-gray-700">
-                  <li>{t('freeCancellationPolicy')}</li>
-                  <li>{t('halfRefundPolicy')}</li>
-                  <li>{t('noRefundPolicy')}</li>
-                  <li>{t('weatherRefundPolicy')}</li>
-                  <li>{t('policyChanges')}</li>
-                </ul>
+                {tour.cancellation_policies.length > 0 ? (
+                  <ul className="space-y-2 text-gray-700">
+                    {tour.cancellation_policies.map((policy) => (
+                      <li key={policy.id}>
+                        {getLocalizedContent(policy.description)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 italic">{t('noCancellationPolicy') || 'No cancellation policy available.'}</p>
+                )}
               </div>
             </div>
           )}

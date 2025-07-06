@@ -186,5 +186,13 @@
   "lookingForwardToConfirmation": "Looking forward to your confirmation.",
   "whatsappNumber": "WhatsApp Number",
   "enterWhatsappNumber": "Enter your WhatsApp number",
-  "contactUsWhatsapp": "1234567890"
+  "contactUsWhatsapp": "1234567890",
+  "failedToLoadTourDetails": "Failed to load tour details. Please try again later.",
+  "tourNotFound": "Tour not found.",
+  "noIncludedItems": "No included items available.",
+  "noExcludedItems": "No excluded items available.",
+  "noItineraryAvailable": "No itinerary available for this tour.",
+  "noFaqsAvailable": "No FAQs available for this tour.",
+  "noCancellationPolicy": "No cancellation policy available.",
+  "noHighlightsAvailable": "No highlights available for this tour."
 }

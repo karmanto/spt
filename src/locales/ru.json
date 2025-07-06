@@ -186,5 +186,13 @@
   "lookingForwardToConfirmation": "Жду вашего подтверждения.",
   "whatsappNumber": "Номер WhatsApp",
   "enterWhatsappNumber": "Введите ваш номер WhatsApp",
-  "contactUsWhatsapp": "79123456789"
+  "contactUsWhatsapp": "79123456789",
+  "failedToLoadTourDetails": "Не удалось загрузить детали тура. Пожалуйста, попробуйте еще раз позже.",
+  "tourNotFound": "Тур не найден.",
+  "noIncludedItems": "Нет включенных элементов.",
+  "noExcludedItems": "Нет исключенных элементов.",
+  "noItineraryAvailable": "Для этого тура нет маршрута.",
+  "noFaqsAvailable": "Для этого тура нет часто задаваемых вопросов.",
+  "noCancellationPolicy": "Политика отмены недоступна.",
+  "noHighlightsAvailable": "Для этого тура нет основных моментов."
 }

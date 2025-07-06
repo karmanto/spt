@@ -10,6 +10,17 @@ function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
   return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
 }
 
+// Helper function to get display name for tour tags
+const getTagDisplayName = (tag: string | undefined): string => {
+  if (!tag) return 'Tidak ada';
+  switch (tag) {
+    case '1_day_trip': return 'Day Trip';
+    case 'open_trip': return 'Open Trip';
+    case 'private_service': return 'Other'; // This maps to 'other' in the API
+    default: return tag; // Fallback to the raw tag if not found
+  }
+};
+
 export default function ShowTour() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -179,9 +190,9 @@ export default function ShowTour() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label> {/* Changed label from Tags to Tipe Tur */}
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.tags || <span className="text-gray-400 italic">Tidak ada</span>}
+                  {getTagDisplayName(tour.tags)} {/* Use the helper function here */}
                 </div>
               </div>
             </div>
@@ -270,27 +281,7 @@ export default function ShowTour() {
                       <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-4 border-t border-gray-200">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Deskripsi Highlight</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">English</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {highlight.description.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {highlight.description.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">Russian</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {highlight.description.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                      </div>
+                      {renderLanguageContentDisplay('Deskripsi Highlight', highlight.description)}
                     </div>
                   </details>
                 ))
@@ -317,29 +308,7 @@ export default function ShowTour() {
                           {itinerary.day}
                         </div>
                       </div>
-                      <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Judul Hari</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">English</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {itinerary.title.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {itinerary.title.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Russian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {itinerary.title.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      {renderLanguageContentDisplay('Judul Hari', itinerary.title)}
 
                       <h4 className="text-lg font-semibold text-gray-800 mt-4 mb-3">Aktivitas</h4>
                       <div className="space-y-4">
@@ -353,25 +322,8 @@ export default function ShowTour() {
                                     {activity.time || <span className="text-gray-400 italic">Tidak ada</span>}
                                   </div>
                                 </div>
-                                <div className="sm:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                  <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (EN)</label>
-                                    <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                      {activity.description.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (ID)</label>
-                                    <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                      {activity.description.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (RU)</label>
-                                    <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                      {activity.description.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                                    </div>
-                                  </div>
+                                <div className="sm:col-span-3">
+                                  {renderLanguageContentDisplay('Deskripsi Aktivitas', activity.description)}
                                 </div>
                               </div>
                             </div>
@@ -386,25 +338,8 @@ export default function ShowTour() {
                         {itinerary.meals.length > 0 ? (
                           itinerary.meals.map((meal, mealIndex) => (
                             <div key={meal.id || mealIndex} className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col sm:flex-row sm:items-end gap-4">
-                              <div className="flex-grow grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (EN)</label>
-                                  <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                    {meal.description.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                                  </div>
-                                </div>
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (ID)</label>
-                                  <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                    {meal.description.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                                  </div>
-                                </div>
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (RU)</label>
-                                  <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                    {meal.description.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                                  </div>
-                                </div>
+                              <div className="flex-grow">
+                                {renderLanguageContentDisplay('Deskripsi Makanan', meal.description)}
                               </div>
                             </div>
                           ))
@@ -436,27 +371,7 @@ export default function ShowTour() {
                       <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
                         {item.type === 'included' ? 'Termasuk' : 'Tidak Termasuk'}
                       </div>
-                      <label className="block text-sm font-medium text-gray-700 mt-4 mb-1">Deskripsi</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">English</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {item.description.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {item.description.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                        <div>
-                          <label className="block text-xs font-medium text-gray-500">Russian</label>
-                          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                            {item.description.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                          </div>
-                        </div>
-                      </div>
+                      {renderLanguageContentDisplay('Deskripsi', item.description)}
                     </div>
                   </details>
                 ))
@@ -477,58 +392,34 @@ export default function ShowTour() {
                       <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-4 border-t border-gray-200 space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Pertanyaan</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">English</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.question.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.question.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Russian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.question.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mt-4 mb-1">Jawaban</label>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">English</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.answer.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.answer.id || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-gray-500">Russian</label>
-                            <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                              {faq.answer.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      {renderLanguageContentDisplay('Pertanyaan', faq.question)}
+                      {renderLanguageContentDisplay('Jawaban', faq.answer)}
                     </div>
                   </details>
                 ))
               ) : (
                 <p className="text-gray-500 p-4 bg-gray-50 rounded-lg shadow-sm">Tidak ada FAQ.</p>
+              )}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Kebijakan Pembatalan</h2>
+            <div className="space-y-4">
+              {tour.cancellation_policies.length > 0 ? (
+                tour.cancellation_policies.map((policy, index) => (
+                  <details key={policy.id} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
+                    <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
+                      <h3 className="text-lg font-medium text-gray-800">Kebijakan {index + 1}</h3>
+                      <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
+                    </summary>
+                    <div className="p-4 border-t border-gray-200">
+                      {renderLanguageContentDisplay('Deskripsi Kebijakan', policy.description)}
+                    </div>
+                  </details>
+                ))
+              ) : (
+                <p className="text-gray-500 p-4 bg-gray-50 rounded-lg shadow-sm">Tidak ada kebijakan pembatalan.</p>
               )}
             </div>
           </section>
