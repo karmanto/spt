@@ -42,7 +42,7 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     fetchTourDetail();
-  }, [id, navigate]); 
+  }, [id, navigate, t]); 
 
   if (loading) {
     return (

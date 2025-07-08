@@ -104,35 +104,32 @@ export interface TourFAQ {
   updated_at: string;
 }
 
-// New interface for Tour Cancellation Policy
 export interface TourCancellationPolicy {
   id: number;
-  package_id: number; // Optional, if linked to package in DB
+  package_id: number; 
   description: LanguageContent;
   created_at: string;
   updated_at: string;
 }
 
-// Define the new structure for tour price options
 export interface TourPriceOption {
-  id?: number; // Optional, if coming from DB with an ID
-  service_type: LanguageContent; // e.g., "Adult", "Child", "Private Tour"
+  id?: number; 
+  service_type: LanguageContent; 
   price: number;
-  description: LanguageContent; // e.g., "Per person", "Minimum 2 pax"
+  description: LanguageContent; 
   created_at?: string;
   updated_at?: string;
 }
 
-// Updated TourPackage interface to match API response
 export interface TourPackage {
   id: number;
   code?: string;
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  prices: TourPriceOption[]; // Changed from 'price' to 'prices' array
-  starting_price: string; // New field for "harga mulai dari"
-  original_price?: string; // API returns as string, keep for potential discount display
+  prices: TourPriceOption[]; 
+  starting_price: string; 
+  original_price?: string; 
   rate?: string;
   images: TourImage[];
   overview: LanguageContent;
@@ -142,11 +139,11 @@ export interface TourPackage {
   faqs: TourFAQ[];
   cancellation_policies: TourCancellationPolicy[];
   tags?: string;
+  order?: number; 
   created_at: string;
   updated_at: string;
 }
 
-// New interface for the API response wrapper for tour lists
 export interface TourPackageResponse {
   data: TourPackage[];
   pagination: {
@@ -157,23 +154,22 @@ export interface TourPackageResponse {
   };
 }
 
-// Payload for creating a new TourPackage
 export interface TourPackageCreatePayload {
   code?: string;
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  prices: { // New structure for prices
+  prices: { 
     service_type: LanguageContent;
     price: number;
     description: LanguageContent;
   }[];
-  starting_price: number; // Assuming number for input, API might convert to string
-  original_price?: number; // Assuming number for input, API might convert to string
-  rate?: number; // Assuming number for input, API might convert to string
-  images: { path: string; order: number }[]; // For payload, sending paths
+  starting_price: number; 
+  original_price?: number; 
+  rate?: number; 
+  images: { path: string; order: number }[]; 
   overview: LanguageContent;
-  highlights: { description: LanguageContent }[]; // For payload, only description
+  highlights: { description: LanguageContent }[]; 
   itineraries: {
     day: number;
     title: LanguageContent;
@@ -184,9 +180,9 @@ export interface TourPackageCreatePayload {
   faqs: { question: LanguageContent; answer: LanguageContent }[];
   cancellation_policies: { description: LanguageContent }[];
   tags?: string;
+  order?: number;
 }
 
-// Payload for updating a TourPackage (all fields optional)
 export interface TourPackageUpdatePayload extends Partial<TourPackageCreatePayload> {}
 
 export interface Advantage {

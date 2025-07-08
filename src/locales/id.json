@@ -133,7 +133,7 @@
   "confirmBooking": "Konfirmasi Pemesanan",
   "resetForm": "Reset Formulir",
   "tourDateRequired": "Tanggal tur wajib diisi.",
-  "atLeastOneParticipant": "Setidaknya satu peserta (Dewasa, Anak, atau Bayi) wajib diisi.",
+  "atLeastOneParticipant": "Jumlah pemesanan belum diisi",
   "familyNameRequired": "Nama Keluarga wajib diisi.",
   "firstNameRequired": "Nama Depan wajib diisi.",
   "emailRequired": "Alamat Email wajib diisi.",
@@ -200,5 +200,7 @@
   "description": "Deskripsi",
   "startingFrom": "Mulai Dari",
   "noPricingInfo": "Tidak ada informasi harga yang tersedia untuk tur ini.",
-  "viewLargerImage": "Lihat gambar lebih besar"
+  "viewLargerImage": "Lihat gambar lebih besar",
+  "failedToLoadPromos": "Gagal memuat promosi. Silakan coba lagi nanti.",
+  "failedToLoadTours": "Gagal memuat tur. Silakan coba lagi nanti."
 }

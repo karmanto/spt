@@ -134,7 +134,7 @@
   "confirmBooking": "Подтвердить",
   "resetForm": "Сбросить",
   "tourDateRequired": "Нужна дата тура.",
-  "atLeastOneParticipant": "Нужен хотя бы один участник.",
+  "atLeastOneParticipant": "Количество заказа не заполнен",
   "familyNameRequired": "Укажите фамилию.",
   "firstNameRequired": "Укажите имя.",
   "emailRequired": "Нужен E-mail.",
@@ -201,5 +201,7 @@
   "description": "Описание",
   "startingFrom": "Начинается от",
   "noPricingInfo": "Нет информации о ценах для этого тура.",
-  "viewLargerImage": "Посмотреть большее изображение"
+  "viewLargerImage": "Посмотреть большее изображение",
+  "failedToLoadPromos": "Не удалось загрузить акции. Попробуйте позже.",
+  "failedToLoadTours": "Не удалось загрузить туры. Попробуйте позже."
 }

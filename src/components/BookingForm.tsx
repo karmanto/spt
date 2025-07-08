@@ -13,7 +13,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
   const [whatsappNumberInput, setWhatsappNumberInput] = useState('');
-  const [quantities, setQuantities] = useState<{ [id: number]: number }>({});
+  const [quantities, setQuantities] = useState<{ [id: number]: number | null }>({});
   const [totalCost, setTotalCost] = useState(0);
 
   const whatsappContactNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
@@ -31,10 +31,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
 
   useEffect(() => {
     if (tour && tour.prices && tour.prices.length > 0) {
-      const initialQuantities: { [id: number]: number } = {};
+      const initialQuantities: { [id: number]: number | null } = {};
       tour.prices.forEach(option => {
         if (option.id !== undefined) {
-          initialQuantities[option.id] = 0;
+          initialQuantities[option.id] = null;
         }
       });
       setQuantities(initialQuantities);
@@ -61,11 +61,18 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   };
 
   const handleQuantityChange = (optionId: number, value: string) => {
-    const newQuantity = Math.max(0, parseInt(value) || 0); 
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [optionId]: newQuantity,
-    }));
+    if (value === '') {
+      setQuantities(prevQuantities => ({
+        ...prevQuantities,
+        [optionId]: null,
+      }));
+    } else {
+      const newQuantity = Math.max(0, parseInt(value) || 0); 
+      setQuantities(prevQuantities => ({
+        ...prevQuantities,
+        [optionId]: newQuantity,
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -76,7 +83,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
       return;
     }
 
-    const hasSelections = Object.values(quantities).some(qty => qty > 0);
+    const hasSelections = Object.values(quantities).some(qty => (qty ?? 0) > 0);
     if (!hasSelections) {
       alert(t('atLeastOneParticipant')); 
       return;
@@ -88,7 +95,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
     let serviceDetails = '';
     tour.prices.forEach(option => {
       if (option.id !== undefined) {
-        const qty = quantities[option.id] || 0;
+        const qty = quantities[option.id] || 0; 
         if (qty > 0) {
           const serviceType = getLocalizedContent(option.service_type);
           const description = getLocalizedContent(option.description);
@@ -198,7 +205,7 @@ ${t('lookingForwardToConfirmation')}
                     id={`quantity-${option.id}`}
                     min="0"
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 text-center"
-                    value={quantities[option.id!] || 0}
+                    value={quantities[option.id!] ?? ""}
                     onChange={(e) => handleQuantityChange(option.id!, e.target.value)}
                     aria-label={`${t('quantity')} for ${getLocalizedContent(option.service_type)}`}
                   />
@@ -217,7 +224,7 @@ ${t('lookingForwardToConfirmation')}
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-semibold transition-colors"
-          disabled={!tour.prices || tour.prices.length === 0 || totalCost === 0} 
+          disabled={!tour.prices || tour.prices.length === 0} 
         >
           {t('confirmBooking')}
         </button>

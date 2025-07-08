@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TourPackage, TourPackageResponse } from '../../../lib/types';
-import { Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Rocket } from 'lucide-react'; // Tambahkan ikon Rocket
 import { Link } from 'react-router-dom';
-import { getTourPackages, deleteTourPackage } from '../../../lib/api';
+import { getTourPackages, deleteTourPackage, boostTourPackage } from '../../../lib/api'; // Import boostTourPackage
 import { FaArrowLeft } from 'react-icons/fa';
 
 export default function AdminTours() {
@@ -39,6 +39,22 @@ export default function AdminTours() {
       } catch (err) {
         console.error('Gagal menghapus tur:', err);
         setError('Gagal menghapus tur. Silakan coba lagi.');
+      }
+    },
+    [fetchTours]
+  );
+
+  // Fungsi baru untuk meningkatkan (boost) tur
+  const handleBoost = useCallback(
+    async (id: number) => {
+      if (!window.confirm('Apakah Anda yakin ingin meningkatkan (boost) tur ini?')) return;
+      try {
+        await boostTourPackage(id);
+        alert('Tur berhasil ditingkatkan!'); // Feedback sederhana
+        fetchTours(); // Perbarui daftar setelah boost
+      } catch (err) {
+        console.error('Gagal meningkatkan tur:', err);
+        setError('Gagal meningkatkan tur. Silakan coba lagi.');
       }
     },
     [fetchTours]
@@ -133,6 +149,13 @@ export default function AdminTours() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-3">
+                          {!tour.order && <button
+                            onClick={() => handleBoost(tour.id)}
+                            className="text-green-600 hover:text-green-800 transition-colors duration-200"
+                            title="Tingkatkan Tur"
+                          >
+                            <Rocket className="h-5 w-5" />
+                          </button>}
                           <Link
                               to={`/admin/tours/${tour.id}`}
                               className="text-secondary hover:text-opacity-80 transition-colors duration-200"
@@ -146,12 +169,12 @@ export default function AdminTours() {
                           >
                             <Edit className="h-5 w-5" />
                           </Link>
-                          <button
+                          {!tour.order && <button
                             onClick={() => handleDelete(tour.id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             <Trash2 className="h-5 w-5" />
-                          </button>
+                          </button>}
                         </div>
                       </td>
                     </tr>

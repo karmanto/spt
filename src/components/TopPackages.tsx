@@ -4,8 +4,8 @@ import { MapPin, Clock, Tag, Star } from 'lucide-react';
 import { TourPackage } from '../lib/types';
 import { Link } from 'react-router-dom';
 import { getTourPackages } from '../lib/api'; 
-import LoadingSpinner from './LoadingSpinner'; // Import LoadingSpinner
-import ErrorDisplay from './ErrorDisplay';     // Import ErrorDisplay
+import LoadingSpinner from './LoadingSpinner';
+import ErrorDisplay from './ErrorDisplay';     
 
 const TopPackages: React.FC = () => {
   const { t, language } = useLanguage();
@@ -16,8 +16,8 @@ const TopPackages: React.FC = () => {
   const fetchTours = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null); // Clear any previous errors
-      const response = await getTourPackages({ per_page: 3, page: 1, min_rate: 4.9 });
+      setError(null); 
+      const response = await getTourPackages({ per_page: 3 });
       setTours(response.data); 
     } catch (err) {
       console.error("Failed to fetch tours:", err);
@@ -25,7 +25,7 @@ const TopPackages: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [t]); // Dependency on t for translation
+  }, [t]); 
 
   useEffect(() => {
     fetchTours();
@@ -41,7 +41,7 @@ const TopPackages: React.FC = () => {
     return (
       <section id="packages" className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <LoadingSpinner /> {/* Use LoadingSpinner */}
+          <LoadingSpinner /> 
         </div>
       </section>
     );

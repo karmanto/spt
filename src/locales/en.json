@@ -134,7 +134,7 @@
   "confirmBooking": "Confirm Booking",
   "resetForm": "Reset Form",
   "tourDateRequired": "Tour date is required.",
-  "atLeastOneParticipant": "At least one participant (Adult, Child, or Infant) is required.",
+  "atLeastOneParticipant": "Order quantity has not been entered",
   "familyNameRequired": "Family Name is required.",
   "firstNameRequired": "First Name is required.",
   "emailRequired": "Email Address is required.",
@@ -201,5 +201,7 @@
   "description": "Description",
   "startingFrom": "Starting From",
   "noPricingInfo": "No pricing information available for this tour.",
-  "viewLargerImage": "View larger image"
+  "viewLargerImage": "View larger image",
+  "failedToLoadPromos": "Failed to load promotions. Please try again later.",
+  "failedToLoadTours": "Failed to load tours. Please try again later."
 }

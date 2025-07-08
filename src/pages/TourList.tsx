@@ -30,7 +30,7 @@ const TourList: React.FC = () => {
   });
 
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const tourCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
 
@@ -60,7 +60,7 @@ const TourList: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, searchTerm, selectedCategory]); 
+  }, [currentPage, searchTerm, selectedCategory, t]); 
 
   useEffect(() => {
     const searchTermChanged = searchTerm !== prevSearchTermRef.current;

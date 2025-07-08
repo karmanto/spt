@@ -134,7 +134,7 @@ export default function ShowTour() {
             >
               <Edit className="h-5 w-5 mr-2" /> Edit
             </button>
-            <button
+            {!tour.order && <button
               type="button"
               onClick={handleDelete}
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center shadow-md"
@@ -142,7 +142,7 @@ export default function ShowTour() {
               disabled={loading}
             >
               <Trash2 className="h-5 w-5 mr-2" /> {loading ? 'Menghapus...' : 'Hapus'}
-            </button>
+            </button>}
           </div>
         </div>
 

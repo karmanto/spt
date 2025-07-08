@@ -330,3 +330,11 @@ export const uploadTourImage = async (imageFile: File): Promise<{ path: string; 
     body: formData,
   });
 };
+
+// New function to boost a tour package
+export const boostTourPackage = async (id: number) => {
+  // Assuming the backend route is /packages/{id}/boost-product for route model binding
+  return fetchData<TourPackage>(`packages/${id}/boost-product`, {
+    method: 'POST',
+  });
+};
