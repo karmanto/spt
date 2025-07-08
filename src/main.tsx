@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import { LanguageProvider } from './context/LanguageContext'; // Import LanguageProvider
+import { LanguageProvider } from './context/LanguageContext';
+import ScrollToTop from './components/ScrollToTop'; 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <LanguageProvider> {/* Wrap the entire App with LanguageProvider */}
+      <ScrollToTop /> 
+      <LanguageProvider>
         <App />
       </LanguageProvider>
     </BrowserRouter>

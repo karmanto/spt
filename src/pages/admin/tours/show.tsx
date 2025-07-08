@@ -1,14 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { TourPackage, LanguageContent, PriceDetails } from '../../../lib/types';
+import { TourPackage, LanguageContent } from '../../../lib/types'; // Removed PriceDetails
 import { getTourPackageDetail, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Image as ImageIcon, Edit, Trash2, ChevronDown } from 'lucide-react';
 
-// Type guard function to check if price is PriceDetails
-function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
-  return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
-}
+// Removed Type guard function to check if price is PriceDetails
 
 // Helper function to get display name for tour tags
 const getTagDisplayName = (tag: string | undefined): string => {
@@ -106,25 +103,8 @@ export default function ShowTour() {
   ) => (
     <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
       <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-xs font-medium text-gray-500">English</label>
-          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-            {value?.en || <span className="text-gray-400 italic">Tidak ada</span>}
-          </div>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
-          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-            {value?.id || <span className="text-gray-400 italic">Tidak ada</span>}
-          </div>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-gray-500">Russian</label>
-          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-            {value?.ru || <span className="text-gray-400 italic">Tidak ada</span>}
-          </div>
-        </div>
+      <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+        {value?.en || <span className="text-gray-400 italic">Tidak ada</span>}
       </div>
     </div>
   );
@@ -205,38 +185,52 @@ export default function ShowTour() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Dewasa</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {isPriceDetails(tour.price) ? `฿${tour.price.adult.toLocaleString('id-ID')}` : `฿${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`}
+                  {tour.starting_price ? `฿${(tour.starting_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Anak</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {isPriceDetails(tour.price) ? `฿${tour.price.child.toLocaleString('id-ID')}` : <span className="text-gray-400 italic">N/A</span>}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Bayi</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {isPriceDetails(tour.price) ? `฿${tour.price.infant.toLocaleString('id-ID')}` : <span className="text-gray-400 italic">N/A</span>}
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Harga Asli (opsional)</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.original_price ? `฿${parseInt(tour.original_price).toLocaleString('id-ID')}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                  {tour.original_price ? `฿${(tour.original_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rating (opsional, 0-5)</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.rate || <span className="text-gray-400 italic">Tidak ada</span>}
-                </div>
+            </div>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">Opsi Harga</h3>
+            {tour.prices.length > 0 ? (
+              <div className="space-y-4">
+                {tour.prices.map((priceOption, index) => (
+                  <div key={priceOption.id || index} className="p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Layanan</label>
+                        <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                          {priceOption.service_type.id || priceOption.service_type.en || <span className="text-gray-400 italic">Tidak ada</span>}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Harga</label>
+                        <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                          {priceOption.price ? `฿${priceOption.price.toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                        </div>
+                      </div>
+                    </div>
+                    {renderLanguageContentDisplay('Deskripsi Harga', priceOption.description)}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500 p-4 bg-gray-50 rounded-lg shadow-sm">Tidak ada opsi harga.</p>
+            )}
+
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Rating (opsional, 0-5)</label>
+              <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                {tour.rate || <span className="text-gray-400 italic">Tidak ada</span>}
               </div>
             </div>
           </section>

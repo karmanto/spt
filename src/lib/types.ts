@@ -113,11 +113,14 @@ export interface TourCancellationPolicy {
   updated_at: string;
 }
 
-// Define the structure for the price object
-export interface PriceDetails {
-  adult: number;
-  child: number;
-  infant: number;
+// Define the new structure for tour price options
+export interface TourPriceOption {
+  id?: number; // Optional, if coming from DB with an ID
+  service_type: LanguageContent; // e.g., "Adult", "Child", "Private Tour"
+  price: number;
+  description: LanguageContent; // e.g., "Per person", "Minimum 2 pax"
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Updated TourPackage interface to match API response
@@ -127,16 +130,17 @@ export interface TourPackage {
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  price: string | PriceDetails; // Updated to allow string or PriceDetails object
-  original_price?: string; // API returns as string
+  prices: TourPriceOption[]; // Changed from 'price' to 'prices' array
+  starting_price: string; // New field for "harga mulai dari"
+  original_price?: string; // API returns as string, keep for potential discount display
   rate?: string;
   images: TourImage[];
   overview: LanguageContent;
   highlights: TourHighlight[];
-  itineraries: TourItinerary[]; // Changed from 'itinerary' to 'itineraries'
-  included_excluded: TourIncludedExcluded[]; // Combines included and excluded
+  itineraries: TourItinerary[];
+  included_excluded: TourIncludedExcluded[];
   faqs: TourFAQ[];
-  cancellation_policies: TourCancellationPolicy[]; // New field for per-tour cancellation policies
+  cancellation_policies: TourCancellationPolicy[];
   tags?: string;
   created_at: string;
   updated_at: string;
@@ -159,11 +163,12 @@ export interface TourPackageCreatePayload {
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  price: {
-    adult: number;
-    child: number;
-    infant: number;
-  };
+  prices: { // New structure for prices
+    service_type: LanguageContent;
+    price: number;
+    description: LanguageContent;
+  }[];
+  starting_price: number; // Assuming number for input, API might convert to string
   original_price?: number; // Assuming number for input, API might convert to string
   rate?: number; // Assuming number for input, API might convert to string
   images: { path: string; order: number }[]; // For payload, sending paths
@@ -177,7 +182,7 @@ export interface TourPackageCreatePayload {
   }[];
   included_excluded: { type: 'included' | 'excluded'; description: LanguageContent }[];
   faqs: { question: LanguageContent; answer: LanguageContent }[];
-  cancellation_policies: { description: LanguageContent }[]; // New field for payload
+  cancellation_policies: { description: LanguageContent }[];
   tags?: string;
 }
 

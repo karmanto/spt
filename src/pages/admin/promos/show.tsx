@@ -180,7 +180,7 @@ export default function ShowPromo() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Berakhir</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {new Date(promo.end_date).toLocaleDateString('id-ID')}
+                  {new Date(promo.end_date).toLocaleDateString()}
                 </div>
               </div>
               <div>

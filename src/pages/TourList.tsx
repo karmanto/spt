@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { TourPackage } from '../lib/types';
 import TourCard from '../components/TourCard';
 import { getTourPackages } from '../lib/api';
-import LoadingSpinner from '../components/LoadingSpinner'; 
-import ErrorDisplay from '../components/ErrorDisplay';     
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 interface OutletContext {
   searchTerm: string;
@@ -13,49 +13,90 @@ interface OutletContext {
 }
 
 const TourList: React.FC = () => {
-  const { t, language } = useLanguage(); // Destructure language here
+  const { t, language } = useLanguage();
   const { searchTerm, selectedCategory } = useOutletContext<OutletContext>();
-  
+
   const [tours, setTours] = useState<TourPackage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10; 
 
-  // Environment variables for contact
+  const [currentPage, setCurrentPage] = useState(() => {
+    const storedPage = sessionStorage.getItem('lastViewedPage');
+    if (storedPage) {
+      return parseInt(storedPage, 10);
+    }
+
+    return 1;
+  });
+
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 5;
+
+  const tourCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
+
+  const prevSearchTermRef = useRef(searchTerm);
+  const prevSelectedCategoryRef = useRef(selectedCategory);
+
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 
   const fetchTours = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null);
       const response = await getTourPackages({
-        page: currentPage,
+        page: currentPage, 
         per_page: itemsPerPage,
         search: searchTerm,
-        tags: selectedCategory, 
+        tags: selectedCategory,
       });
       setTours(response.data);
       setTotalPages(response.pagination.last_page);
+
+      sessionStorage.removeItem('lastViewedPage');
     } catch (err) {
       console.error("Failed to fetch tours:", err);
       setError(t('failedToLoadTours') || 'Failed to load tour packages. Please try again later.');
     } finally {
       setLoading(false);
     }
-  }, [currentPage, searchTerm, selectedCategory, t]);
+  }, [currentPage, searchTerm, selectedCategory]); 
 
   useEffect(() => {
-    // Reset to first page when search term or category changes
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory]);
+    const searchTermChanged = searchTerm !== prevSearchTermRef.current;
+    const selectedCategoryChanged = selectedCategory !== prevSelectedCategoryRef.current;
+
+    if (searchTermChanged || selectedCategoryChanged) {
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    }
+
+    prevSearchTermRef.current = searchTerm;
+    prevSelectedCategoryRef.current = selectedCategory;
+
+  }, [searchTerm, selectedCategory]); 
 
   useEffect(() => {
-    fetchTours();
-  }, [fetchTours]);
-  
+    fetchTours(); 
+  }, [fetchTours]); 
+
+  useEffect(() => {
+    if (!loading && tours.length > 0) {
+      const lastViewedTourId = sessionStorage.getItem('lastViewedTourId');
+      if (lastViewedTourId) {
+        const tourIdNum = parseInt(lastViewedTourId, 10);
+        const targetCard = tourCardRefs.current.get(tourIdNum);
+        if (targetCard) {
+          requestAnimationFrame(() => {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+          sessionStorage.removeItem('lastViewedTourId'); 
+        }
+      }
+    }
+  }, [loading, tours]); 
+
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -65,7 +106,7 @@ const TourList: React.FC = () => {
   const handleContactExperts = () => {
     const isRussian = language === 'ru';
     const whatsappMessage = encodeURIComponent(t('whatsappMessage'));
-    
+
     let url = '';
     if (isRussian) {
       url = `https://t.me/${telegramUsername}?text=${whatsappMessage}`;
@@ -75,12 +116,11 @@ const TourList: React.FC = () => {
     window.open(url, '_blank', 'noopener noreferrer');
   };
 
-  // Pagination controls rendering
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
     const pageNumbers = [];
-    const maxPagesToShow = 5; // Number of page buttons to display
+    const maxPagesToShow = 5; 
     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
     let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
@@ -167,7 +207,18 @@ const TourList: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {tours.map((tour: TourPackage) => (
-                <TourCard key={tour.id} tour={tour} />
+                <TourCard
+                  key={tour.id}
+                  tour={tour}
+                  currentPage={currentPage} 
+                  ref={(el) => {
+                    if (el) {
+                      tourCardRefs.current.set(tour.id, el);
+                    } else {
+                      tourCardRefs.current.delete(tour.id);
+                    }
+                  }}
+                />
               ))}
             </div>
             {renderPagination()}
@@ -179,8 +230,7 @@ const TourList: React.FC = () => {
           </div>
         )}
       </div>
-      
-      {/* Call to Action */}
+
       <div className="bg-gray-900 text-white py-16 mt-16">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -189,8 +239,8 @@ const TourList: React.FC = () => {
           <p className="text-xl mb-8 text-blue-100">
             {t('tourList.customize')}
           </p>
-          <button 
-            onClick={handleContactExperts} 
+          <button
+            onClick={handleContactExperts}
             className={`inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white ${language ==="ru" ? "bg-[#0088cc] hover:bg-[#006699]" : "bg-[#25d366] hover:bg-[#13a033]"} transition-colors duration-300`}
           >
             {t('tourList.contactExperts')}

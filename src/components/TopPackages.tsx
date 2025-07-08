@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { MapPin, Clock, Tag, Star } from 'lucide-react';
-import { TourPackage, PriceDetails } from '../lib/types';
+import { TourPackage } from '../lib/types';
 import { Link } from 'react-router-dom';
 import { getTourPackages } from '../lib/api'; 
 import LoadingSpinner from './LoadingSpinner'; // Import LoadingSpinner
@@ -93,29 +93,11 @@ const TopPackages: React.FC = () => {
             const tourLocation = getLocalizedContent(tour.location);
             const tourOverview = getLocalizedContent(tour.overview);
 
+            const startingPriceNum = parseFloat(tour.starting_price || '0');
             const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
-            
-            let adultPrice = 0;
-            let parsedPrice: PriceDetails | null = null;
 
-            if (typeof tour.price === 'string') {
-              try {
-                parsedPrice = JSON.parse(tour.price);
-              } catch (e) {
-                console.error("Failed to parse tour price string:", tour.price, e);
-              }
-            } else if (typeof tour.price === 'object' && tour.price !== null) {
-              parsedPrice = tour.price;
-            }
-
-            if (parsedPrice && typeof parsedPrice.adult === 'number') {
-              adultPrice = parsedPrice.adult;
-            } else {
-              console.warn("Adult price not found or invalid for tour:", tour.id, tour.price);
-            }
-
-            const discountPercentage = originalPriceNum > adultPrice
-              ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
+            const discountPercentage = originalPriceNum > startingPriceNum
+              ? Math.round(((originalPriceNum - startingPriceNum) / originalPriceNum) * 100)
               : 0;
 
             return (
@@ -177,17 +159,17 @@ const TopPackages: React.FC = () => {
 
                     <div className="flex items-center justify-between">
                       <div className="text-left">
+                        <div className="text-sm text-gray-500">{t('startingFrom')}</div>
                         <div className="flex items-center gap-2">
                           <div className="text-2xl font-bold text-gray-900">
-                            ฿{adultPrice.toLocaleString()}
+                            ฿{startingPriceNum.toLocaleString()}
                           </div>
-                          {originalPriceNum > adultPrice && (
+                          {originalPriceNum > startingPriceNum && (
                             <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
                               ฿{originalPriceNum.toLocaleString()}
                             </div>
                           )}
                         </div>
-                        <div className="text-sm text-gray-500">{t('perAdult')}</div>
                       </div>
 
                       <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200 flex items-center gap-2 group/btn whitespace-nowrap">

@@ -1,4 +1,4 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, PriceDetails } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent } from './types';
 import { handleAuthError } from './auth'; // Import fungsi handleAuthError
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -26,7 +26,12 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
   parsedTour.location = safeJSONParse<LanguageContent>(tour.location) as LanguageContent;
   parsedTour.overview = safeJSONParse<LanguageContent>(tour.overview) as LanguageContent;
 
-  parsedTour.price = safeJSONParse<PriceDetails>(tour.price) as PriceDetails;
+  // Parse the new 'prices' array
+  parsedTour.prices = tour.prices.map(p => ({
+    ...p,
+    service_type: safeJSONParse<LanguageContent>(p.service_type) as LanguageContent,
+    description: safeJSONParse<LanguageContent>(p.description) as LanguageContent,
+  }));
 
   parsedTour.highlights = tour.highlights.map(h => ({
     ...h,
@@ -223,7 +228,13 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
     name: JSON.stringify(tour.name),
     duration: JSON.stringify(tour.duration),
     location: JSON.stringify(tour.location),
-    price: JSON.stringify(tour.price),
+    // New 'prices' array handling
+    prices: tour.prices.map(p => ({
+      service_type: JSON.stringify(p.service_type),
+      price: p.price,
+      description: JSON.stringify(p.description),
+    })),
+    starting_price: tour.starting_price, // New field
     overview: JSON.stringify(tour.overview),
     highlights: tour.highlights.map(h => ({
       description: JSON.stringify(h.description)
@@ -247,7 +258,6 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
       question: JSON.stringify(faq.question),
       answer: JSON.stringify(faq.answer)
     })),
-    // Stringify cancellation_policies descriptions
     cancellation_policies: tour.cancellation_policies.map(cp => ({
       description: JSON.stringify(cp.description)
     })),
@@ -265,7 +275,13 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
     ...(tour.name && { name: JSON.stringify(tour.name) }),
     ...(tour.duration && { duration: JSON.stringify(tour.duration) }),
     ...(tour.location && { location: JSON.stringify(tour.location) }),
-    ...(tour.price && { price: JSON.stringify(tour.price) }),
+    // New 'prices' array handling for update
+    ...(tour.prices && { prices: tour.prices.map(p => ({
+      service_type: JSON.stringify(p.service_type),
+      price: p.price,
+      description: JSON.stringify(p.description),
+    })) }),
+    ...(tour.starting_price !== undefined && { starting_price: tour.starting_price }), // New field for update
     ...(tour.overview && { overview: JSON.stringify(tour.overview) }),
     ...(tour.highlights && { highlights: tour.highlights.map(h => ({
       description: JSON.stringify(h.description)
@@ -289,7 +305,6 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
       question: JSON.stringify(faq.question),
       answer: JSON.stringify(faq.answer)
     })) }),
-    // Stringify cancellation_policies descriptions for update
     ...(tour.cancellation_policies && { cancellation_policies: tour.cancellation_policies.map(cp => ({
       description: JSON.stringify(cp.description)
     })) }),

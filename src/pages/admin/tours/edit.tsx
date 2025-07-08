@@ -8,7 +8,7 @@ import { Plus, Trash2, Image as ImageIcon, ChevronDown } from 'lucide-react';
 const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' };
 
 interface ImagePreviewItem {
-  id?: number | string; // Allow string for temporary new image IDs
+  id?: number | string; 
   file?: File;
   path: string;
   order: number;
@@ -24,7 +24,7 @@ export default function EditTour() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [imagePreviews, setImagePreviews] = useState<ImagePreviewItem[]>([]);
-  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(null); // State for drag-and-drop
+  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(null); 
 
   useEffect(() => {
     if (id) {
@@ -52,13 +52,12 @@ export default function EditTour() {
         name: data.name,
         duration: data.duration,
         location: data.location,
-        price: typeof data.price === 'object' && data.price !== null
-        ? {
-            adult: Number('adult' in data.price ? data.price.adult : 0) || 0,
-            child: Number('child' in data.price ? data.price.child : 0) || 0,
-            infant: Number('infant' in data.price ? data.price.infant : 0) || 0,
-          }
-        : { adult: 0, child: 0, infant: 0 },
+        prices: data.prices.map(p => ({ // Map existing prices
+          service_type: p.service_type,
+          price: p.price,
+          description: p.description,
+        })),
+        starting_price: Number(data.starting_price) || 0, // New field
         original_price: data.original_price ? Number(data.original_price) : undefined,
         rate: data.rate ? Number(data.rate) : undefined,
         overview: data.overview,
@@ -71,8 +70,8 @@ export default function EditTour() {
         })),
         included_excluded: data.included_excluded.map(ie => ({ type: ie.type, description: ie.description })),
         faqs: data.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
-        cancellation_policies: data.cancellation_policies.map(cp => ({ description: cp.description })), // Initialize cancellation policies
-        tags: data.tags || '', // Ensure tags is initialized
+        cancellation_policies: data.cancellation_policies.map(cp => ({ description: cp.description })),
+        tags: data.tags || '',
       });
 
       setImagePreviews(data.images.map(img => ({
@@ -116,19 +115,10 @@ export default function EditTour() {
           },
         }));
       }
-    } else if (name.includes('price.')) {
-      const priceKey = name.split('.')[1] as 'adult' | 'child' | 'infant';
+    } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') { // Added starting_price
       setFormData((prev) => ({
         ...prev!,
-        price: {
-          ...prev!.price!,
-          [priceKey]: Number(value) || 0, // Menggunakan Number() untuk konversi yang lebih langsung
-        },
-      }));
-    } else if (name === 'original_price' || name === 'rate') {
-      setFormData((prev) => ({
-        ...prev!,
-        [name]: Number(value) || undefined, // Menggunakan Number() untuk konversi
+        [name]: Number(value) || undefined,
       }));
     } else {
       setFormData((prev) => ({ ...prev!, [name]: value }));
@@ -140,7 +130,7 @@ export default function EditTour() {
       arrayName: keyof TourPackageUpdatePayload,
       itemIndex: number,
       propertyName: string,
-      value: string,
+      value: string | number, // Allow number for price
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
@@ -305,15 +295,16 @@ export default function EditTour() {
 
         const payload = {
           ...formData,
-          price: {
-            adult: Number(formData.price?.adult),
-            child: Number(formData.price?.child),
-            infant: Number(formData.price?.infant),
-          },
+          prices: formData.prices?.map(p => ({ // Ensure prices is mapped
+            service_type: p.service_type,
+            price: Number(p.price) || 0,
+            description: p.description,
+          })) || [],
+          starting_price: Number(formData.starting_price) || 0, // Ensure starting_price is number
           original_price: formData.original_price ? Number(formData.original_price) : undefined,
           rate: formData.rate ? Number(formData.rate) : undefined,
           images: finalImagesPayload.sort((a, b) => a.order - b.order),
-          cancellation_policies: formData.cancellation_policies?.map(cp => ({ description: cp.description })) || [], // Ensure policies are mapped
+          cancellation_policies: formData.cancellation_policies?.map(cp => ({ description: cp.description })) || [],
         };
 
         await updateTourPackage(parseInt(id), payload);
@@ -505,45 +496,19 @@ export default function EditTour() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               <div>
-                <label htmlFor="price.adult" className="block text-sm font-medium text-gray-700 mb-1">Harga Dewasa</label>
+                <label htmlFor="starting_price" className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <input
                   type="number"
-                  id="price.adult"
-                  name="price.adult"
-                  value={formData.price?.adult || 0}
+                  id="starting_price"
+                  name="starting_price"
+                  value={formData.starting_price || 0}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
                   required
                 />
               </div>
-              <div>
-                <label htmlFor="price.child" className="block text-sm font-medium text-gray-700 mb-1">Harga Anak</label>
-                <input
-                  type="number"
-                  id="price.child"
-                  name="price.child"
-                  value={formData.price?.child || 0}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="price.infant" className="block text-sm font-medium text-gray-700 mb-1">Harga Bayi</label>
-                <input
-                  type="number"
-                  id="price.infant"
-                  name="price.infant"
-                  value={formData.price?.infant || 0}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
-                  required
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="original_price" className="block text-sm font-medium text-gray-700 mb-1">Harga Asli (opsional)</label>
                 <input
@@ -570,6 +535,128 @@ export default function EditTour() {
                 />
               </div>
             </div>
+
+            <h3 className="text-xl font-semibold text-gray-800 mb-4 mt-6">Opsi Harga</h3>
+            <div className="space-y-4">
+              {formData.prices?.map((priceOption, index) => (
+                <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
+                  <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
+                    <h4 className="text-lg font-medium text-gray-800">Opsi Harga {index + 1}</h4>
+                    <div className="flex items-center space-x-3">
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); removeNestedItem('prices', index); }}
+                        className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                        title="Hapus Opsi Harga"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                      <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
+                    </div>
+                  </summary>
+                  <div className="p-4 border-t border-gray-200 space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Layanan</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label htmlFor={`price-service-type-en-${index}`} className="block text-xs font-medium text-gray-500">English</label>
+                          <input
+                            type="text"
+                            id={`price-service-type-en-${index}`}
+                            value={priceOption.service_type.en}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'service_type', e.target.value, 'en')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., Adult"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`price-service-type-id-${index}`} className="block text-xs font-medium text-gray-500">Indonesian</label>
+                          <input
+                            type="text"
+                            id={`price-service-type-id-${index}`}
+                            value={priceOption.service_type.id || ''}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'service_type', e.target.value, 'id')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., Dewasa (opsional)"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`price-service-type-ru-${index}`} className="block text-xs font-medium text-gray-500">Russian</label>
+                          <input
+                            type="text"
+                            id={`price-service-type-ru-${index}`}
+                            value={priceOption.service_type.ru || ''}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'service_type', e.target.value, 'ru')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., Взрослый (opsional)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor={`price-value-${index}`} className="block text-sm font-medium text-gray-700 mb-1">Harga</label>
+                      <input
+                        type="number"
+                        id={`price-value-${index}`}
+                        value={priceOption.price}
+                        onChange={(e) => handleArrayItemPropertyChange('prices', index, 'price', Number(e.target.value))}
+                        className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi Harga</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                          <label htmlFor={`price-desc-en-${index}`} className="block text-xs font-medium text-gray-500">English</label>
+                          <input
+                            type="text"
+                            id={`price-desc-en-${index}`}
+                            value={priceOption.description.en}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'description', e.target.value, 'en')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., Per person"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`price-desc-id-${index}`} className="block text-xs font-medium text-gray-500">Indonesian</label>
+                          <input
+                            type="text"
+                            id={`price-desc-id-${index}`}
+                            value={priceOption.description.id || ''}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'description', e.target.value, 'id')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., Per orang (opsional)"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`price-desc-ru-${index}`} className="block text-xs font-medium text-gray-500">Russian</label>
+                          <input
+                            type="text"
+                            id={`price-desc-ru-${index}`}
+                            value={priceOption.description.ru || ''}
+                            onChange={(e) => handleArrayItemPropertyChange('prices', index, 'description', e.target.value, 'ru')}
+                            className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                            placeholder="e.g., За человека (opsional)"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => addNestedItem('prices', { service_type: { ...initialLanguageContent }, price: 0, description: { ...initialLanguageContent } })}
+              className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
+            >
+              <Plus className="h-5 w-5 mr-2" /> Tambah Opsi Harga
+            </button>
           </section>
 
           <section>

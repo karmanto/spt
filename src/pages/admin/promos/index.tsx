@@ -115,7 +115,7 @@ export default function AdminPromos() {
                         {promo.end_date
                           ? new Date(
                               promo.end_date.replace(/\.(\d{3})\d+Z$/, '.$1Z')
-                            ).toLocaleDateString('id-ID')
+                            ).toLocaleDateString()
                           : '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TourPackage, PriceDetails } from '../lib/types';
+import { TourPackage } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
 
 interface BookingFormProps {
@@ -12,13 +12,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
-  const [whatsappNumberInput, setWhatsappNumberInput] = useState(''); // Renamed to avoid conflict
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [infants, setInfants] = useState(0);
+  const [whatsappNumberInput, setWhatsappNumberInput] = useState('');
+  const [quantities, setQuantities] = useState<{ [id: number]: number }>({});
   const [totalCost, setTotalCost] = useState(0);
 
-  // Get environment variables
   const whatsappContactNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 
@@ -33,41 +30,88 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   }, []);
 
   useEffect(() => {
-    if (tour && typeof tour.price !== 'string') {
-      const priceDetails = tour.price as PriceDetails;
-      const calculatedTotal =
-        (adults * (priceDetails.adult || 0)) +
-        (children * (priceDetails.child || 0)) +
-        (infants * (priceDetails.infant || 0));
-      setTotalCost(calculatedTotal);
+    if (tour && tour.prices && tour.prices.length > 0) {
+      const initialQuantities: { [id: number]: number } = {};
+      tour.prices.forEach(option => {
+        if (option.id !== undefined) {
+          initialQuantities[option.id] = 0;
+        }
+      });
+      setQuantities(initialQuantities);
     }
-  }, [adults, children, infants, tour]);
+  }, [tour]);
+
+  useEffect(() => {
+    let calculatedTotal = 0;
+    if (tour && tour.prices) {
+      tour.prices.forEach(option => {
+        if (option.id !== undefined) {
+          const qty = quantities[option.id] || 0;
+          calculatedTotal += option.price * qty;
+        }
+      });
+    }
+    setTotalCost(calculatedTotal);
+  }, [quantities, tour]);
+
+  const getLocalizedContent = (content: { en: string; id?: string; ru?: string }) => {
+    if (language === 'id') return content.id;
+    if (language === 'ru') return content.ru || content.en;
+    return content.en;
+  };
+
+  const handleQuantityChange = (optionId: number, value: string) => {
+    const newQuantity = Math.max(0, parseInt(value) || 0); 
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [optionId]: newQuantity,
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!tour || typeof tour.price === 'string') {
+    if (!tour || !tour.prices || tour.prices.length === 0) {
       alert(t('bookingErrorInvalidTour'));
       return;
     }
 
-    const tourName = tour.name[language] || tour.name.en;
+    const hasSelections = Object.values(quantities).some(qty => qty > 0);
+    if (!hasSelections) {
+      alert(t('atLeastOneParticipant')); 
+      return;
+    }
+
+    const tourName = getLocalizedContent(tour.name);
     const tourCode = tour.code || 'N/A';
 
+    let serviceDetails = '';
+    tour.prices.forEach(option => {
+      if (option.id !== undefined) {
+        const qty = quantities[option.id] || 0;
+        if (qty > 0) {
+          const serviceType = getLocalizedContent(option.service_type);
+          const description = getLocalizedContent(option.description);
+          serviceDetails += `
+
+- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ฿${option.price.toLocaleString()} = ฿${(option.price * qty).toLocaleString()}
+`;
+        }
+      }
+    });
+
     const message = `
-      ${t('hello')}! ${t('iWantToBookTour')}
+${t('hello')}! ${t('iWantToBookTour')}
 
-      ${t('tourName')}: ${tourName} (${tourCode})
-      ${t('fullName')}: ${name}
-      ${t('emailAddress')}: ${email}
-      ${t('dateOfTour')}: ${date}
-      ${t('adults')}: ${adults}
-      ${t('children')}: ${children}
-      ${t('infants')}: ${infants}
-      ${t('totalCost')}: ฿${totalCost.toLocaleString()}
-      ${t('myWhatsappNumber')}: ${whatsappNumberInput}
+${t('tourName')}: ${tourName} (${tourCode})
+${t('fullName')}: ${name}
+${t('emailAddress')}: ${email}
+${t('dateOfTour')}: ${date}
+${t('serviceType')}: ${serviceDetails}
+${t('totalCost')}: ฿${totalCost.toLocaleString()}
+${t('myWhatsappNumber')}: ${whatsappNumberInput}
 
-      ${t('lookingForwardToConfirmation')}
+${t('lookingForwardToConfirmation')}
     `.trim(); 
 
     const encodedMessage = encodeURIComponent(message);
@@ -136,50 +180,36 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
             required
           />
         </div>
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <label htmlFor="adults" className="block text-sm font-medium text-gray-700 mb-1">
-              {t('adult')}
-            </label>
-            <input
-              type="number"
-              id="adults"
-              min="1"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
-              value={adults}
-              onChange={(e) => setAdults(Math.max(1, parseInt(e.target.value) || 1))}
-              required
-            />
+
+        {tour.prices && tour.prices.length > 0 ? (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900">{t('numberOfBookings')}</h3>
+            {tour.prices.map((option) => (
+              <div key={option.id} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900">{getLocalizedContent(option.service_type)} </div>
+                  <div className="text-sm text-gray-600 block">{getLocalizedContent(option.description)}</div>
+                  <div className="text-md font-bold text-blue-600">฿{parseFloat(String(option.price ?? '')).toLocaleString()}</div>
+                </div>
+                <div className="w-24 ml-4">
+                  <label htmlFor={`quantity-${option.id}`} className="sr-only">{t('quantity')} for {getLocalizedContent(option.service_type)}</label>
+                  <input
+                    type="number"
+                    id={`quantity-${option.id}`}
+                    min="0"
+                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 text-center"
+                    value={quantities[option.id!] || 0}
+                    onChange={(e) => handleQuantityChange(option.id!, e.target.value)}
+                    aria-label={`${t('quantity')} for ${getLocalizedContent(option.service_type)}`}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-          <div>
-            <label htmlFor="children" className="block text-sm font-medium text-gray-700 mb-1">
-              {t('child')}
-            </label>
-            <input
-              type="number"
-              id="children"
-              min="0"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
-              value={children}
-              onChange={(e) => setChildren(Math.max(0, parseInt(e.target.value) || 0))}
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="infants" className="block text-sm font-medium text-gray-700 mb-1">
-              {t('infant')}
-            </label>
-            <input
-              type="number"
-              id="infants"
-              min="0"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
-              value={infants}
-              onChange={(e) => setInfants(Math.max(0, parseInt(e.target.value) || 0))}
-              required
-            />
-          </div>
-        </div>
+        ) : (
+          <p className="text-gray-600 italic">{t('noPricingInfo') || 'No pricing information available for this tour.'}</p>
+        )}
+        
         <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg">
           <span className="text-lg font-semibold text-gray-900">{t('totalCost')}:</span>
           <span className="text-2xl font-bold text-blue-600">฿{totalCost.toLocaleString()}</span>
@@ -187,6 +217,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-semibold transition-colors"
+          disabled={!tour.prices || tour.prices.length === 0 || totalCost === 0} 
         >
           {t('confirmBooking')}
         </button>

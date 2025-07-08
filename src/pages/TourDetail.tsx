@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext'; 
-import { TourPackage, LanguageContent, PriceDetails } from '../lib/types'; 
+import { TourPackage, LanguageContent } from '../lib/types'; 
 import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa'; 
 import BookingForm from '../components/BookingForm'; 
 import ItineraryDocument from '../components/ItineraryDocument'; 
 import { getTourPackageDetail } from '../lib/api'; 
-import LoadingSpinner from '../components/LoadingSpinner'; // Import LoadingSpinner
-import ErrorDisplay from '../components/ErrorDisplay';     // Import ErrorDisplay
+import LoadingSpinner from '../components/LoadingSpinner'; 
+import ErrorDisplay from '../components/ErrorDisplay';     
+import ImageModal from '../components/ImageModal'; 
 
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ const TourDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview'); 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
+  const [showImageModal, setShowImageModal] = useState(false); 
 
   const fetchTourDetail = async () => {
     if (!id) {
@@ -27,13 +29,12 @@ const TourDetail: React.FC = () => {
     }
     try {
       setLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null); 
       const foundTour = await getTourPackageDetail(id);
       setTour(foundTour);
     } catch (err) {
       console.error("Failed to fetch tour detail:", err);
-      setError(t('failedToLoadTourDetails') || 'Failed to load tour details. Please try again later.');
-      // Removed direct navigation on error, let ErrorDisplay handle it or user retry
+      setError(t('failedToLoadTourDetails'));
     } finally {
       setLoading(false);
     }
@@ -41,12 +42,12 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     fetchTourDetail();
-  }, [id, navigate, t]); 
+  }, [id, navigate]); 
 
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <LoadingSpinner /> {/* Use LoadingSpinner */}
+        <LoadingSpinner /> 
       </div>
     );
   }
@@ -54,7 +55,7 @@ const TourDetail: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <ErrorDisplay message={error} onRetry={fetchTourDetail} /> {/* Use ErrorDisplay with retry */}
+        <ErrorDisplay message={error} onRetry={fetchTourDetail} /> 
       </div>
     );
   }
@@ -62,7 +63,7 @@ const TourDetail: React.FC = () => {
   if (!tour) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <p className="text-base text-gray-700">{t('tourNotFound') || 'Tour not found.'}</p>
+        <p className="text-base text-gray-700">{t('tourNotFound')}</p>
       </div>
     );
   }
@@ -86,13 +87,10 @@ const TourDetail: React.FC = () => {
     { id: 'booking', label: t('booking') }
   ];
 
-  const priceDetails = tour.price as PriceDetails; 
-  const adultPrice = priceDetails.adult || 0;
-  const childPrice = priceDetails.child || 0;
-
+  const startingPriceNum = parseFloat(tour.starting_price || '0');
   const originalPriceNum = tour.original_price ? parseFloat(tour.original_price) : 0;
-  const discountPercentage = originalPriceNum > adultPrice
-    ? Math.round(((originalPriceNum - adultPrice) / originalPriceNum) * 100)
+  const discountPercentage = originalPriceNum > startingPriceNum
+    ? Math.round(((originalPriceNum - startingPriceNum) / originalPriceNum) * 100)
     : 0;
 
   return (
@@ -115,11 +113,17 @@ const TourDetail: React.FC = () => {
                 {discountPercentage}{t('discountOff')}
               </div>
             )}
-            <img
-              src={`${import.meta.env.VITE_BASE_URL}${sortedImages[selectedImageIndex]?.path}`}
-              alt={getLocalizedContent(tour.name)}
-              className="w-full h-96 object-cover rounded-2xl shadow-lg mb-4"
-            />
+            <button
+              onClick={() => setShowImageModal(true)}
+              className="w-full h-96 rounded-2xl shadow-lg mb-4 overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 block"
+              aria-label={t('viewLargerImage')}
+            >
+              <img
+                src={`${import.meta.env.VITE_BASE_URL}${sortedImages[selectedImageIndex]?.path}`}
+                alt={getLocalizedContent(tour.name)}
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </button>
             <div className="absolute bottom-6 right-6 bg-black bg-opacity-50 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1">
               <Camera className="w-4 h-4" />
               {selectedImageIndex + 1} / {sortedImages.length}
@@ -279,40 +283,32 @@ const TourDetail: React.FC = () => {
             <div className="space-y-8">
               <div className="bg-white rounded-2xl p-8 shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('pricingInfo')}</h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-4 px-6 font-semibold text-gray-900">{t('category')}</th>
-                        <th className="text-center py-4 px-6 font-semibold text-gray-900">{t('ageRange')}</th>
-                        <th className="text-right py-4 px-6 font-semibold text-gray-900">{t('pricePerPerson')}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-4 px-6 font-medium text-gray-900">{t('adult')}</td>
-                        <td className="py-4 px-6 text-center text-gray-600">{t('ageRangeAdult')}</td>
-                        <td className="py-4 px-6 text-right text-xl font-bold text-gray-900">
-                          ฿{adultPrice.toLocaleString()} {/* Use parsed adultPrice */}
-                        </td>
-                      </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-4 px-6 font-medium text-gray-900">{t('child')}</td>
-                        <td className="py-4 px-6 text-center text-gray-600">{t('ageRangeChild')}</td>
-                        <td className="py-4 px-6 text-right text-xl font-bold text-gray-900">
-                          ฿{childPrice.toLocaleString()} {/* Use parsed childPrice */}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="py-4 px-6 font-medium text-gray-900">{t('infant')}</td>
-                        <td className="py-4 px-6 text-center text-gray-600">{t('ageRangeInfant')}</td>
-                        <td className="py-4 px-6 text-right text-xl font-bold text-green-600">
-                          {t('free')}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                {tour.prices && tour.prices.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200">
+                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('serviceType')}</th>
+                          <th className="text-center py-4 px-6 font-semibold text-sm text-gray-900">{t('price')}</th> 
+                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('description')}</th> 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {tour.prices.map((priceOption) => (
+                          <tr key={priceOption.id} className="border-b border-gray-100">
+                            <td className="py-4 px-6 font-medium text-md text-gray-900">{getLocalizedContent(priceOption.service_type)}</td>
+                            <td className="py-4 px-6 text-center text-md font-bold text-blue-600">
+                              ฿{parseFloat(String(priceOption.price ?? '')).toLocaleString()}
+                            </td>
+                            <td className="py-4 px-6 text-sm text-gray-600">{getLocalizedContent(priceOption.description)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <p className="text-gray-600 italic">{t('noPricingInfo')}</p>
+                )}
               </div>
 
               <div className="bg-white rounded-2xl p-8 shadow-sm">
@@ -320,7 +316,7 @@ const TourDetail: React.FC = () => {
                 {tour.faqs.length > 0 ? (
                   <div className="space-y-6">
                     {tour.faqs.map((faq) => (
-                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> {/* Use faq.id as key */}
+                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> 
                         <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
                         <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
                       </div>
@@ -353,6 +349,14 @@ const TourDetail: React.FC = () => {
           )}
         </div>
       </div>
+
+      {showImageModal && (
+        <ImageModal
+          imageUrl={`${import.meta.env.VITE_BASE_URL}${sortedImages[selectedImageIndex]?.path}`}
+          altText={getLocalizedContent(tour.name) || ''}
+          onClose={() => setShowImageModal(false)}
+        />
+      )}
     </div>
   );
 };

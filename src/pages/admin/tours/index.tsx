@@ -1,15 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TourPackage, TourPackageResponse, PriceDetails } from '../../../lib/types';
+import { TourPackage, TourPackageResponse } from '../../../lib/types';
 import { Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTourPackages, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
-
-// Type guard function to check if price is PriceDetails
-function isPriceDetails(price: string | PriceDetails): price is PriceDetails {
-  return typeof price === 'object' && price !== null && 'adult' in price && 'child' in price && 'infant' in price;
-}
 
 export default function AdminTours() {
   const [tours, setTours] = useState<TourPackage[]>([]);
@@ -95,7 +90,7 @@ export default function AdminTours() {
                     Lokasi
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Harga Dewasa
+                    Mulai Dari
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Aksi
@@ -130,10 +125,10 @@ export default function AdminTours() {
                         <div className="text-sm text-gray-900">{tour.location.id || tour.location.en}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {isPriceDetails(tour.price) ? (
-                          `฿${tour.price.adult.toLocaleString('id-ID')}`
+                        {tour.starting_price ? (
+                          `฿${tour.starting_price.toLocaleString()}`
                         ) : (
-                          `฿${typeof tour.price === 'string' ? parseInt(tour.price).toLocaleString('id-ID') : 'N/A'}`
+                          `tidak ada`
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

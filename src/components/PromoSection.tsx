@@ -1,44 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import PromoCard from './PromoCard';
-import { CountdownState, Promo } from '../lib/types'; // Import Promo directly
-import { getPromos } from '../lib/api'; // Import getPromos
+import { CountdownState, Promo } from '../lib/types';
+import { getPromos } from '../lib/api';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorDisplay from './ErrorDisplay';
 
 const PromoSection: React.FC = () => {
   const { t } = useLanguage();
-  const [promos, setPromos] = useState<Promo[]>([]); // State for fetched promos
-  const [countdowns, setCountdowns] = useState<{ [key: number]: CountdownState }>({});
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [error, setError] = useState<string | null>(null); // Add error state
+  const [promos, setPromos] = useState<Promo[]>([]);
+  const [countdowns, setCountdowns] = useState<{ [key: string]: CountdownState }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Effect to fetch promos
-  useEffect(() => {
-    const fetchPromosData = async () => {
-      try {
-        setLoading(true);
-        const data = await getPromos();
-        setPromos(data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch promos:', err);
-        setError('Failed to load promotions. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPromosData();
-  }, []); // Empty dependency array: runs once on mount
+  const fetchPromosData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null); // Clear any previous errors
+      const data = await getPromos();
+      setPromos(data);
+    } catch (err) {
+      console.error('Failed to fetch promos:', err);
+      setError(t('failedToLoadPromos') || 'Failed to load promotions. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  }, [t]);
 
-  // Effect for countdowns, depends on promos
   useEffect(() => {
-    if (promos.length === 0 && !loading) { // Only clear if no promos and not loading
+    fetchPromosData();
+  }, [fetchPromosData]);
+
+  // Effect for countdowns, depends on promos and loading state
+  useEffect(() => {
+    // If no promos or still loading, clear countdowns and return
+    if (promos.length === 0 && !loading) {
       setCountdowns({});
       return;
     }
 
     const updateCountdowns = () => {
       const now = new Date().getTime();
-      const newCountdowns: { [key: number]: CountdownState } = {};
+      const newCountdowns: { [key: string]: CountdownState } = {};
 
       promos.forEach((promo) => {
         const endTime = new Date(promo.end_date).getTime();
@@ -49,32 +53,53 @@ const PromoSection: React.FC = () => {
           const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
           const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-          newCountdowns[promo.id] = { days, hours, minutes, seconds };
-        } else {
-          // If promo has ended, ensure it's not in countdowns
-          if (countdowns[promo.id]) {
-            delete newCountdowns[promo.id];
-          }
+          newCountdowns[promo.id.toString()] = { days, hours, minutes, seconds };
         }
+        // If timeLeft <= 0, the promo is simply not added to newCountdowns.
+        // No need to explicitly delete from newCountdowns based on old state.
       });
 
-      setCountdowns(newCountdowns);
+      // Use functional update to compare with previous state and prevent unnecessary re-renders
+      setCountdowns(prevCountdowns => {
+        const prevKeys = Object.keys(prevCountdowns);
+        const newKeys = Object.keys(newCountdowns);
+
+        // If the number of promos with active countdowns changes, update
+        if (prevKeys.length !== newKeys.length) {
+          return newCountdowns;
+        }
+
+        // Check if any individual countdown value has changed
+        for (const key of newKeys) {
+          const prev = prevCountdowns[key];
+          const current = newCountdowns[key];
+
+          // If a key exists in new but not prev, or any value is different, update
+          if (!prev || prev.days !== current.days || prev.hours !== current.hours ||
+              prev.minutes !== current.minutes || prev.seconds !== current.seconds) {
+            return newCountdowns;
+          }
+        }
+
+        // If no changes detected, return the previous state to prevent re-render
+        return prevCountdowns;
+      });
     };
 
     // Initial update
     updateCountdowns();
 
-    // Set up interval
+    // Set up interval to update countdowns every second
     const timer = setInterval(updateCountdowns, 1000);
 
-    // Cleanup on unmount or when promos change
+    // Cleanup on unmount or when promos/loading state changes
     return () => clearInterval(timer);
-  }, [promos, loading]); // Dependency array: re-run when promos or loading state change
+  }, [promos, loading]); // Removed 'countdowns' from dependencies
 
   if (loading) {
     return (
       <section id="promo" className="py-16 bg-gray-50 flex justify-center items-center min-h-[300px]">
-        <p className="text-lg text-gray-600">{'Loading promotions...'}</p>
+        <LoadingSpinner />
       </section>
     );
   }
@@ -82,7 +107,7 @@ const PromoSection: React.FC = () => {
   if (error) {
     return (
       <section id="promo" className="py-16 bg-gray-50 flex justify-center items-center min-h-[300px]">
-        <p className="text-lg text-red-600">{error}</p>
+        <ErrorDisplay message={error} onRetry={fetchPromosData} />
       </section>
     );
   }
@@ -112,7 +137,7 @@ const PromoSection: React.FC = () => {
             <PromoCard
               key={promo.id}
               promo={promo}
-              countdown={countdowns[promo.id]}
+              countdown={countdowns[promo.id.toString()]}
             />
           ))}
         </div>

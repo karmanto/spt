@@ -173,7 +173,7 @@
   "fullName": "Nama Lengkap",
   "enterFullName": "Masukkan nama lengkap Anda",
   "enterEmail": "Masukkan alamat email Anda",
-  "numberOfParticipants": "Jumlah Peserta",
+  "numberOfBookings": "Jumlah Pemesanan",
   "bookingFormSubmitted": "Formulir pemesanan telah dikirim!",
   "tourOverview": "Ringkasan Tur",
   "tourHighlights": "Sorotan Tur",
@@ -193,5 +193,12 @@
   "noItineraryAvailable": "Tidak ada itinerary tersedia untuk tur ini.",
   "noFaqsAvailable": "Tidak ada FAQ tersedia untuk tur ini.",
   "noCancellationPolicy": "Tidak ada kebijakan pembatalan yang tersedia.",
-  "noHighlightsAvailable": "Tidak ada sorotan tersedia untuk tur ini."
+  "noHighlightsAvailable": "Tidak ada sorotan tersedia untuk tur ini.",
+  "failedToLoadPackages": "Gagal memuat paket. Silakan coba lagi nanti.",
+  "serviceType": "Tipe Layanan",
+  "price": "Harga",
+  "description": "Deskripsi",
+  "startingFrom": "Mulai Dari",
+  "noPricingInfo": "Tidak ada informasi harga yang tersedia untuk tur ini.",
+  "viewLargerImage": "Lihat gambar lebih besar"
 }

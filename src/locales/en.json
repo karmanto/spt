@@ -174,7 +174,7 @@
   "fullName": "Full Name",
   "enterFullName": "Enter your full name",
   "enterEmail": "Enter your email address",
-  "numberOfParticipants": "Number of Participants",
+  "numberOfBookings": "Number of Bookings",
   "bookingFormSubmitted": "Your booking form has been submitted!",
   "tourOverview": "Tour Overview",
   "tourHighlights": "Tour Highlights",
@@ -194,5 +194,12 @@
   "noItineraryAvailable": "No itinerary available for this tour.",
   "noFaqsAvailable": "No FAQs available for this tour.",
   "noCancellationPolicy": "No cancellation policy available.",
-  "noHighlightsAvailable": "No highlights available for this tour."
+  "noHighlightsAvailable": "No highlights available for this tour.",
+  "failedToLoadPackages": "Failed to load packages. Please try again later.",
+  "serviceType": "Service Type",
+  "price": "Price",
+  "description": "Description",
+  "startingFrom": "Starting From",
+  "noPricingInfo": "No pricing information available for this tour.",
+  "viewLargerImage": "View larger image"
 }
