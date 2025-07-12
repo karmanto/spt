@@ -1,7 +1,7 @@
 {
   "heros": [
     {
-      "image": "/hero1.jpg",
+      "image": "/hero1.webp",
       "heroTitle": {
         "en": "Trusted Travel Experts in Thailand",
         "id": "Ahli Perjalanan Terpercaya di Thailand",
@@ -14,7 +14,7 @@
       }
     },
     {
-      "image": "/hero2.jpg",
+      "image": "/hero2.webp",
       "heroTitle": {
         "en": "Explore the Best of Phuket, Krabi & Bangkok",
         "id": "Jelajahi Terbaik Phuket, Krabi & Bangkok",
@@ -27,7 +27,7 @@
       }
     },
     {
-      "image": "/hero3.jpg",
+      "image": "/hero3.webp",
       "heroTitle": {
         "en": "Day Trips, Transfers & Group Tours — All Made Easy",
         "id": "Perjalanan Sehari, Transfer & Tur Grup — Semua Menjadi Mudah",
@@ -40,7 +40,7 @@
       }
     },
     {
-      "image": "/hero4.jpg",
+      "image": "/hero4.webp",
       "heroTitle": {
         "en": "Quality Hotels, Great Food & Smooth Itineraries",
         "id": "Hotel Berkualitas, Makanan Lezat & Itinerary Lancar",
@@ -53,7 +53,7 @@
       }
     },
     {
-      "image": "/hero5.jpg",
+      "image": "/hero5.webp",
       "heroTitle": {
         "en": "Quick Booking & Friendly Support from a Local Team",
         "id": "Pemesan Cepat & Dukungan Ramah dari Tim Lokal",

@@ -10,7 +10,7 @@ Disallow: /src/
 
 # SEO here: Allow access to important assets
 Allow: /spt_logo.png
-Allow: /hero*.jpg
+Allow: /hero*.webp
 Allow: /promo*.jpeg
 Allow: /testimoni*.jpeg
 

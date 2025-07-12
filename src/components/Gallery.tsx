@@ -86,6 +86,7 @@ const Gallery: React.FC = () => {
                     src={`${cat.images[0].url}`}
                     alt={getCategoryName(cat)}
                     className="w-full h-64 object-cover"
+                    loading="lazy" 
                   />
                   <img
                     src="/spt_logo.png"
@@ -128,6 +129,7 @@ const Gallery: React.FC = () => {
                         src={`${image.url}`}
                         alt={getCategoryName(selectedCategory)}
                         className="w-full h-[70vh] object-contain"
+                        loading="lazy" 
                       />
                       <img
                         src="/spt_logo.png"
