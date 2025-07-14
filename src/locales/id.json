@@ -128,7 +128,6 @@
   "pickupTime": "Waktu Penjemputan",
   "selectTime": "Pilih Waktu",
   "optionalAddOns": "Tambahan Opsional",
-  "joinWhatsappGroup": "Bergabung dengan grup WhatsApp untuk pengingat",
   "requestVegetarianMeal": "Permintaan Makanan Vegetarian",
   "confirmBooking": "Konfirmasi Pemesanan",
   "resetForm": "Reset Formulir",
@@ -185,7 +184,6 @@
   "lookingForwardToConfirmation": "Menantikan konfirmasi Anda.",
   "whatsappNumber": "Nomor WhatsApp",
   "enterWhatsappNumber": "Masukkan nomor WhatsApp Anda",
-  "contactUsWhatsapp": "6281234567890",
   "failedToLoadTourDetails": "Gagal memuat detail tur. Silakan coba lagi nanti.",
   "tourNotFound": "Tur tidak ditemukan.",
   "noIncludedItems": "Tidak ada item yang termasuk.",
@@ -202,5 +200,13 @@
   "noPricingInfo": "Tidak ada informasi harga yang tersedia untuk tur ini.",
   "viewLargerImage": "Lihat gambar lebih besar",
   "failedToLoadPromos": "Gagal memuat promosi. Silakan coba lagi nanti.",
-  "failedToLoadTours": "Gagal memuat tur. Silakan coba lagi nanti."
+  "failedToLoadTours": "Gagal memuat tur. Silakan coba lagi nanti.",
+  "phiPhiTrip": "Tur Phi Phi",
+  "krabiTrip": "Tur Krabi",
+  "rentalTours": "Tur Sewa",
+  "tourGuide": "Pemandu Tur",
+  "divingTours": "Tur Menyelam",
+  "jamesBondTrip": "Tur James Bond",
+  "similianTrip": "Tur Similan",
+  "privacyPolicy": "Kebijakan Privasi"
 }

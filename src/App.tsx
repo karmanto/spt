@@ -1,15 +1,8 @@
 // App.tsx
-import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom'; 
+import { useState, useEffect, lazy, Suspense } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import PromoSection from './components/PromoSection';
-import TopPackages from './components/TopPackages';
-import Testimonials from './components/Testimonials';
-import Advantages from './components/Advantages';
-import AboutSection from './components/AboutSection';
-import Gallery from './components/Gallery';
-import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import Login from './pages/Login';
@@ -27,15 +20,25 @@ import AdminTours from './pages/admin/tours';
 import CreateTour from './pages/admin/tours/create';
 import EditTour from './pages/admin/tours/edit';
 import ShowTour from './pages/admin/tours/show';
-import { setAuthErrorHandler } from './lib/auth'; 
+import { setAuthErrorHandler } from './lib/auth';
+import LoadingSpinner from './components/LoadingSpinner'; 
+
+const LazyPromoSection = lazy(() => import('./components/PromoSection'));
+const LazyTopPackages = lazy(() => import('./components/TopPackages'));
+
+const LazyTestimonials = lazy(() => import('./components/Testimonials'));
+const LazyAdvantages = lazy(() => import('./components/Advantages'));
+const LazyAboutSection = lazy(() => import('./components/AboutSection'));
+const LazyFAQ = lazy(() => import('./components/FAQ'));
+const LazyGallery = lazy(() => import('./components/Gallery')); 
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi';
-    
+
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
@@ -61,7 +64,7 @@ function App() {
     const hreflangRu = document.createElement('link');
     hreflangRu.rel = 'alternate';
     hreflangRu.hreflang = 'ru';
-    hreflangRu.href = 'https://simbolonphukettour.com/ru'; 
+    hreflangRu.href = 'https://simbolonphukettour.com/ru';
     document.head.appendChild(hreflangRu);
 
     const hreflangDefault = document.createElement('link');
@@ -71,9 +74,9 @@ function App() {
     document.head.appendChild(hreflangDefault);
 
     setAuthErrorHandler(() => {
-      navigate('/login', { replace: true }); 
+      navigate('/login', { replace: true });
     });
-  }, [navigate]); 
+  }, [navigate]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -87,13 +90,27 @@ function App() {
               <>
                 <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
                 <Hero />
-                <PromoSection />
-                <TopPackages />
-                <Testimonials />
-                <Advantages />
-                <AboutSection />
-                <Gallery />
-                <FAQ />
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-gray-50"><LoadingSpinner /></div>}>
+                  <LazyPromoSection />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-white"><LoadingSpinner /></div>}>
+                  <LazyTopPackages />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-gray-50"><LoadingSpinner /></div>}>
+                  <LazyTestimonials />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-white"><LoadingSpinner /></div>}>
+                  <LazyAdvantages />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-gray-50"><LoadingSpinner /></div>}>
+                  <LazyAboutSection />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-white"><LoadingSpinner /></div>}>
+                  <LazyGallery />
+                </Suspense>
+                <Suspense fallback={<div className="flex justify-center items-center h-64 py-16 bg-white"><LoadingSpinner /></div>}>
+                  <LazyFAQ />
+                </Suspense>
                 <Footer />
                 <WhatsAppButton />
               </>
@@ -105,7 +122,7 @@ function App() {
             </Route>
 
             <Route path="/login" element={<Login />} />
-            <Route 
+            <Route
               path="/admin"
               element={
                 <ProtectedRoute>
@@ -115,7 +132,7 @@ function App() {
             >
               <Route index element={<Dashboard />} />
             </Route>
-            <Route 
+            <Route
               path="/admin/promos"
               element={
                 <ProtectedRoute>
@@ -124,11 +141,11 @@ function App() {
               }
             >
               <Route index element={<AdminPromos />} />
-              <Route path="create" element={<CreatePromo />} /> 
-              <Route path="edit/:id" element={<EditPromo />} />  
-              <Route path=":id" element={<ShowPromo />} />       
+              <Route path="create" element={<CreatePromo />} />
+              <Route path="edit/:id" element={<EditPromo />} />
+              <Route path=":id" element={<ShowPromo />} />
             </Route>
-            <Route 
+            <Route
               path="/admin/tours"
               element={
                 <ProtectedRoute>
@@ -137,9 +154,9 @@ function App() {
               }
             >
               <Route index element={<AdminTours />} />
-              <Route path="create" element={<CreateTour />} /> 
-              <Route path="edit/:id" element={<EditTour />} />  
-              <Route path=":id" element={<ShowTour />} />       
+              <Route path="create" element={<CreateTour />} />
+              <Route path="edit/:id" element={<EditTour />} />
+              <Route path=":id" element={<ShowTour />} />
             </Route>
           </Routes>
         </main>

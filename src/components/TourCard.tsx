@@ -1,13 +1,8 @@
 import { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Clock, Tag, Star } from 'lucide-react';
-import { TourPackage, LanguageContent } from '../lib/types';
+import { TourCardProps, LanguageContent } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
-
-interface TourCardProps {
-  tour: TourPackage;
-  currentPage: number; 
-}
 
 const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage }, ref) => { 
   const { t, language } = useLanguage();

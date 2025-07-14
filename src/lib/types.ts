@@ -239,3 +239,50 @@ export interface Testimonial {
   rating: number;
   image: string;
 }
+
+export interface OutletContext {
+  searchTerm: string;
+  selectedCategory: string;
+  setSearchTerm: (term: string) => void;
+  setSelectedCategory: (category: string) => void;
+}
+
+export interface BookingFormProps {
+  tour: TourPackage;
+}
+
+export interface ErrorDisplayProps {
+  message: string;
+  onRetry?: () => void;
+}
+
+export interface HeaderProps {
+  mobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
+}
+
+export interface ImageModalProps {
+  images: { id: string; path: string; order?: number | null; }[];
+  currentIndex: number;
+  altText: string; 
+  onClose: () => void;
+  onNavigate: (newIndex: number) => void;
+}
+
+export interface ItineraryDocumentProps {
+  tour: TourPackage;
+}
+
+export interface TourCardProps {
+  tour: TourPackage;
+  currentPage: number; 
+}
+
+export interface TourFilterPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+}

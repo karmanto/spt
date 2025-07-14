@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
 import { TourPackageCreatePayload, LanguageContent } from '../../../lib/types';
-import { addTourPackage, uploadTourImage } from '../../../lib/api';
+import { addTourPackage, uploadTourImage, getTourPackageDetail } from '../../../lib/api'; // Import getTourPackageDetail
 import { FaArrowLeft } from 'react-icons/fa';
 import { Plus, Trash2, Image as ImageIcon, ChevronDown } from 'lucide-react';
 
-const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' };
+const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' }; // Made constant
 
 interface ImagePreviewItem {
   id?: number;
@@ -18,12 +18,15 @@ interface ImagePreviewItem {
 
 export default function CreateTour() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // Initialize useSearchParams
+  const copyFromId = searchParams.get('copyFrom'); // Get copyFrom ID from URL
+
   const [formData, setFormData] = useState<TourPackageCreatePayload>({
     name: { ...initialLanguageContent },
     duration: { ...initialLanguageContent },
     location: { ...initialLanguageContent },
-    prices: [], // Changed from 'price' object to 'prices' array
-    starting_price: 0, // New field
+    prices: [],
+    starting_price: 0,
     overview: { ...initialLanguageContent },
     images: [],
     highlights: [],
@@ -37,6 +40,86 @@ export default function CreateTour() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [imagePreviews, setImagePreviews] = useState<ImagePreviewItem[]>([]);
+
+  // Effect to handle copying tour data
+  useEffect(() => {
+    if (copyFromId) {
+      const fetchCopiedTour = async () => {
+        setLoading(true); // Use existing loading state for fetching
+        setError(null);
+        try {
+          const copiedTour = await getTourPackageDetail(copyFromId);
+
+          // Transform the fetched tour data to fit the create payload
+          // and remove IDs to ensure new entries are created
+          const transformedData: TourPackageCreatePayload = {
+            ...copiedTour,
+            code: '', // Clear code, as it should be unique
+            order: undefined, // Clear order for new tour
+            starting_price: Number(copiedTour.starting_price) || 0, // Convert to number
+            original_price: copiedTour.original_price ? Number(copiedTour.original_price) : undefined, // Convert to number
+            rate: copiedTour.rate ? Number(copiedTour.rate) : undefined, // Convert to number
+            // Transform nested arrays to remove IDs and ensure correct structure for creation
+            prices: copiedTour.prices.map(p => ({
+              service_type: p.service_type,
+              price: p.price,
+              description: p.description,
+            })),
+            highlights: copiedTour.highlights.map(h => ({
+              description: h.description,
+            })),
+            itineraries: copiedTour.itineraries.map(it => ({
+              day: it.day,
+              title: it.title,
+              activities: it.activities.map(act => ({
+                time: act.time,
+                description: act.description,
+              })),
+              meals: it.meals.map(meal => ({
+                description: meal.description,
+              })),
+            })),
+            included_excluded: copiedTour.included_excluded.map(ie => ({
+              type: ie.type,
+              description: ie.description,
+            })),
+            faqs: copiedTour.faqs.map(faq => ({
+              question: faq.question,
+              answer: faq.answer,
+            })),
+            cancellation_policies: copiedTour.cancellation_policies.map(cp => ({
+              description: cp.description,
+            })),
+            // Images need special handling: copy path, but they are not "new" files
+            images: copiedTour.images.map(img => ({
+              path: img.path,
+              order: img.order,
+            })),
+          };
+
+          setFormData(transformedData);
+
+          // Also set image previews from existing paths
+          setImagePreviews(copiedTour.images.map(img => ({
+            id: img.id, // Keep ID for existing images if needed for other logic, but not sent to create API
+            path: img.path,
+            order: img.order,
+            previewUrl: img.path, // Use path directly as preview URL for existing images
+            isNew: false, // Mark as not a new file upload
+          })));
+
+          setSuccess('Konten tur berhasil disalin. Silakan sesuaikan dan simpan.');
+        } catch (err) {
+          console.error('Gagal menyalin tur:', err);
+          setError('Gagal memuat data tur yang akan disalin. Silakan coba lagi.');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchCopiedTour();
+    }
+  }, [copyFromId]); // Depend on copyFromId
 
   // Clean up object URLs when component unmounts
   useEffect(() => {
@@ -697,13 +780,13 @@ export default function CreateTour() {
               {formData.itineraries.map((itinerary, dayIndex) => (
                 <details key={dayIndex} className="group border border-gray-300 rounded-lg shadow-md bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
-                    <h3 className="text-lg font-medium text-gray-900">Hari {itinerary.day}</h3>
+                    <h3 className="text-lg font-medium text-gray-900">Urutan {itinerary.day}</h3>
                     <div className="flex items-center space-x-3">
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); removeNestedItem('itineraries', dayIndex); }}
                         className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                        title="Hapus Hari Itinerary"
+                        title="Hapus Urutan Itinerary"
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
@@ -712,7 +795,7 @@ export default function CreateTour() {
                   </summary>
                   <div className="p-5 border-t border-gray-300 space-y-6">
                     <div className="mb-4">
-                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor Hari</label>
+                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor Urutan</label>
                       <input
                         type="number"
                         id={`itinerary-day-${dayIndex}`}
@@ -723,7 +806,7 @@ export default function CreateTour() {
                       />
                     </div>
                     <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Judul Hari</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Judul Urutan</label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label htmlFor={`itinerary-title-en-${dayIndex}`} className="block text-xs font-medium text-gray-500">English</label>
@@ -918,7 +1001,7 @@ export default function CreateTour() {
               onClick={() => addNestedItem('itineraries', { day: (formData.itineraries?.length || 0) + 1, title: { ...initialLanguageContent }, activities: [], meals: [] })}
               className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
             >
-              <Plus className="h-5 w-5 mr-2" /> Tambah Hari Itinerary
+              <Plus className="h-5 w-5 mr-2" /> Tambah Urutan Itinerary
             </button>
           </section>
 

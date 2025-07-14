@@ -1,11 +1,7 @@
 import React from 'react';
-import { TourPackage } from '../lib/types';
+import { ItineraryDocumentProps } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
 import { Clock } from 'lucide-react';
-
-interface ItineraryDocumentProps {
-  tour: TourPackage;
-}
 
 const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
   const { t, language } = useLanguage();
@@ -41,7 +37,7 @@ const ItineraryDocument: React.FC<ItineraryDocumentProps> = ({ tour }) => {
               {dayPlan.day}
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {t('day')} {dayPlan.day}: {getLocalizedContent(dayPlan.title)}
+              {getLocalizedContent(dayPlan.title)}
             </h3>
             <ul className="space-y-2 text-gray-700">
               {dayPlan.activities.map((activity, idx) => (

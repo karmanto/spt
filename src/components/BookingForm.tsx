@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { TourPackage } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
-
-interface BookingFormProps {
-  tour: TourPackage;
-}
+import { BookingFormProps } from '../lib/types'; 
 
 const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const { t, language } = useLanguage();
@@ -198,7 +194,7 @@ ${t('lookingForwardToConfirmation')}
                   <div className="text-sm text-gray-600 block">{getLocalizedContent(option.description)}</div>
                   <div className="text-md font-bold text-blue-600">฿{parseFloat(String(option.price ?? '')).toLocaleString()}</div>
                 </div>
-                <div className="w-24 ml-4">
+                <div className="w-24 ml-4 border-2 border-gray-900 rounded-md shadow-sm">
                   <label htmlFor={`quantity-${option.id}`} className="sr-only">{t('quantity')} for {getLocalizedContent(option.service_type)}</label>
                   <input
                     type="number"

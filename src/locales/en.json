@@ -129,7 +129,6 @@
   "pickupTime": "Pick-up Time",
   "selectTime": "Select Time",
   "optionalAddOns": "Optional Add-ons",
-  "joinWhatsappGroup": "Join WhatsApp group reminder",
   "requestVegetarianMeal": "Request Vegetarian Meal",
   "confirmBooking": "Confirm Booking",
   "resetForm": "Reset Form",
@@ -186,7 +185,6 @@
   "lookingForwardToConfirmation": "Looking forward to your confirmation.",
   "whatsappNumber": "WhatsApp Number",
   "enterWhatsappNumber": "Enter your WhatsApp number",
-  "contactUsWhatsapp": "1234567890",
   "failedToLoadTourDetails": "Failed to load tour details. Please try again later.",
   "tourNotFound": "Tour not found.",
   "noIncludedItems": "No included items available.",
@@ -203,5 +201,13 @@
   "noPricingInfo": "No pricing information available for this tour.",
   "viewLargerImage": "View larger image",
   "failedToLoadPromos": "Failed to load promotions. Please try again later.",
-  "failedToLoadTours": "Failed to load tours. Please try again later."
+  "failedToLoadTours": "Failed to load tours. Please try again later.",
+  "phiPhiTrip": "Phi Phi Trip",
+  "krabiTrip": "Krabi Trip",
+  "rentalTours": "Rental Tours",
+  "tourGuide": "Tour Guide",
+  "divingTours": "Diving Tours",
+  "jamesBondTrip": "James Bond Trip",
+  "similianTrip": "Similan Trip",
+  "privacyPolicy": "Privacy Policy"
 }

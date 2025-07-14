@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLanguage } from '../context/LanguageContext'; 
-import { TourPackage, LanguageContent } from '../lib/types'; 
+import { useLanguage } from '../context/LanguageContext';
+import { TourPackage, LanguageContent } from '../lib/types';
 import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
-import { FaArrowLeft } from 'react-icons/fa'; 
-import BookingForm from '../components/BookingForm'; 
-import ItineraryDocument from '../components/ItineraryDocument'; 
-import { getTourPackageDetail } from '../lib/api'; 
-import LoadingSpinner from '../components/LoadingSpinner'; 
-import ErrorDisplay from '../components/ErrorDisplay';     
-import ImageModal from '../components/ImageModal'; 
+import { FaArrowLeft } from 'react-icons/fa';
+import BookingForm from '../components/BookingForm';
+import ItineraryDocument from '../components/ItineraryDocument';
+import { getTourPackageDetail } from '../lib/api';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorDisplay from '../components/ErrorDisplay';
+import ImageModal from '../components/ImageModal';
 
 const TourDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,18 +18,18 @@ const TourDetail: React.FC = () => {
   const [tour, setTour] = useState<TourPackage | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview'); 
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0); 
-  const [showImageModal, setShowImageModal] = useState(false); 
+  const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview');
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showImageModal, setShowImageModal] = useState(false);
 
   const fetchTourDetail = async () => {
     if (!id) {
-      navigate('/tours'); 
+      navigate('/tours');
       return;
     }
     try {
       setLoading(true);
-      setError(null); 
+      setError(null);
       const foundTour = await getTourPackageDetail(id);
       setTour(foundTour);
     } catch (err) {
@@ -42,12 +42,12 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     fetchTourDetail();
-  }, [id, navigate, t]); 
+  }, [id, navigate, t]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <LoadingSpinner /> 
+        <LoadingSpinner />
       </div>
     );
   }
@@ -55,7 +55,7 @@ const TourDetail: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <ErrorDisplay message={error} onRetry={fetchTourDetail} /> 
+        <ErrorDisplay message={error} onRetry={fetchTourDetail} />
       </div>
     );
   }
@@ -182,7 +182,7 @@ const TourDetail: React.FC = () => {
                   {tour.highlights.map((highlight) => (
                     <li key={highlight.id} className="flex items-start gap-2">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span> 
+                      <span className="text-gray-700">{getLocalizedContent(highlight.description)}</span>
                     </li>
                   ))}
                 </ul>
@@ -289,8 +289,8 @@ const TourDetail: React.FC = () => {
                       <thead>
                         <tr className="border-b border-gray-200">
                           <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('serviceType')}</th>
-                          <th className="text-center py-4 px-6 font-semibold text-sm text-gray-900">{t('price')}</th> 
-                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('description')}</th> 
+                          <th className="text-center py-4 px-6 font-semibold text-sm text-gray-900">{t('price')}</th>
+                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('description')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -316,7 +316,7 @@ const TourDetail: React.FC = () => {
                 {tour.faqs.length > 0 ? (
                   <div className="space-y-6">
                     {tour.faqs.map((faq) => (
-                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0"> 
+                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
                         <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
                         <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
                       </div>
@@ -352,9 +352,14 @@ const TourDetail: React.FC = () => {
 
       {showImageModal && (
         <ImageModal
-          imageUrl={`${import.meta.env.VITE_BASE_URL}${sortedImages[selectedImageIndex]?.path}`}
+          images={sortedImages.map(img => ({
+            ...img,
+            id: String(img.id)
+          }))}
+          currentIndex={selectedImageIndex}
           altText={getLocalizedContent(tour.name) || ''}
           onClose={() => setShowImageModal(false)}
+          onNavigate={(newIndex) => setSelectedImageIndex(newIndex)}
         />
       )}
     </div>

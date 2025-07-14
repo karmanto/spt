@@ -1,15 +1,7 @@
 import React from 'react';
 import { Search, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
-
-interface TourFilterPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  selectedCategory: string;
-  setSelectedCategory: (category: string) => void;
-}
+import { TourFilterPopupProps } from '../lib/types';
 
 const TourFilterPopup: React.FC<TourFilterPopupProps> = ({
   isOpen,

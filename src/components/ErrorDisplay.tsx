@@ -1,10 +1,6 @@
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
-
-interface ErrorDisplayProps {
-  message: string;
-  onRetry?: () => void;
-}
+import { ErrorDisplayProps } from '../lib/types'; 
 
 const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ message, onRetry }) => {
   return (

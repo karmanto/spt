@@ -72,7 +72,8 @@ const TourLayout: React.FC = () => {
           </div>
         </div>
       </header>
-      <Outlet context={{ searchTerm, selectedCategory }} /> 
+      {/* Pass setSearchTerm and setSelectedCategory to Outlet context */}
+      <Outlet context={{ searchTerm, selectedCategory, setSearchTerm, setSelectedCategory }} /> 
 
       <TourFilterPopup
         isOpen={isFilterPopupOpen}

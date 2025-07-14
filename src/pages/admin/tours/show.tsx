@@ -292,17 +292,17 @@ export default function ShowTour() {
                 tour.itineraries.sort((a, b) => a.day - b.day).map((itinerary) => (
                   <details key={itinerary.id} className="group border border-gray-300 rounded-lg shadow-md bg-gray-50 animate-slide-up-fade-in" open>
                     <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
-                      <h3 className="text-lg font-medium text-gray-900">Hari {itinerary.day}</h3>
+                      <h3 className="text-lg font-medium text-gray-900">Urutan {itinerary.day}</h3>
                       <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-5 border-t border-gray-300 space-y-6">
                       <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Hari</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Urutan</label>
                         <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
                           {itinerary.day}
                         </div>
                       </div>
-                      {renderLanguageContentDisplay('Judul Hari', itinerary.title)}
+                      {renderLanguageContentDisplay('Judul ', itinerary.title)}
 
                       <h4 className="text-lg font-semibold text-gray-800 mt-4 mb-3">Aktivitas</h4>
                       <div className="space-y-4">

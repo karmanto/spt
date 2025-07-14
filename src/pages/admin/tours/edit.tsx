@@ -798,13 +798,13 @@ export default function EditTour() {
               {formData.itineraries?.map((itinerary, dayIndex) => (
                 <details key={dayIndex} className="group border border-gray-300 rounded-lg shadow-md bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
-                    <h3 className="text-lg font-medium text-gray-900">Hari {itinerary.day}</h3>
+                    <h3 className="text-lg font-medium text-gray-900">Urutan {itinerary.day}</h3>
                     <div className="flex items-center space-x-3">
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); removeNestedItem('itineraries', dayIndex); }}
                         className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                        title="Hapus Hari Itinerary"
+                        title="Hapus Urutan Itinerary"
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
@@ -813,7 +813,7 @@ export default function EditTour() {
                   </summary>
                   <div className="p-5 border-t border-gray-300 space-y-6">
                     <div className="mb-4">
-                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor Hari</label>
+                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor urutan</label>
                       <input
                         type="number"
                         id={`itinerary-day-${dayIndex}`}
@@ -824,7 +824,7 @@ export default function EditTour() {
                       />
                     </div>
                     <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Judul Hari</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Judul Urutan</label>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label htmlFor={`itinerary-title-en-${dayIndex}`} className="block text-xs font-medium text-gray-500">English</label>
@@ -1019,7 +1019,7 @@ export default function EditTour() {
               onClick={() => addNestedItem('itineraries', { day: (formData.itineraries?.length || 0) + 1, title: { ...initialLanguageContent }, activities: [], meals: [] })}
               className="mt-6 bg-secondary text-white px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors flex items-center shadow-md"
             >
-              <Plus className="h-5 w-5 mr-2" /> Tambah Hari Itinerary
+              <Plus className="h-5 w-5 mr-2" /> Tambah Urutan Itinerary
             </button>
           </section>
 

@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import 'flag-icons/css/flag-icons.min.css';
-
-interface HeaderProps {
-  mobileMenuOpen: boolean;
-  toggleMobileMenu: () => void;
-}
+import { HeaderProps } from '../lib/types'; 
 
 const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => {
   const { language, setLanguage, t } = useLanguage();
