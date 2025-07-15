@@ -6,9 +6,10 @@ import TourCard from '../components/TourCard';
 import { getTourPackages } from '../lib/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
+import Pagination from '../components/Pagination'; 
 
 const TourList: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   
   const { searchTerm, selectedCategory, setSearchTerm, setSelectedCategory } = useOutletContext<OutletContext>();
   const [initialized, setInitialized] = useState(false);
@@ -26,16 +27,13 @@ const TourList: React.FC = () => {
   });
 
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
   const tourCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
   const filtersContainerRef = useRef<HTMLDivElement>(null);
 
   const prevSearchTermRef = useRef(searchTerm);
   const prevSelectedCategoryRef = useRef(selectedCategory);
-
-  const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
-  const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 
   useEffect(() => {
     const storedFilterParams = sessionStorage.getItem('tourFilterParams');
@@ -116,19 +114,6 @@ const TourList: React.FC = () => {
     }
   };
 
-  const handleContactExperts = () => {
-    const isRussian = language === 'ru';
-    const whatsappMessage = encodeURIComponent(t('whatsappMessage'));
-
-    let url = '';
-    if (isRussian) {
-      url = `https://t.me/${telegramUsername}?text=${whatsappMessage}`;
-    } else {
-      url = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
-    }
-    window.open(url, '_blank', 'noopener noreferrer');
-  };
-
   // Fungsi umum untuk filter
   const handleFilter = (search: string, category: string) => {
     setSearchTerm(search);
@@ -145,6 +130,11 @@ const TourList: React.FC = () => {
   // Konfigurasi tombol filter
   const filterOptions = [
     { 
+      label: 'multiDayTrip', 
+      search: '',
+      category: 'multi_day_trip'
+    },
+    { 
       label: 'oneDayTrip', 
       search: '',
       category: '1_day_trip',
@@ -155,18 +145,8 @@ const TourList: React.FC = () => {
       category: 'all'
     },
     { 
-      label: 'krabiTrip', 
-      search: 'Krabi',
-      category: 'all'
-    },
-    { 
       label: 'jamesBondTrip', 
       search: 'james bond',
-      category: 'all'
-    },
-    { 
-      label: 'similianTrip', 
-      search: 'similian',
       category: 'all'
     },
     { 
@@ -175,91 +155,32 @@ const TourList: React.FC = () => {
       category: 'all'
     },
     { 
+      label: 'similianTrip', 
+      search: 'similan',
+      category: 'all'
+    },
+    { 
+      label: 'elephantTour', 
+      search: 'elephant',
+      category: 'all'
+    },
+    { 
       label: 'tourGuide', 
       search: 'guide',
       category: 'all'
     },
     { 
-      label: 'divingTours', 
-      search: 'Diving',
+      label: 'Zipline & ATV', 
+      search: 'zipline & atv',
       category: 'all'
     }
   ];
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    const pageNumbers = [];
-    const maxPagesToShow = 5; 
-    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
-    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
-
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(1, endPage - maxPagesToShow + 1);
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(i);
-    }
-
-    return (
-      <div className="flex justify-center items-center space-x-2 mt-12">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-3 py-1.5 rounded-lg bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-        >
-          {t('previous')}
-        </button>
-        {startPage > 1 && (
-          <>
-            <button
-              onClick={() => handlePageChange(1)}
-              className="px-3 py-1.5 rounded-lg bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
-            >
-              1
-            </button>
-            {startPage > 2 && <span className="text-textSecondary">...</span>}
-          </>
-        )}
-        {pageNumbers.map(number => (
-          <button
-            key={number}
-            onClick={() => handlePageChange(number)}
-            className={`px-3 py-1.5 rounded-lg font-semibold transition-colors duration-200
-              ${currentPage === number
-                ? 'bg-primary text-white shadow-md'
-                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
-              }`}
-          >
-            {number}
-          </button>
-        ))}
-        {endPage < totalPages && (
-          <>
-            {endPage < totalPages - 1 && <span className="text-textSecondary">...</span>}
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              className="px-3 py-1.5 rounded-lg bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 transition-colors duration-200"
-            >
-              {totalPages}
-            </button>
-          </>
-        )}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-3 py-1.5 rounded-lg bg-white text-gray-700 border border-gray-200 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-        >
-          {t('next')}
-        </button>
-      </div>
-    );
-  };
+  // renderPagination function removed as it will be replaced by the Pagination component
 
   return (
     <section id="tour-list" className="pt-10 min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="text-center mb-6">
           <h2 className="text-4xl sm:text-5xl font-extrabold text-text mb-4 leading-tight" data-aos="fade-up">
             {t('tourListTitle')}
@@ -269,7 +190,6 @@ const TourList: React.FC = () => {
           </p>
         </div>
 
-        {/* Bagian tombol filter yang diubah */}
         <div 
           ref={filtersContainerRef}
           className="flex overflow-x-auto pb-4 mb-6 -mx-4 px-4 scrollbar-hide"
@@ -328,7 +248,13 @@ const TourList: React.FC = () => {
                 />
               ))}
             </div>
-            {renderPagination()}
+            {totalPages > 1 && ( // Only render pagination if there's more than one page
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
           </>
         ) : (
           <div className="text-center py-20">
@@ -336,23 +262,6 @@ const TourList: React.FC = () => {
             <p className="text-lg text-textSecondary mt-2">{t('tryDifferentSearch')}</p>
           </div>
         )}
-      </div>
-
-      <div className="bg-gray-900 text-white py-16 mt-16">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {t('tourList.cantFind')}
-          </h2>
-          <p className="text-xl mb-8 text-blue-100">
-            {t('tourList.customize')}
-          </p>
-          <button
-            onClick={handleContactExperts}
-            className={`inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl text-white ${language ==="ru" ? "bg-[#0088cc] hover:bg-[#006699]" : "bg-[#25d366] hover:bg-[#13a033]"} transition-colors duration-300`}
-          >
-            {t('tourList.contactExperts')}
-          </button>
-        </div>
       </div>
     </section>
   );

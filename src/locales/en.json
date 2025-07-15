@@ -157,6 +157,7 @@
   "tryDifferentSearch": "Try a different search or adjust your filters.",
   "allTours": "All Tours",
   "oneDayTrip": "Day Trip",
+  "multiDayTrip": "Multi-Day Trip",
   "openTrip": "Open Trip",
   "otherTours": "Other",
   "closeFilter": "Close Filter",
@@ -209,5 +210,7 @@
   "divingTours": "Diving Tours",
   "jamesBondTrip": "James Bond Trip",
   "similianTrip": "Similan Trip",
-  "privacyPolicy": "Privacy Policy"
+  "privacyPolicy": "Privacy Policy",
+  "blog": "Blog",
+  "elephantTour": "Elephant"
 }

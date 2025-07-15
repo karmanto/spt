@@ -10,6 +10,17 @@
   .animate-slide-up-fade-in {
     animation: slideUpFadeIn 0.4s ease-out forwards;
   }
+
+  /* Custom utility to hide number input spin buttons */
+  .no-spin-buttons::-webkit-outer-spin-button,
+  .no-spin-buttons::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; /* Safari */
+  }
+
+  .no-spin-buttons {
+    -moz-appearance: textfield; /* Firefox */
+  }
 }
 
 @keyframes fadeIn {

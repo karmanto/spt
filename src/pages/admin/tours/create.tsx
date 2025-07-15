@@ -465,6 +465,7 @@ export default function CreateTour() {
                   <option value="">Pilih Tipe Tur</option>
                   <option value="1_day_trip">Day Trip</option>
                   <option value="open_trip">Open Trip</option>
+                  <option value="multi_day_trip">Multi-Day Trip</option>
                   <option value="private_service">Other</option>
                 </select>
               </div>

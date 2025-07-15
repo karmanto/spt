@@ -20,6 +20,12 @@ import AdminTours from './pages/admin/tours';
 import CreateTour from './pages/admin/tours/create';
 import EditTour from './pages/admin/tours/edit';
 import ShowTour from './pages/admin/tours/show';
+import AdminBlogs from './pages/admin/blogs'; 
+import CreateBlog from './pages/admin/blogs/create'; 
+import EditBlog from './pages/admin/blogs/edit';
+import ShowBlog from './pages/admin/blogs/show'; 
+import BlogList from './pages/BlogList'; 
+import BlogDetail from './pages/BlogDetail';
 import { setAuthErrorHandler } from './lib/auth';
 import LoadingSpinner from './components/LoadingSpinner'; 
 
@@ -119,6 +125,9 @@ function App() {
             <Route element={<TourLayout />}>
               <Route path="/tours" element={<TourList />} />
               <Route path="/tours/:id" element={<TourDetail />} />
+              {/* Blog Routes now use TourLayout */}
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogDetail />} />
             </Route>
 
             <Route path="/login" element={<Login />} />
@@ -157,6 +166,20 @@ function App() {
               <Route path="create" element={<CreateTour />} />
               <Route path="edit/:id" element={<EditTour />} />
               <Route path=":id" element={<ShowTour />} />
+            </Route>
+            {/* Admin Blog Routes */}
+            <Route
+              path="/admin/blogs"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<AdminBlogs />} />
+              <Route path="create" element={<CreateBlog />} />
+              <Route path="edit/:id" element={<EditBlog />} />
+              <Route path=":id" element={<ShowBlog />} />
             </Route>
           </Routes>
         </main>

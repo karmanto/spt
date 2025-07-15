@@ -17,6 +17,7 @@ const TourFilterPopup: React.FC<TourFilterPopupProps> = ({
     { key: 'all', label: t('allTours') },
     { key: '1_day_trip', label: t('oneDayTrip') },
     { key: 'open_trip', label: t('openTrip') },
+    { key: 'multi_day_trip', label: t('multiDayTrip') },
     { key: 'other', label: t('otherTours') },
   ];
 

@@ -9,7 +9,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
   const [whatsappNumberInput, setWhatsappNumberInput] = useState('');
-  const [quantities, setQuantities] = useState<{ [id: number]: number | null }>({});
+  // Mengubah tipe state quantities menjadi number, bukan number | null
+  const [quantities, setQuantities] = useState<{ [id: number]: number }>({});
   const [totalCost, setTotalCost] = useState(0);
 
   const whatsappContactNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
@@ -27,10 +28,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
 
   useEffect(() => {
     if (tour && tour.prices && tour.prices.length > 0) {
-      const initialQuantities: { [id: number]: number | null } = {};
+      // Inisialisasi kuantitas dengan 0 untuk setiap opsi
+      const initialQuantities: { [id: number]: number } = {};
       tour.prices.forEach(option => {
         if (option.id !== undefined) {
-          initialQuantities[option.id] = null;
+          initialQuantities[option.id] = 0; // Default value is 0
         }
       });
       setQuantities(initialQuantities);
@@ -42,7 +44,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
     if (tour && tour.prices) {
       tour.prices.forEach(option => {
         if (option.id !== undefined) {
-          const qty = quantities[option.id] || 0;
+          const qty = quantities[option.id] || 0; // Pastikan menggunakan 0 jika undefined
           calculatedTotal += option.price * qty;
         }
       });
@@ -57,18 +59,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   };
 
   const handleQuantityChange = (optionId: number, value: string) => {
-    if (value === '') {
-      setQuantities(prevQuantities => ({
-        ...prevQuantities,
-        [optionId]: null,
-      }));
-    } else {
-      const newQuantity = Math.max(0, parseInt(value) || 0); 
-      setQuantities(prevQuantities => ({
-        ...prevQuantities,
-        [optionId]: newQuantity,
-      }));
-    }
+    // Jika nilai kosong, set ke 0, jika tidak, parse sebagai integer dan pastikan tidak kurang dari 0
+    const newQuantity = value === '' ? 0 : Math.max(0, parseInt(value) || 0); 
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [optionId]: newQuantity,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,7 +75,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
       return;
     }
 
-    const hasSelections = Object.values(quantities).some(qty => (qty ?? 0) > 0);
+    // Memastikan ada setidaknya satu kuantitas > 0
+    const hasSelections = Object.values(quantities).some(qty => qty > 0);
     if (!hasSelections) {
       alert(t('atLeastOneParticipant')); 
       return;
@@ -134,7 +131,7 @@ ${t('lookingForwardToConfirmation')}
           <input
             type="text"
             id="name"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
             placeholder={t('enterFullName')}
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -148,7 +145,7 @@ ${t('lookingForwardToConfirmation')}
           <input
             type="email"
             id="email"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
             placeholder={t('enterEmail')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -162,7 +159,7 @@ ${t('lookingForwardToConfirmation')}
           <input
             type="tel" 
             id="whatsappNumber"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
             placeholder={t('enterWhatsappNumber')}
             value={whatsappNumberInput}
             onChange={(e) => setWhatsappNumberInput(e.target.value)}
@@ -176,7 +173,7 @@ ${t('lookingForwardToConfirmation')}
           <input
             type="date"
             id="date"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
             min={getMinDate()}
             value={date}
             onChange={(e) => setDate(e.target.value)}
@@ -188,23 +185,44 @@ ${t('lookingForwardToConfirmation')}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900">{t('numberOfBookings')}</h3>
             {tour.prices.map((option) => (
-              <div key={option.id} className="flex items-center justify-between bg-gray-50 p-4 rounded-lg">
-                <div className="flex-1">
+              <div key={option.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-gray-50 p-4 rounded-lg">
+                <div className="flex-1 mb-4 sm:mb-0 sm:mr-4">
                   <div className="font-medium text-gray-900">{getLocalizedContent(option.service_type)} </div>
                   <div className="text-sm text-gray-600 block">{getLocalizedContent(option.description)}</div>
                   <div className="text-md font-bold text-blue-600">฿{parseFloat(String(option.price ?? '')).toLocaleString()}</div>
                 </div>
-                <div className="w-24 ml-4 border-2 border-gray-900 rounded-md shadow-sm">
+                <div className="flex items-center border border-gray-300 rounded-md shadow-sm overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(option.id!, String(Math.max(0, (quantities[option.id!] || 0) - 1)))}
+                    className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+                    disabled={(quantities[option.id!] || 0) <= 0}
+                    aria-label={`Decrease quantity for ${getLocalizedContent(option.service_type)}`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
+                    </svg>
+                  </button>
                   <label htmlFor={`quantity-${option.id}`} className="sr-only">{t('quantity')} for {getLocalizedContent(option.service_type)}</label>
                   <input
                     type="number"
                     id={`quantity-${option.id}`}
                     min="0"
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 text-center"
-                    value={quantities[option.id!] ?? ""}
+                    className="w-16 text-center border-x border-gray-300 focus:outline-none focus:ring-0 sm:text-sm px-1 py-2 no-spin-buttons"
+                    value={quantities[option.id!] ?? 0} // Pastikan menampilkan 0 jika nilai adalah 0
                     onChange={(e) => handleQuantityChange(option.id!, e.target.value)}
                     aria-label={`${t('quantity')} for ${getLocalizedContent(option.service_type)}`}
                   />
+                  <button
+                    type="button"
+                    onClick={() => handleQuantityChange(option.id!, String((quantities[option.id!] || 0) + 1))}
+                    className="p-2 bg-gray-100 hover:bg-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
+                    aria-label={`Increase quantity for ${getLocalizedContent(option.service_type)}`}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             ))}

@@ -286,3 +286,59 @@ export interface TourFilterPopupProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
 }
+
+// New interfaces for Blog
+export interface BlogImage {
+  id: number;
+  imageable_type: string;
+  imageable_id: number;
+  path: string;
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogCategory {
+  id: number;
+  name: LanguageContent;
+  slug: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: LanguageContent;
+  content: LanguageContent;
+  image: string; // URL of the main image
+  category_id: number;
+  category?: BlogCategory; // Optional, can be eager loaded
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPostResponse {
+  data: BlogPost[];
+  pagination: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+  };
+}
+
+export interface BlogPostCreatePayload {
+  title: LanguageContent;
+  content: LanguageContent;
+  image?: File; // For file upload
+  category_id: number;
+}
+
+export interface BlogPostUpdatePayload extends Partial<BlogPostCreatePayload> {
+  _method?: 'PUT'; // For Laravel form data PUT simulation
+}
+
+export interface BlogCardProps {
+  post: BlogPost;
+}

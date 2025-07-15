@@ -156,6 +156,7 @@
   "tryDifferentSearch": "Coba pencarian lain atau sesuaikan filter Anda.",
   "allTours": "Semua Tur",
   "oneDayTrip": "Tur Sehari",
+  "multiDayTrip": "Paket Kombo",
   "openTrip": "Open Trip",
   "otherTours": "Lainnya",
   "closeFilter": "Tutup Filter",
@@ -208,5 +209,7 @@
   "divingTours": "Tur Menyelam",
   "jamesBondTrip": "Tur James Bond",
   "similianTrip": "Tur Similan",
-  "privacyPolicy": "Kebijakan Privasi"
+  "privacyPolicy": "Kebijakan Privasi",
+  "blog": "Blog",
+  "elephantTour": "Gajah"
 }

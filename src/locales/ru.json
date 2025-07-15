@@ -157,6 +157,7 @@
   "tryDifferentSearch": "Попробуйте другой поиск.",
   "allTours": "Все туры",
   "oneDayTrip": "День поездка",
+  "multiDayTrip": "Пакет комбо",
   "openTrip": "Открытый тур",
   "otherTours": "Другие",
   "closeFilter": "Закрыть",
@@ -181,10 +182,10 @@
   "hello": "Здравствуйте",
   "iWantToBookTour": "Хочу забронировать тур.",
   "tourName": "Название тура",
-  "myWhatsappNumber": "Мой WhatsApp",
+  "myWhatsappNumber": "Мой Telegram",
   "lookingForwardToConfirmation": "Жду подтверждения.",
-  "whatsappNumber": "WhatsApp",
-  "enterWhatsappNumber": "Введите WhatsApp",
+  "whatsappNumber": "Telegram",
+  "enterWhatsappNumber": "Введите Telegram",
   "failedToLoadTourDetails": "Ошибка загрузки. Попробуйте позже.",
   "tourNotFound": "Тур не найден.",
   "noIncludedItems": "Нет включённых услуг.",
@@ -209,5 +210,8 @@
   "divingTours": "Туры по дайвингу",
   "jamesBondTrip": "Тур Джеймса Бонда",
   "similianTrip": "Тур Симиланских островов",
-  "privacyPolicy": "Политика конфиденциальности"
+  "privacyPolicy": "Политика конфиденциальности",
+  "blog": "Блог",
+  "elephantTour": "слонах",
+  "paymentMethod": "Методы оплаты"
 }

@@ -13,7 +13,8 @@ const getTagDisplayName = (tag: string | undefined): string => {
   switch (tag) {
     case '1_day_trip': return 'Day Trip';
     case 'open_trip': return 'Open Trip';
-    case 'private_service': return 'Other'; // This maps to 'other' in the API
+    case 'multi_day_trip': return 'Multi-Day Trip';
+    case 'private_service': return 'Other'; 
     default: return tag; // Fallback to the raw tag if not found
   }
 };

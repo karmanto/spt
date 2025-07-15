@@ -1,4 +1,4 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, BlogPost, BlogPostResponse, BlogPostCreatePayload, BlogPostUpdatePayload } from './types';
 import { handleAuthError } from './auth'; // Import fungsi handleAuthError
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -69,6 +69,17 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
   }));
 
   return parsedTour;
+};
+
+// New function to parse blog post data
+const parseBlogPostData = (post: BlogPost): BlogPost => {
+  const parsedPost = { ...post };
+  parsedPost.title = safeJSONParse<LanguageContent>(post.title) as LanguageContent;
+  parsedPost.content = safeJSONParse<LanguageContent>(post.content) as LanguageContent;
+  if (parsedPost.category) {
+    parsedPost.category.name = safeJSONParse<LanguageContent>(parsedPost.category.name) as LanguageContent;
+  }
+  return parsedPost;
 };
 
 // === Fungsi fetch untuk request JSON ===
@@ -336,5 +347,83 @@ export const boostTourPackage = async (id: number) => {
   // Assuming the backend route is /packages/{id}/boost-product for route model binding
   return fetchData<TourPackage>(`packages/${id}/boost-product`, {
     method: 'POST',
+  });
+};
+
+// ==== API Blog Posts ====
+export const getBlogPosts = async (params?: { per_page?: number; page?: number; category_slug?: string; search?: string; }) => {
+  const query = new URLSearchParams();
+  if (params?.per_page) query.append('per_page', params.per_page.toString());
+  if (params?.page) query.append('page', params.page.toString());
+  if (params?.category_slug) query.append('category_slug', params.category_slug);
+  if (params?.search) query.append('search', params.search);
+
+  const queryString = query.toString();
+  const endpoint = `blogs${queryString ? `?${queryString}` : ''}`;
+  const response = await fetchData<BlogPostResponse>(endpoint);
+  response.data = response.data.map(parseBlogPostData);
+  return response;
+};
+
+export const getBlogPost = async (slug: string) => {
+  const post = await fetchData<BlogPost>(`blogs/${slug}`);
+  return parseBlogPostData(post);
+};
+
+export const addBlogPost = async (post: BlogPostCreatePayload) => {
+  const formData = new FormData();
+  formData.append('title_id', post.title.id || '');
+  formData.append('title_en', post.title.en);
+  formData.append('title_ru', post.title.ru || '');
+  formData.append('content_id', post.content.id || '');
+  formData.append('content_en', post.content.en);
+  formData.append('content_ru', post.content.ru || '');
+  formData.append('category_id', post.category_id.toString());
+  if (post.image) {
+    formData.append('image', post.image);
+  }
+  return fetchMultipartData<BlogPost>('blogs', { method: 'POST', body: formData });
+};
+
+export const updateBlogPost = async (id: number, post: BlogPostUpdatePayload) => {
+  const formData = new FormData();
+
+  if (post.title) {
+    formData.append('title_id', post.title.id || '');
+    formData.append('title_en', post.title.en);
+    formData.append('title_ru', post.title.ru || '');
+  }
+  if (post.content) {
+    formData.append('content_id', post.content.id || '');
+    formData.append('content_en', post.content.en);
+    formData.append('content_ru', post.content.ru || '');
+  }
+  if (post.category_id) {
+    formData.append('category_id', post.category_id.toString());
+  }
+  if (post.image) {
+    formData.append('image', post.image);
+  }
+
+  formData.append('_method', 'PUT'); // Simulate PUT request for Laravel
+
+  return fetchMultipartData<BlogPost>(`blogs/${id}`, {
+    method: 'POST', // Must be POST for FormData with _method
+    body: formData,
+  });
+};
+
+export const deleteBlogPost = async (id: number) => {
+  return fetchData<void>(`blogs/${id}`, {
+    method: 'DELETE',
+  });
+};
+
+export const uploadBlogImage = async (imageFile: File): Promise<{ path: string; full_url: string }> => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+  return fetchMultipartData<{ path: string; full_url: string }>('blogs/upload-image', {
+    method: 'POST',
+    body: formData,
   });
 };

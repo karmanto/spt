@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import 'flag-icons/css/flag-icons.min.css';
 
 const Footer: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage(); // Destructure language from useLanguage
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
 
@@ -16,11 +16,13 @@ const Footer: React.FC = () => {
     { key: 'phiPhiLink', label: t('phiPhiLink'), filter: { search: 'Phi', category: 'all' } },
     { key: 'rentalLink', label: t('rentalLink'), filter: { search: 'rental', category: 'all' } },
     { key: 'tourLink', label: t('tourLink'), filter: { search: 'guide', category: 'all' } },
-    { key: 'similianLink', label: t('similianLink'), filter: { search: 'similian', category: 'all' } },
+    { key: 'similianLink', label: t('similianLink'), filter: { search: 'similan', category: 'all' } },
   ];
 
   const companyLinks = [
     { key: 'privacyPolicyLink', label: t('privacyPolicy'), href: '/Kebijakan Privasi - SPT.pdf' },
+    // Conditionally add payment method link for Russian language
+    ...(language === 'ru' ? [{ key: 'paymentMethodLink', label: t('paymentMethod'), href: '/Russian Payment.pdf' }] : []),
   ];
 
   const handlePackageClick = (filterParams: { search: string; category: string }) => {
