@@ -36,7 +36,7 @@ const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage 
       className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
       data-aos="fade-up"
     >
-      <Link to={`/tours/${tour.id}`} onClick={handleCardClick}>
+      <Link to={`/tours/${tour.slug}`} onClick={handleCardClick}>
         <div className="relative h-64 overflow-hidden">
           <img
             src={

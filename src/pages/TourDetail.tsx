@@ -12,7 +12,7 @@ import ErrorDisplay from '../components/ErrorDisplay';
 import ImageModal from '../components/ImageModal';
 
 const TourDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>(); 
   const navigate = useNavigate();
   const { t, language: currentLanguage } = useLanguage();
   const [tour, setTour] = useState<TourPackage | null>(null);
@@ -23,10 +23,17 @@ const TourDetail: React.FC = () => {
   const [showImageModal, setShowImageModal] = useState(false);
 
   const fetchTourDetail = async () => {
-    if (!id) {
+    if (!slug) {
       navigate('/tours');
       return;
     }
+    const id = slug.split('-').pop();
+    if (!id) {
+      setError(t('tourNotFound'));
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -42,7 +49,7 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     fetchTourDetail();
-  }, [id, navigate, t]);
+  }, [slug, navigate, t]); 
 
   if (loading) {
     return (

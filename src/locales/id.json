@@ -211,5 +211,12 @@
   "similianTrip": "Tur Similan",
   "privacyPolicy": "Kebijakan Privasi",
   "blog": "Blog",
-  "elephantTour": "Gajah"
+  "elephantTour": "Gajah",
+  "noPromosAvailable": "Tidak ada promosi yang tersedia saat ini.",
+  "ourBlog": "Blog Kami",
+  "blogIntroText": "Jelajahi artikel terbaru kami, wawasan perjalanan, dan tips untuk petualangan Anda berikutnya di Thailand.",
+  "searchBlogsPlaceholder": "Cari blog...",
+  "readMore": "Baca Selengkapnya",
+  "backToBlogs": "Kembali ke Blog",
+  "noBlogsFound": "Tidak ada blog yang ditemukan"
 }

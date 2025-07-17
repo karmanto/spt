@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Outlet, Link } from 'react-router-dom';
-import { LayoutDashboard, Gift, Globe, Menu, X, BookOpen } from 'lucide-react'; // Added BookOpen icon
+import { LayoutDashboard, Gift, Globe, Menu, X } from 'lucide-react'; 
 
 const AdminLayout: React.FC = () => {
   const { t } = useLanguage();
@@ -77,7 +77,7 @@ const AdminLayout: React.FC = () => {
             onClick={() => setMenuOpen(false)}
           >
             <LayoutDashboard className="h-4 w-4 mr-2" />
-            {t('dashboard')}
+            dashboard
           </Link>
           <Link
             to="/admin/promos"
@@ -85,7 +85,7 @@ const AdminLayout: React.FC = () => {
             onClick={() => setMenuOpen(false)}
           >
             <Gift className="h-4 w-4 mr-2" />
-            {t('managePromos')}
+            kelola promo
           </Link>
           <Link
             to="/admin/tours"
@@ -93,16 +93,15 @@ const AdminLayout: React.FC = () => {
             onClick={() => setMenuOpen(false)}
           >
             <Globe className=" h-4 w-4 mr-2" />
-            {t('manageTours')}
+            kelola paket tur
           </Link>
-          {/* New Blog Link */}
           <Link
             to="/admin/blogs"
             className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
             onClick={() => setMenuOpen(false)}
           >
-            <BookOpen className="h-4 w-4 mr-2" />
-            {t('manageBlogPosts')}
+            <Globe className=" h-4 w-4 mr-2" />
+            kelola blog
           </Link>
         </div>
       </nav>

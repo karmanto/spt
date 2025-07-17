@@ -142,6 +142,7 @@ export interface TourPackage {
   order?: number; 
   created_at: string;
   updated_at: string;
+  slug?: string; // Added slug property
 }
 
 export interface TourPackageResponse {
@@ -278,48 +279,30 @@ export interface TourCardProps {
   currentPage: number; 
 }
 
-export interface TourFilterPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  selectedCategory: string;
-  setSelectedCategory: (category: string) => void;
-}
-
 // New interfaces for Blog
-export interface BlogImage {
+export interface Blog {
   id: number;
-  imageable_type: string;
-  imageable_id: number;
-  path: string;
-  order: number;
-  created_at: string;
-  updated_at: string;
+  title_id: string;
+  title_en: string;
+  title_ru: string;
+  content_id: string;
+  content_en: string;
+  content_ru: string;
+  image: string;
+  posting_date: string;
+  slug?: string; // Added slug property
 }
 
-export interface BlogCategory {
-  id: number;
-  name: LanguageContent;
-  slug: string;
-  created_at: string;
-  updated_at: string;
+export interface BlogCreatePayload extends Omit<Blog, 'id' | 'image'> {
+  image?: File;
 }
 
-export interface BlogPost {
-  id: number;
-  slug: string;
-  title: LanguageContent;
-  content: LanguageContent;
-  image: string; // URL of the main image
-  category_id: number;
-  category?: BlogCategory; // Optional, can be eager loaded
-  created_at: string;
-  updated_at: string;
+export interface BlogUpdatePayload extends Partial<Omit<Blog, 'id' | 'image'>> {
+  image?: File;
 }
 
-export interface BlogPostResponse {
-  data: BlogPost[];
+export interface BlogResponse {
+  data: Blog[];
   pagination: {
     current_page: number;
     per_page: number;
@@ -328,17 +311,6 @@ export interface BlogPostResponse {
   };
 }
 
-export interface BlogPostCreatePayload {
-  title: LanguageContent;
-  content: LanguageContent;
-  image?: File; // For file upload
-  category_id: number;
-}
-
-export interface BlogPostUpdatePayload extends Partial<BlogPostCreatePayload> {
-  _method?: 'PUT'; // For Laravel form data PUT simulation
-}
-
 export interface BlogCardProps {
-  post: BlogPost;
+  blog: Blog;
 }

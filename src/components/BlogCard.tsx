@@ -1,73 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BlogCardProps } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
-import { BlogPost } from '../lib/types';
-import { format } from 'date-fns';
-import { id, enUS, ru } from 'date-fns/locale';
+import { CalendarDays } from 'lucide-react';
 
-interface BlogCardProps {
-  post: BlogPost;
-}
+const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+  const { t, language: currentLanguage } = useLanguage();
 
-const getLocale = (lang: string) => {
-  switch (lang) {
-    case 'id': return id;
-    case 'en': return enUS;
-    case 'ru': return ru;
-    default: return enUS;
-  }
-};
-
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
-  const { language } = useLanguage();
-  const currentLocale = getLocale(language);
-
-  const formattedDate = post.created_at
-    ? format(new Date(post.created_at), 'PPP', { locale: currentLocale })
-    : '';
-
-  const displayTitle = post.title[language] || post.title.en;
-  const displayContent = post.content[language] || post.content.en;
-  const displayCategory = post.category?.name[language] || post.category?.name.en;
-
-  // Simple function to strip HTML and truncate
-  const stripHtmlAndTruncate = (html: string, maxLength: number) => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const textContent = doc.body.textContent || "";
-    if (textContent.length > maxLength) {
-      return textContent.substring(0, maxLength) + '...';
-    }
-    return textContent;
+  const getLocalizedTitle = () => {
+    if (currentLanguage === 'id') return blog.title_id;
+    if (currentLanguage === 'ru') return blog.title_ru || blog.title_en;
+    return blog.title_en;
   };
 
+  const getLocalizedContentSnippet = () => {
+    let content = '';
+    if (currentLanguage === 'id') content = blog.content_id;
+    else if (currentLanguage === 'ru') content = blog.content_ru || blog.content_en;
+    else content = blog.content_en;
+
+    // Strip HTML tags and truncate
+    const strippedContent = content.replace(/<[^>]*>?/gm, '');
+    return strippedContent.length > 150 ? strippedContent.substring(0, 150) + '...' : strippedContent;
+  };
+
+  const formattedDate = new Date(blog.posting_date).toLocaleDateString(currentLanguage === 'id' ? 'id-ID' : 'en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
-    <div className="bg-surface rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
-      <Link to={`/blog/${post.slug}`} className="block">
-        {post.image && (
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
+      <Link to={`/blogs/${blog.slug}`} className="block">
+        <div className="relative w-full h-48 overflow-hidden">
           <img
-            src={post.image}
-            alt={displayTitle}
-            className="w-full h-56 object-cover object-center"
-            loading="lazy"
+            src={`${import.meta.env.VITE_BASE_URL}/storage/${blog.image}`}
+            alt={getLocalizedTitle()}
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
           />
-        )}
+        </div>
         <div className="p-6">
-          {displayCategory && (
-            <span className="inline-block bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full mb-2">
-              {displayCategory}
-            </span>
-          )}
-          <h3 className="text-xl font-bold text-primary mb-2 line-clamp-2">
-            {displayTitle}
+          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+            {getLocalizedTitle()}
           </h3>
-          <p className="text-textSecondary text-sm mb-4">
-            {formattedDate}
+          <div className="flex items-center text-sm text-gray-500 mb-4">
+            <CalendarDays className="w-4 h-4 mr-1" />
+            <span>{formattedDate}</span>
+          </div>
+          <p className="text-gray-700 text-base mb-4 line-clamp-3">
+            {getLocalizedContentSnippet()}
           </p>
-          <p className="text-textSecondary text-base line-clamp-3">
-            {stripHtmlAndTruncate(displayContent, 150)}
-          </p>
-          <span className="mt-4 inline-block text-primary hover:underline font-semibold">
-            Read More &rarr;
+          <span className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition-colors">
+            {t('readMore')} &rarr;
           </span>
         </div>
       </Link>

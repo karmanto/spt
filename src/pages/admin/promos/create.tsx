@@ -94,7 +94,7 @@ export default function CreatePromo() {
           <input type="file" accept="image/*" onChange={(e) => { if (e.target.files && e.target.files[0]) { setImage(e.target.files[0]); } }} className="p-2 mt-1 block w-full" />
         </div>
 
-        <div className="flex space-x-4"> {/* Flex container for buttons */}
+        <div className="flex space-x-4"> 
           <button
             type="submit"
             className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 flex items-center justify-center transition duration-300 ease-in-out"

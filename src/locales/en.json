@@ -212,5 +212,12 @@
   "similianTrip": "Similan Trip",
   "privacyPolicy": "Privacy Policy",
   "blog": "Blog",
-  "elephantTour": "Elephant"
+  "elephantTour": "Elephant",
+  "noPromosAvailable": "No promotions available at the moment.",
+  "ourBlog": "Our Blog",
+  "blogIntroText": "Explore our latest articles, travel insights, and tips for your next adventure in Thailand.",
+  "searchBlogsPlaceholder": "Search blogs...",
+  "readMore": "Read More",
+  "backToBlogs": "Back to Blogs",
+  "noBlogsFound": "No blogs found"
 }

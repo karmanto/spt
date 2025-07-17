@@ -1,56 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useLanguage } from '../../../context/LanguageContext';
-import { getBlogPost } from '../../../lib/api';
-import { BlogPost } from '../../../lib/types';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { getBlogDetail, deleteBlog } from '../../../lib/api';
+import { Blog } from '../../../lib/types';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import ErrorDisplay from '../../../components/ErrorDisplay';
-import { ArrowLeft } from 'lucide-react';
-import { format } from 'date-fns';
-import { id, enUS, ru } from 'date-fns/locale';
-
-const getLocale = (lang: string) => {
-  switch (lang) {
-    case 'id': return id;
-    case 'en': return enUS;
-    case 'ru': return ru;
-    default: return enUS;
-  }
-};
+import { toast } from 'react-toastify';
+// Menggunakan react-icons/fa untuk konsistensi dengan halaman promo
+import { FaEdit, FaTrash, FaArrowLeft, FaCalendarAlt } from 'react-icons/fa';
 
 const ShowBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { t, language } = useLanguage();
-  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
+  const navigate = useNavigate();
+  const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null); // Menambahkan state sukses
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      if (!id) {
-        setError(t('blogPostNotFound'));
-        setLoading(false);
-        return;
-      }
+  const fetchBlogDetail = useCallback(async () => {
+    if (!id) {
+      navigate('/admin/blogs');
+      return;
+    }
+    try {
       setLoading(true);
       setError(null);
-      try {
-        const post = await getBlogPost(id); // Assuming getBlogPost can take ID or slug
-        setBlogPost(post);
-      } catch (err) {
-        console.error('Failed to fetch blog post:', err);
-        setError(t('errorFetchingBlogPost'));
-      } finally {
-        setLoading(false);
-      }
-    };
+      const foundBlog = await getBlogDetail(id);
+      setBlog(foundBlog);
+    } catch (err) {
+      console.error("Failed to fetch blog detail:", err);
+      setError("Gagal memuat detail blog.");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, navigate]);
 
-    fetchPost();
-  }, [id, language, t]);
+  useEffect(() => {
+    fetchBlogDetail();
+  }, [fetchBlogDetail]);
+
+  const handleDelete = async () => {
+    if (!id) return;
+    if (window.confirm("Apakah Anda yakin ingin menghapus blog ini? Tindakan ini tidak dapat dibatalkan.")) {
+      try {
+        setLoading(true); // Set loading true selama proses penghapusan
+        setError(null);
+        setSuccess(null);
+        await deleteBlog(parseInt(id));
+        setSuccess("Blog berhasil dihapus!"); // Set pesan sukses
+        toast.success("Blog berhasil dihapus!");
+        navigate('/admin/blogs');
+      } catch (err) {
+        console.error("Failed to delete blog:", err);
+        setError("Gagal menghapus blog."); // Set pesan error
+        toast.error("Gagal menghapus blog.");
+      } finally {
+        setLoading(false); // Reset loading
+      }
+    }
+  };
+
+  // Fungsi helper untuk menampilkan konten multibahasa, meniru renderPromoLanguageContentDisplay
+  const renderBlogLanguageContentDisplay = (
+    label: string,
+    idContent: string | undefined,
+    enContent: string | undefined,
+    ruContent: string | undefined,
+    isHtmlContent: boolean = false // Parameter baru untuk menangani konten HTML
+  ) => (
+    <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+      <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {isHtmlContent ? (
+              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: idContent || '<span class="text-gray-400 italic">Tidak ada</span>' }} />
+            ) : (
+              idContent || <span className="text-gray-400 italic">Tidak ada</span>
+            )}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">English</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {isHtmlContent ? (
+              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: enContent || '<span class="text-gray-400 italic">Tidak ada</span>' }} />
+            ) : (
+              enContent || <span className="text-gray-400 italic">Tidak ada</span>
+            )}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Russian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {isHtmlContent ? (
+              <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: ruContent || '<span class="text-gray-400 italic">Tidak ada</span>' }} />
+            ) : (
+              ruContent || <span className="text-gray-400 italic">Tidak ada</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-background">
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex justify-center items-center">
         <LoadingSpinner />
       </div>
     );
@@ -58,94 +114,115 @@ const ShowBlog: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-background">
-        <ErrorDisplay message={error} />
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex justify-center items-center">
+        <ErrorDisplay message={error} onRetry={fetchBlogDetail} />
       </div>
     );
   }
 
-  if (!blogPost) {
+  if (!blog) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-background">
-        <ErrorDisplay message={t('blogPostNotFound')} />
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex justify-center items-center">
+        <p className="text-lg text-gray-600">Blog tidak ditemukan.</p>
       </div>
     );
   }
 
-  const currentLocale = getLocale(language);
-  const formattedDate = blogPost.created_at
-    ? format(new Date(blogPost.created_at), 'PPP', { locale: currentLocale })
-    : '';
+  const formattedDate = new Date(blog.posting_date).toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-primary">{t('blogPostDetails')}</h1>
-        <Link
-          to="/admin/blogs"
-          className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md shadow-md hover:bg-gray-700 transition-colors"
+    <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 py-6 sm:px-0">
+        <button
+          type="button"
+          onClick={() => navigate('/admin/blogs')}
+          className="bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 mb-2 flex items-center justify-center transition duration-300 ease-in-out shadow-md"
+          title="Kembali ke Daftar Blog"
         >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          {t('backToList')}
-        </Link>
-      </div>
+          <FaArrowLeft className="text-xl" />
+        </button>
+        <div className="flex flex-col sm:flex-row sm:items-center mb-8 space-y-4 sm:space-y-0 sm:space-x-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex-grow text-center sm:text-left">
+            {blog.title_id || blog.title_en}
+          </h1>
 
-      <div className="bg-surface rounded-lg shadow-lg p-6 md:p-8">
-        {blogPost.image && (
-          <div className="mb-6">
-            <img
-              src={blogPost.image}
-              alt={blogPost.title[language] || blogPost.title.en}
-              className="w-full h-96 object-cover rounded-md"
-            />
+          <div className="flex space-x-3">
+            <Link
+              to={`/admin/blogs/edit/${blog.id}`}
+              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center shadow-md"
+              title="Edit Blog"
+            >
+              <FaEdit className="h-5 w-5 mr-2" /> Edit
+            </Link>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center shadow-md"
+              title="Hapus Blog"
+              disabled={loading}
+            >
+              <FaTrash className="h-5 w-5 mr-2" /> {loading ? 'Menghapus...' : 'Hapus'}
+            </button>
+          </div>
+        </div>
+
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg relative mb-6 shadow-md" role="alert">
+            <strong className="font-bold">Berhasil!</strong>
+            <span className="block sm:inline"> {success}</span>
+          </div>
+        )}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6 shadow-md" role="alert">
+            <strong className="font-bold">Error!</strong>
+            <span className="block sm:inline"> {error}</span>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <h3 className="text-lg font-semibold text-textSecondary">{t('title')} (ID)</h3>
-            <p className="text-text text-xl">{blogPost.title.id || '-'}</p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-textSecondary">{t('title')} (EN)</h3>
-            <p className="text-text text-xl">{blogPost.title.en || '-'}</p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-textSecondary">{t('title')} (RU)</h3>
-            <p className="text-text text-xl">{blogPost.title.ru || '-'}</p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-textSecondary">{t('category')}</h3>
-            <p className="text-text text-xl">
-              {blogPost.category ? (blogPost.category.name[language] || blogPost.category.name.en) : t('uncategorized')}
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg font-semibold text-textSecondary">{t('createdAt')}</h3>
-            <p className="text-text text-xl">{formattedDate}</p>
-          </div>
-        </div>
+        <div className="bg-white shadow-xl rounded-xl p-8 space-y-8">
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Umum</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Posting</label>
+                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                  <FaCalendarAlt className="w-4 h-4 mr-2 text-gray-500" />
+                  <span>{formattedDate}</span>
+                </div>
+              </div>
+            </div>
 
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-textSecondary mb-2">{t('content')} (ID)</h3>
-          <div
-            className="prose prose-invert max-w-none text-textSecondary"
-            dangerouslySetInnerHTML={{ __html: blogPost.content.id || '-' }}
-          />
-        </div>
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-textSecondary mb-2">{t('content')} (EN)</h3>
-          <div
-            className="prose prose-invert max-w-none text-textSecondary"
-            dangerouslySetInnerHTML={{ __html: blogPost.content.en || '-' }}
-          />
-        </div>
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-textSecondary mb-2">{t('content')} (RU)</h3>
-          <div
-            className="prose prose-invert max-w-none text-textSecondary"
-            dangerouslySetInnerHTML={{ __html: blogPost.content.ru || '-' }}
-          />
+            {renderBlogLanguageContentDisplay('Judul Blog', blog.title_id, blog.title_en, blog.title_ru)}
+            {renderBlogLanguageContentDisplay('Konten Blog', blog.content_id, blog.content_en, blog.content_ru, true)}
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Gambar Blog</h2>
+            <p className="text-sm text-gray-600 mb-4">Gambar utama yang terkait dengan blog ini.</p>
+            {blog.image ? (
+              <div className="relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+                <img
+                  src={`/storage/${blog.image}`}
+                  alt={`Gambar Blog: ${blog.title_id}`}
+                  className="w-full h-64 object-cover"
+                />
+                <div className="p-3 bg-gray-50 border-t border-gray-200">
+                  <span className="block text-xs font-medium text-gray-600">Nama File: {blog.image.split('/').pop()}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 mb-6 bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-lg font-medium">Tidak ada gambar.</span>
+              </div>
+            )}
+          </section>
         </div>
       </div>
     </div>

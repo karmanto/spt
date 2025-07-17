@@ -123,7 +123,7 @@ export default function ShowTour() {
         </button>
         <div className="flex flex-col sm:flex-row sm:items-center mb-8 space-y-4 sm:space-y-0 sm:space-x-4">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex-grow text-center sm:text-left">
-            Detail Tur: {tour.name.id || tour.name.en}
+            {tour.name.id || tour.name.en}
           </h1>
 
           <div className="flex space-x-3">

@@ -1,5 +1,6 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, BlogPost, BlogPostResponse, BlogPostCreatePayload, BlogPostUpdatePayload } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, Blog, BlogCreatePayload, BlogUpdatePayload, BlogResponse } from './types';
 import { handleAuthError } from './auth'; // Import fungsi handleAuthError
+import { slugify } from './utils'; // Import slugify
 
 const API_URL = import.meta.env.VITE_API_URL;
 interface FetchOptions extends RequestInit {
@@ -68,18 +69,22 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
     description: safeJSONParse<LanguageContent>(cp.description) as LanguageContent
   }));
 
+  // Generate slug for URL
+  parsedTour.slug = `${slugify(parsedTour.name.en)}-${tour.id}`;
+
   return parsedTour;
 };
 
-// New function to parse blog post data
-const parseBlogPostData = (post: BlogPost): BlogPost => {
-  const parsedPost = { ...post };
-  parsedPost.title = safeJSONParse<LanguageContent>(post.title) as LanguageContent;
-  parsedPost.content = safeJSONParse<LanguageContent>(post.content) as LanguageContent;
-  if (parsedPost.category) {
-    parsedPost.category.name = safeJSONParse<LanguageContent>(parsedPost.category.name) as LanguageContent;
-  }
-  return parsedPost;
+// New function to parse Blog data
+const parseBlogData = (blog: Blog): Blog => {
+  const parsedBlog = { ...blog };
+  // Removed safeJSONParse for title and content fields as they are plain strings, not JSON strings.
+  // The Blog interface already defines them as strings, so no parsing is needed.
+
+  // Generate slug for URL
+  parsedBlog.slug = `${slugify(parsedBlog.title_en)}-${blog.id}`;
+
+  return parsedBlog;
 };
 
 // === Fungsi fetch untuk request JSON ===
@@ -246,6 +251,8 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
       description: JSON.stringify(p.description),
     })),
     starting_price: tour.starting_price, // New field
+    original_price: tour.original_price,
+    rate: tour.rate,
     overview: JSON.stringify(tour.overview),
     highlights: tour.highlights.map(h => ({
       description: JSON.stringify(h.description)
@@ -293,6 +300,8 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
       description: JSON.stringify(p.description),
     })) }),
     ...(tour.starting_price !== undefined && { starting_price: tour.starting_price }), // New field for update
+    ...(tour.original_price !== undefined && { original_price: tour.original_price }),
+    ...(tour.rate !== undefined && { rate: tour.rate }),
     ...(tour.overview && { overview: JSON.stringify(tour.overview) }),
     ...(tour.highlights && { highlights: tour.highlights.map(h => ({
       description: JSON.stringify(h.description)
@@ -350,80 +359,61 @@ export const boostTourPackage = async (id: number) => {
   });
 };
 
-// ==== API Blog Posts ====
-export const getBlogPosts = async (params?: { per_page?: number; page?: number; category_slug?: string; search?: string; }) => {
+// ==== API Blog ====
+export const getBlogs = async (params?: { per_page?: number; page?: number; search?: string; }) => {
   const query = new URLSearchParams();
   if (params?.per_page) query.append('per_page', params.per_page.toString());
   if (params?.page) query.append('page', params.page.toString());
-  if (params?.category_slug) query.append('category_slug', params.category_slug);
-  if (params?.search) query.append('search', params.search);
+  if (params?.search) query.append('search', params.search); 
 
   const queryString = query.toString();
   const endpoint = `blogs${queryString ? `?${queryString}` : ''}`;
-  const response = await fetchData<BlogPostResponse>(endpoint);
-  response.data = response.data.map(parseBlogPostData);
+  const response = await fetchData<BlogResponse>(endpoint);
+  response.data = response.data.map(parseBlogData);
   return response;
 };
 
-export const getBlogPost = async (slug: string) => {
-  const post = await fetchData<BlogPost>(`blogs/${slug}`);
-  return parseBlogPostData(post);
+export const getBlogDetail = async (id: string) => {
+  const blog = await fetchData<Blog>(`blogs/${id}`);
+  return parseBlogData(blog);
 };
 
-export const addBlogPost = async (post: BlogPostCreatePayload) => {
+export const addBlog = async (blog: BlogCreatePayload) => {
   const formData = new FormData();
-  formData.append('title_id', post.title.id || '');
-  formData.append('title_en', post.title.en);
-  formData.append('title_ru', post.title.ru || '');
-  formData.append('content_id', post.content.id || '');
-  formData.append('content_en', post.content.en);
-  formData.append('content_ru', post.content.ru || '');
-  formData.append('category_id', post.category_id.toString());
-  if (post.image) {
-    formData.append('image', post.image);
+  formData.append('title_id', blog.title_id);
+  formData.append('title_en', blog.title_en);
+  formData.append('title_ru', blog.title_ru);
+  formData.append('content_id', blog.content_id);
+  formData.append('content_en', blog.content_en);
+  formData.append('content_ru', blog.content_ru);
+  formData.append('posting_date', blog.posting_date);
+  if (blog.image) {
+    formData.append('image', blog.image);
   }
-  return fetchMultipartData<BlogPost>('blogs', { method: 'POST', body: formData });
+  return fetchMultipartData<Blog>('blogs', { method: 'POST', body: formData });
 };
 
-export const updateBlogPost = async (id: number, post: BlogPostUpdatePayload) => {
+export const updateBlog = async (id: number, blog: BlogUpdatePayload) => {
   const formData = new FormData();
 
-  if (post.title) {
-    formData.append('title_id', post.title.id || '');
-    formData.append('title_en', post.title.en);
-    formData.append('title_ru', post.title.ru || '');
-  }
-  if (post.content) {
-    formData.append('content_id', post.content.id || '');
-    formData.append('content_en', post.content.en);
-    formData.append('content_ru', post.content.ru || '');
-  }
-  if (post.category_id) {
-    formData.append('category_id', post.category_id.toString());
-  }
-  if (post.image) {
-    formData.append('image', post.image);
+  if (blog.title_id) formData.append('title_id', blog.title_id);
+  if (blog.title_en) formData.append('title_en', blog.title_en);
+  if (blog.title_ru) formData.append('title_ru', blog.title_ru);
+  if (blog.content_id) formData.append('content_id', blog.content_id);
+  if (blog.content_en) formData.append('content_en', blog.content_en);
+  if (blog.content_ru) formData.append('content_ru', blog.content_ru);
+  if (blog.posting_date) formData.append('posting_date', blog.posting_date);
+  if (blog.image) {
+    formData.append('image', blog.image);
   }
 
-  formData.append('_method', 'PUT'); // Simulate PUT request for Laravel
+  formData.append('_method', 'PUT'); // Laravel expects _method for PUT with form-data
 
-  return fetchMultipartData<BlogPost>(`blogs/${id}`, {
-    method: 'POST', // Must be POST for FormData with _method
+  return fetchMultipartData<Blog>(`blogs/${id}`, {
+    method: 'POST', // Use POST with _method for file uploads
     body: formData,
   });
 };
 
-export const deleteBlogPost = async (id: number) => {
-  return fetchData<void>(`blogs/${id}`, {
-    method: 'DELETE',
-  });
-};
-
-export const uploadBlogImage = async (imageFile: File): Promise<{ path: string; full_url: string }> => {
-  const formData = new FormData();
-  formData.append('image', imageFile);
-  return fetchMultipartData<{ path: string; full_url: string }>('blogs/upload-image', {
-    method: 'POST',
-    body: formData,
-  });
-};
+export const deleteBlog = async (id: number) =>
+  fetchData<void>(`blogs/${id}`, { method: 'DELETE' });
