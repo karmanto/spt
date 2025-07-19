@@ -351,11 +351,21 @@ export const uploadTourImage = async (imageFile: File): Promise<{ path: string; 
   });
 };
 
-// New function to boost a tour package
-export const boostTourPackage = async (id: number) => {
-  // Assuming the backend route is /packages/{id}/boost-product for route model binding
-  return fetchData<TourPackage>(`packages/${id}/boost-product`, {
+// Removed boostTourPackage
+// export const boostTourPackage = async (id: number) => {
+//   return fetchData<TourPackage>(`packages/${id}/boost-product`, {
+//     method: 'POST',
+//   });
+// };
+
+// New function to swap tour package order
+export const swapTourOrder = async (firstPackageId: number, secondPackageId: number) => {
+  return fetchData<void>(`packages/swap-order`, {
     method: 'POST',
+    body: JSON.stringify({
+      first_package_id: firstPackageId,
+      second_package_id: secondPackageId,
+    }),
   });
 };
 

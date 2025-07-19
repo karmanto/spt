@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { TourPackage, LanguageContent } from '../../../lib/types'; // Removed PriceDetails
+import { TourPackage, LanguageContent } from '../../../lib/types';
 import { getTourPackageDetail, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Image as ImageIcon, Edit, Trash2, ChevronDown } from 'lucide-react';
-
-// Removed Type guard function to check if price is PriceDetails
 
 // Helper function to get display name for tour tags
 const getTagDisplayName = (tag: string | undefined): string => {
@@ -135,7 +133,8 @@ export default function ShowTour() {
             >
               <Edit className="h-5 w-5 mr-2" /> Edit
             </button>
-            {!tour.order && <button
+            {/* Removed !tour.order condition to always show delete button */}
+            <button
               type="button"
               onClick={handleDelete}
               className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center shadow-md"
@@ -143,7 +142,7 @@ export default function ShowTour() {
               disabled={loading}
             >
               <Trash2 className="h-5 w-5 mr-2" /> {loading ? 'Menghapus...' : 'Hapus'}
-            </button>}
+            </button>
           </div>
         </div>
 
@@ -171,9 +170,9 @@ export default function ShowTour() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label> {/* Changed label from Tags to Tipe Tur */}
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {getTagDisplayName(tour.tags)} {/* Use the helper function here */}
+                  {getTagDisplayName(tour.tags)}
                 </div>
               </div>
             </div>

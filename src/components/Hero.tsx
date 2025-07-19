@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import herosData from '../data/heros.json'; 
 import { HeroSlide } from '../lib/types'; 
-import { Link } from 'react-router-dom'; // Import Link
+import { Link } from 'react-router-dom';
 
 const slides: HeroSlide[] = herosData.heros;
-
-slides.forEach(slide => {
-  const img = new Image();
-  img.src = `${slide.image}`;
-});
 
 const Hero: React.FC = () => {
   const { t, language } = useLanguage();
@@ -17,10 +12,13 @@ const Hero: React.FC = () => {
   const [loadedImages, setLoadedImages] = useState<Record<string, boolean>>({});
   const length = slides.length;
 
-  // Get environment variables
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
   const whatsappMessage = encodeURIComponent(t('whatsappMessage'));
+
+  const handleImageLoad = useCallback((imageUrl: string) => {
+    setLoadedImages(prev => ({ ...prev, [imageUrl]: true }));
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,6 +26,18 @@ const Hero: React.FC = () => {
     }, 10000);
     return () => clearInterval(interval);
   }, [length]);
+
+  useEffect(() => {
+    const nextIndex = (current + 1) % length;
+    const nextSlide = slides[nextIndex];
+
+    if (nextSlide && !loadedImages[nextSlide.image]) {
+      const img = new Image();
+      img.src = nextSlide.image;
+      img.onload = () => handleImageLoad(nextSlide.image);
+      img.onerror = () => console.error(`Failed to load image: ${nextSlide.image}`);
+    }
+  }, [current, length, loadedImages, handleImageLoad]); 
 
   const slide: HeroSlide = slides[current]; 
 
@@ -39,10 +49,6 @@ const Hero: React.FC = () => {
     return slide.heroSubtitle[language] || slide.heroSubtitle.en;
   }, [slide, language]);
 
-  const handleImageLoad = (imageUrl: string) => {
-    setLoadedImages(prev => ({ ...prev, [imageUrl]: true }));
-  };
-
   return (
     <section
       id="home"
@@ -51,13 +57,13 @@ const Hero: React.FC = () => {
       itemScope
       itemType="https://schema.org/WebPage"
     >
-      {!`${loadedImages[slide.image]}` && (
+      {!loadedImages[slide.image] && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse" />
       )}
-      
+    
       <div 
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
-          `${loadedImages[slide.image]}` ? 'opacity-100' : 'opacity-0'
+          loadedImages[slide.image] ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ backgroundImage: `url('${slide.image}')` }}
       >
@@ -70,7 +76,7 @@ const Hero: React.FC = () => {
       </div>
       
       <div className={`absolute inset-0 bg-black transition-opacity duration-1000 ${
-        loadedImages[`${slide.image}`] ? 'opacity-50' : 'opacity-20'
+        loadedImages[slide.image] ? 'opacity-50' : 'opacity-20'
       }`} />
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
