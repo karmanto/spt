@@ -220,5 +220,12 @@
   "searchBlogsPlaceholder": "Поиск по блогу...",
   "readMore": "Читать далее",
   "backToBlogs": "Назад к блогу",
-  "noBlogsFound": "Блоги не найдены"
+  "noBlogsFound": "Блоги не найдены",
+  "quantity": "Количество",
+  "hotelName": "Название отеля",
+  "notes": "Примечания",
+  "enterAnyNotes": "Введите любые дополнительные примечания или запросы",
+  "captchaQuestion": "Пожалуйста, решите математическую задачу",
+  "enterCaptchaAnswer": "Введите ваш ответ",
+  "captchaIncorrect": "Неверная CAPTCHA. Пожалуйста, попробуйте еще раз."
 }

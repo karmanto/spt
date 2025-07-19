@@ -219,5 +219,12 @@
   "searchBlogsPlaceholder": "Search blogs...",
   "readMore": "Read More",
   "backToBlogs": "Back to Blogs",
-  "noBlogsFound": "No blogs found"
+  "noBlogsFound": "No blogs found",
+  "quantity": "Quantity",
+  "hotelName": "Hotel Name",
+  "notes": "Notes",
+  "enterAnyNotes": "Enter any additional notes or requests",
+  "captchaQuestion": "Please solve the math problem",
+  "enterCaptchaAnswer": "Enter your answer",
+  "captchaIncorrect": "Incorrect CAPTCHA. Please try again."
 }

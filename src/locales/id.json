@@ -218,5 +218,12 @@
   "searchBlogsPlaceholder": "Cari blog...",
   "readMore": "Baca Selengkapnya",
   "backToBlogs": "Kembali ke Blog",
-  "noBlogsFound": "Tidak ada blog yang ditemukan"
+  "noBlogsFound": "Tidak ada blog yang ditemukan",
+  "quantity": "Kuantitas",
+  "hotelName": "Nama Hotel",
+  "notes": "Catatan",
+  "enterAnyNotes": "Masukkan catatan atau permintaan tambahan",
+  "captchaQuestion": "Mohon selesaikan soal matematika",
+  "enterCaptchaAnswer": "Masukkan jawaban Anda",
+  "captchaIncorrect": "CAPTCHA salah. Silakan coba lagi."
 }

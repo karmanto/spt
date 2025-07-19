@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { BookingFormProps } from '../lib/types'; 
+import { BookingFormProps } from '../lib/types';
+import nationalities from '../data/nationalities.json'; 
 
 const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const { t, language } = useLanguage();
@@ -8,8 +9,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [date, setDate] = useState('');
-  const [whatsappNumberInput, setWhatsappNumberInput] = useState('');
-  // Mengubah tipe state quantities menjadi number, bukan number | null
+  const [nationality, setNationality] = useState('');
+  const [hotelName, setHotelName] = useState(''); 
+  const [notes, setNotes] = useState(''); 
   const [quantities, setQuantities] = useState<{ [id: number]: number }>({});
   const [totalCost, setTotalCost] = useState(0);
 
@@ -18,21 +20,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
 
   const getMinDate = () => {
     const today = new Date();
-    today.setDate(today.getDate() + 1); 
-    return today.toISOString().split('T')[0]; 
+    today.setDate(today.getDate() + 1);
+    return today.toISOString().split('T')[0];
   };
 
   useEffect(() => {
-    setDate(getMinDate()); 
+    setDate(getMinDate());
   }, []);
 
   useEffect(() => {
     if (tour && tour.prices && tour.prices.length > 0) {
-      // Inisialisasi kuantitas dengan 0 untuk setiap opsi
       const initialQuantities: { [id: number]: number } = {};
       tour.prices.forEach(option => {
         if (option.id !== undefined) {
-          initialQuantities[option.id] = 0; // Default value is 0
+          initialQuantities[option.id] = 0;
         }
       });
       setQuantities(initialQuantities);
@@ -44,7 +45,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
     if (tour && tour.prices) {
       tour.prices.forEach(option => {
         if (option.id !== undefined) {
-          const qty = quantities[option.id] || 0; // Pastikan menggunakan 0 jika undefined
+          const qty = quantities[option.id] || 0;
           calculatedTotal += option.price * qty;
         }
       });
@@ -59,8 +60,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   };
 
   const handleQuantityChange = (optionId: number, value: string) => {
-    // Jika nilai kosong, set ke 0, jika tidak, parse sebagai integer dan pastikan tidak kurang dari 0
-    const newQuantity = value === '' ? 0 : Math.max(0, parseInt(value) || 0); 
+    const newQuantity = value === '' ? 0 : Math.max(0, parseInt(value) || 0);
     setQuantities(prevQuantities => ({
       ...prevQuantities,
       [optionId]: newQuantity,
@@ -75,10 +75,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
       return;
     }
 
-    // Memastikan ada setidaknya satu kuantitas > 0
     const hasSelections = Object.values(quantities).some(qty => qty > 0);
     if (!hasSelections) {
-      alert(t('atLeastOneParticipant')); 
+      alert(t('atLeastOneParticipant'));
       return;
     }
 
@@ -86,33 +85,39 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
     const tourCode = tour.code || 'N/A';
 
     let serviceDetails = '';
-    tour.prices.forEach(option => {
+    tour.prices.forEach((option, index) => {
       if (option.id !== undefined) {
-        const qty = quantities[option.id] || 0; 
+        const qty = quantities[option.id] || 0;
         if (qty > 0) {
           const serviceType = getLocalizedContent(option.service_type);
           const description = getLocalizedContent(option.description);
-          serviceDetails += `
-
+          serviceDetails += `- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ฿${option.price.toLocaleString()} = ฿${(option.price * qty).toLocaleString()}
+`;
+          if (!index) {
+            serviceDetails = `
 - ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ฿${option.price.toLocaleString()} = ฿${(option.price * qty).toLocaleString()}
 `;
+          }
         }
       }
     });
 
     const message = `
-${t('hello')}! ${t('iWantToBookTour')}
+${t('hello')} SPT! ${t('iWantToBookTour')}
 
 ${t('tourName')}: ${tourName} (${tourCode})
 ${t('fullName')}: ${name}
 ${t('emailAddress')}: ${email}
 ${t('dateOfTour')}: ${date}
-${t('serviceType')}: ${serviceDetails}
+${t('nationality')}: ${nationality || t('notSpecified')}
+${t('hotelName')}: ${hotelName || t('notSpecified')}
+${t('serviceType')}: 
+${serviceDetails}
 ${t('totalCost')}: ฿${totalCost.toLocaleString()}
-${t('myWhatsappNumber')}: ${whatsappNumberInput}
+${notes ? `${t('notes')}: ${notes}` : ''}
 
 ${t('lookingForwardToConfirmation')}
-    `.trim(); 
+    `.trim();
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://${language === 'ru' ? `t.me/${telegramUsername}` : `wa.me/${whatsappContactNumber}`}?text=${encodedMessage}`;
@@ -153,20 +158,6 @@ ${t('lookingForwardToConfirmation')}
           />
         </div>
         <div>
-          <label htmlFor="whatsappNumber" className="block text-sm font-medium text-gray-700 mb-1">
-            {t('whatsappNumber')}
-          </label>
-          <input
-            type="tel" 
-            id="whatsappNumber"
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
-            placeholder={t('enterWhatsappNumber')}
-            value={whatsappNumberInput}
-            onChange={(e) => setWhatsappNumberInput(e.target.value)}
-            required
-          />
-        </div>
-        <div>
           <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
             {t('dateOfTour')}
           </label>
@@ -179,6 +170,55 @@ ${t('lookingForwardToConfirmation')}
             onChange={(e) => setDate(e.target.value)}
             required
           />
+        </div>
+
+        {/* New: Nationality Field */}
+        <div>
+          <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-1">
+            {t('nationality')}
+          </label>
+          <select
+            id="nationality"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
+            value={nationality}
+            onChange={(e) => setNationality(e.target.value)}
+            required
+          >
+            <option value="">{t('selectNationality')}</option>
+            {nationalities.map((nat) => (
+              <option key={nat} value={nat}>{nat}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* New: Hotel Name Field (Optional) */}
+        <div>
+          <label htmlFor="hotelName" className="block text-sm font-medium text-gray-700 mb-1">
+            {t('hotelName')} ({t('optional')})
+          </label>
+          <input
+            type="text"
+            id="hotelName"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
+            placeholder={t('enterHotelName')}
+            value={hotelName}
+            onChange={(e) => setHotelName(e.target.value)}
+          />
+        </div>
+
+        {/* New: Notes Field (Optional) */}
+        <div>
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+            {t('notes')} ({t('optional')})
+          </label>
+          <textarea
+            id="notes"
+            rows={3}
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 transition-all duration-200"
+            placeholder={t('enterAnyNotes')}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          ></textarea>
         </div>
 
         {tour.prices && tour.prices.length > 0 ? (
@@ -209,7 +249,7 @@ ${t('lookingForwardToConfirmation')}
                     id={`quantity-${option.id}`}
                     min="0"
                     className="w-16 text-center border-x border-gray-300 focus:outline-none focus:ring-0 sm:text-sm px-1 py-2 no-spin-buttons"
-                    value={quantities[option.id!] ?? 0} // Pastikan menampilkan 0 jika nilai adalah 0
+                    value={quantities[option.id!] ?? 0}
                     onChange={(e) => handleQuantityChange(option.id!, e.target.value)}
                     aria-label={`${t('quantity')} for ${getLocalizedContent(option.service_type)}`}
                   />
@@ -230,7 +270,7 @@ ${t('lookingForwardToConfirmation')}
         ) : (
           <p className="text-gray-600 italic">{t('noPricingInfo') || 'No pricing information available for this tour.'}</p>
         )}
-        
+
         <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg">
           <span className="text-lg font-semibold text-gray-900">{t('totalCost')}:</span>
           <span className="text-2xl font-bold text-blue-600">฿{totalCost.toLocaleString()}</span>
@@ -238,7 +278,7 @@ ${t('lookingForwardToConfirmation')}
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-semibold transition-colors"
-          disabled={!tour.prices || tour.prices.length === 0} 
+          disabled={!tour.prices || tour.prices.length === 0}
         >
           {t('confirmBooking')}
         </button>
