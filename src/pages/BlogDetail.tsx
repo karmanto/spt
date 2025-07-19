@@ -105,7 +105,7 @@ const BlogDetail: React.FC = () => {
           <img
             src={`${import.meta.env.VITE_BASE_URL}/storage/${blog.image}`}
             alt={getLocalizedTitle()}
-            className="w-full h-80 object-cover rounded-xl mb-8 shadow-md"
+            className="w-full h-80 object-contain rounded-xl mb-8 shadow-md"
           />
 
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
