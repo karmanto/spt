@@ -23,6 +23,13 @@ import ShowTour from './pages/admin/tours/show';
 import { setAuthErrorHandler } from './lib/auth';
 import LoadingSpinner from './components/LoadingSpinner'; 
 
+import IntlTourList from './pages/IntlTourList';
+import IntlTourDetail from './pages/IntlTourDetail';
+import IntlAdminTours from './pages/admin/intlTours';
+import IntlCreateTour from './pages/admin/intlTours/create';
+import IntlEditTour from './pages/admin/intlTours/edit';
+import IntlShowTour from './pages/admin/intlTours/show';
+
 // New Blog Imports
 const BlogList = lazy(() => import('./pages/BlogList'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
@@ -130,6 +137,11 @@ function App() {
             </Route>
 
             <Route element={<TourLayout />}>
+              <Route path="/international-tours" element={<IntlTourList />} />
+              <Route path="/international-tours/:slug" element={<IntlTourDetail />} />
+            </Route>
+
+            <Route element={<TourLayout />}>
               <Route path="/blogs" element={<BlogList />} />
               <Route path="/blogs/:slug" element={<BlogDetail />} />
             </Route>
@@ -170,6 +182,19 @@ function App() {
               <Route path="create" element={<CreateTour />} />
               <Route path="edit/:id" element={<EditTour />} />
               <Route path=":id" element={<ShowTour />} />
+            </Route>
+            <Route
+              path="/admin/international-tours"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<IntlAdminTours />} />
+              <Route path="create" element={<IntlCreateTour />} />
+              <Route path="edit/:id" element={<IntlEditTour />} />
+              <Route path=":id" element={<IntlShowTour />} />
             </Route>
             <Route
               path="/admin/blogs"

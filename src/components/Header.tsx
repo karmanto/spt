@@ -18,6 +18,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
     { name: t('faq'), href: '#faq' },
     { name: t('contact'), href: '#contact' },
     { name: t('blog'), href: '/blogs' }, 
+    { name: t('intlTour'), href: '/international-tours' }, 
     { name: t('admin'), href: '/admin' },
   ];
 

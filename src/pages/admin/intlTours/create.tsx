@@ -23,7 +23,7 @@ export default function CreateTour() {
 
   const [formData, setFormData] = useState<TourPackageCreatePayload>({
     name: { ...initialLanguageContent },
-    tour_type: 1,
+    tour_type: 3,
     duration: { ...initialLanguageContent },
     location: { ...initialLanguageContent },
     prices: [],
@@ -109,10 +109,10 @@ export default function CreateTour() {
             isNew: false, // Mark as not a new file upload
           })));
 
-          setSuccess('Konten tur berhasil disalin. Silakan sesuaikan dan simpan.');
+          setSuccess('Konten tur internasional berhasil disalin. Silakan sesuaikan dan simpan.');
         } catch (err) {
-          console.error('Gagal menyalin tur:', err);
-          setError('Gagal memuat data tur yang akan disalin. Silakan coba lagi.');
+          console.error('Gagal menyalin tur internasional:', err);
+          setError('Gagal memuat data tur internasional yang akan disalin. Silakan coba lagi.');
         } finally {
           setLoading(false);
         }
@@ -302,10 +302,10 @@ export default function CreateTour() {
         };
 
         await addTourPackage(payload);
-        setSuccess('Tur berhasil ditambahkan!');
+        setSuccess('tur internasional berhasil ditambahkan!');
         setFormData({ // Reset form
           name: { ...initialLanguageContent },
-          tour_type: 1,
+          tour_type: 3,
           duration: { ...initialLanguageContent },
           location: { ...initialLanguageContent },
           prices: [], // Reset prices
@@ -320,10 +320,10 @@ export default function CreateTour() {
           tags: '',
         });
         setImagePreviews([]); // Reset image previews
-        navigate('/admin/tours'); // Redirect to tour list
+        navigate('/admin/international-tours'); // Redirect to tour list
       } catch (err: any) {
-        console.error('Gagal menambahkan tur:', err);
-        setError(err.message || 'Terjadi kesalahan saat menambahkan tur.');
+        console.error('Gagal menambahkan tur internasional:', err);
+        setError(err.message || 'Terjadi kesalahan saat menambahkan tur internasional.');
       } finally {
         setLoading(false);
       }
@@ -418,13 +418,13 @@ export default function CreateTour() {
         <div className="flex items-center mb-8">
           <button
             type="button"
-            onClick={() => navigate('/admin/tours')}
+            onClick={() => navigate('/admin/international-tours')}
             className="bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 flex items-center justify-center transition duration-300 ease-in-out mr-4 shadow-md"
-            title="Kembali ke Daftar Tur"
+            title="Kembali ke Daftar Tur Internasional"
           >
             <FaArrowLeft className="text-xl" />
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Tambah Tur Baru</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Tambah Tur Internasional Baru</h1>
         </div>
 
         {success && (
@@ -1274,7 +1274,7 @@ export default function CreateTour() {
           <div className="mt-8 flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => navigate('/admin/tours')}
+              onClick={() => navigate('/admin/international-tours')}
               className="px-8 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
             >
               Batal

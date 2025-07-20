@@ -7,22 +7,25 @@ export default function Dashboard() {
   const [dataCounts, setDataCounts] = useState({
     promos: 0,
     tours: 0,
-    blogs: 0, // New: Blog count
+    blogs: 0, 
+    intlTours: 0,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [promosResponse, toursResponse, blogsResponse] = await Promise.all([ 
+        const [promosResponse, toursResponse, blogsResponse, intlTourResponse] = await Promise.all([ 
           getPromos(),
-          getTourPackages({ per_page: 1 }), 
-          getBlogs({ per_page: 1 }), // Fetch blog count
+          getTourPackages({ per_page: 1, tour_type: 1 }), 
+          getBlogs({ per_page: 1 }), 
+          getTourPackages({ per_page: 1, tour_type: 3 }), 
         ]);
 
         setDataCounts({
           promos: promosResponse.length,
           tours: toursResponse.pagination.total,
-          blogs: blogsResponse.pagination.total, // Set blog count
+          blogs: blogsResponse.pagination.total, 
+          intlTours: intlTourResponse.pagination.total,
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -46,7 +49,13 @@ export default function Dashboard() {
       count: dataCounts.tours,
     },
     {
-      title: 'Blog', // New: Blog module
+      title: 'Paket Tur Internasional', 
+      icon: Globe, 
+      link: '/admin/international-tours',
+      count: dataCounts.intlTours,
+    },
+    {
+      title: 'Blog', 
       icon: Newspaper,
       link: '/admin/blogs',
       count: dataCounts.blogs,

@@ -61,14 +61,14 @@ const TourList: React.FC = () => {
         per_page: itemsPerPage,
         search: searchTerm,
         tags: selectedCategory,
-        tour_type: 1,
+        tour_type: 3,
       });
       setTours(response.data);
       setTotalPages(response.pagination.last_page);
       sessionStorage.removeItem('lastViewedPage');
     } catch (err) {
       console.error("Failed to fetch tours:", err);
-      setError(t('failedToLoadTours') || 'Failed to load tour packages. Please try again later.');
+      setError(t('failedToLoadIntlTours') || 'Failed to load tour packages. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -141,53 +141,26 @@ const TourList: React.FC = () => {
       category: '1_day_trip',
     },
     { 
-      label: 'phiPhiTrip', 
-      search: 'Phi',
-      category: 'all'
-    },
-    { 
-      label: 'jamesBondTrip', 
-      search: 'james bond',
-      category: 'all'
-    },
-    { 
       label: 'rentalTours', 
       search: 'rental',
-      category: 'all'
-    },
-    { 
-      label: 'similianTrip', 
-      search: 'similan',
-      category: 'all'
-    },
-    { 
-      label: 'elephantTour', 
-      search: 'elephant',
       category: 'all'
     },
     { 
       label: 'tourGuide', 
       search: 'guide',
       category: 'all'
-    },
-    { 
-      label: 'Zipline & ATV', 
-      search: 'zipline & atv',
-      category: 'all'
     }
   ];
-
-  // renderPagination function removed as it will be replaced by the Pagination component
 
   return (
     <section id="tour-list" className="pt-10 min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="text-center mb-6">
           <h2 className="text-4xl sm:text-5xl font-extrabold text-text mb-4 leading-tight" data-aos="fade-up">
-            {t('tourListTitle')}
+            {t('intlTourListTitle')}
           </h2>
           <p className="text-xl text-textSecondary max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-            {t('tourListSubtitle')}
+            {t('intlTourListSubtitle')}
           </p>
         </div>
 
@@ -222,7 +195,7 @@ const TourList: React.FC = () => {
                   : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
                 }`}
             >
-              {t('allTours')}
+              {t('allIntlTours')}
             </button>
           </div>
         </div>
@@ -259,7 +232,7 @@ const TourList: React.FC = () => {
           </>
         ) : (
           <div className="text-center py-20">
-            <p className="text-2xl text-textSecondary">{t('noToursFound')}</p>
+            <p className="text-2xl text-textSecondary">{t('noIntlToursFound')}</p>
             <p className="text-lg text-textSecondary mt-2">{t('tryDifferentSearch')}</p>
           </div>
         )}

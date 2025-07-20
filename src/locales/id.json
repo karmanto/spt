@@ -225,5 +225,14 @@
   "enterAnyNotes": "Masukkan catatan atau permintaan tambahan",
   "captchaQuestion": "Mohon selesaikan soal matematika",
   "enterCaptchaAnswer": "Masukkan jawaban Anda",
-  "captchaIncorrect": "CAPTCHA salah. Silakan coba lagi."
+  "captchaIncorrect": "CAPTCHA salah. Silakan coba lagi.",
+  "intlTour": "Tour Internasional",
+  "intlTourListTitle": "Paket Tur Internasional",
+  "intlTourListSubtitle": "Jelajahi destinasi internasional yang menakjubkan dengan paket tur pilihan kami.",
+  "allIntlTours": "Semua Tur Internasional",
+  "noIntlToursFound": "Tidak ada tur internasional yang ditemukan.",
+  "failedToLoadIntlTours": "Gagal memuat paket tur internasional. Silakan coba lagi nanti.",
+  "backToIntlTours": "Kembali ke Tur Internasional",
+  "intlTourNotFound": "Tur internasional tidak ditemukan.",
+  "failedToLoadIntlTourDetails": "Gagal memuat detail tur internasional. Silakan coba lagi nanti."
 }

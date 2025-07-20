@@ -124,6 +124,7 @@ export interface TourPriceOption {
 export interface TourPackage {
   id: number;
   code?: string;
+  tour_type: number;
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
@@ -157,6 +158,7 @@ export interface TourPackageResponse {
 
 export interface TourPackageCreatePayload {
   code?: string;
+  tour_type: number;
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;

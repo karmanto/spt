@@ -216,8 +216,9 @@ export const deletePromo = async (id: number) =>
   fetchData<void>(`promos/${id}`, { method: 'DELETE' });
 
 // ==== API Tour Packages ====
-export const getTourPackages = async (params?: { per_page?: number; page?: number; min_rate?: number; search?: string; tags?: string; }) => {
+export const getTourPackages = async (params?: { per_page?: number; page?: number; min_rate?: number; search?: string; tags?: string; tour_type: number}) => {
   const query = new URLSearchParams();
+  if (params?.tour_type) query.append('tour_type', params.tour_type.toString());
   if (params?.per_page) query.append('per_page', params.per_page.toString());
   if (params?.page) query.append('page', params.page.toString());
   if (params?.min_rate) query.append('min_rate', params.min_rate.toString());
@@ -242,6 +243,7 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
   const payloadToSend = {
     ...tour,
     name: JSON.stringify(tour.name),
+    tour_type: tour.tour_type,
     duration: JSON.stringify(tour.duration),
     location: JSON.stringify(tour.location),
     // New 'prices' array handling
@@ -250,7 +252,7 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
       price: p.price,
       description: JSON.stringify(p.description),
     })),
-    starting_price: tour.starting_price, // New field
+    starting_price: tour.starting_price, 
     original_price: tour.original_price,
     rate: tour.rate,
     overview: JSON.stringify(tour.overview),
@@ -299,7 +301,7 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
       price: p.price,
       description: JSON.stringify(p.description),
     })) }),
-    ...(tour.starting_price !== undefined && { starting_price: tour.starting_price }), // New field for update
+    ...(tour.starting_price !== undefined && { starting_price: tour.starting_price }), 
     ...(tour.original_price !== undefined && { original_price: tour.original_price }),
     ...(tour.rate !== undefined && { rate: tour.rate }),
     ...(tour.overview && { overview: JSON.stringify(tour.overview) }),

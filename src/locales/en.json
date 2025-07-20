@@ -226,5 +226,15 @@
   "enterAnyNotes": "Enter any additional notes or requests",
   "captchaQuestion": "Please solve the math problem",
   "enterCaptchaAnswer": "Enter your answer",
-  "captchaIncorrect": "Incorrect CAPTCHA. Please try again."
+  "captchaIncorrect": "Incorrect CAPTCHA. Please try again.",
+  "intlTour": "International Tour",
+  "intlTourListTitle": "International Tour Packages",
+  "intlTourListSubtitle": "Explore breathtaking international destinations with our curated tour packages.",
+  "allIntlTours": "All International Tours",
+  "noIntlToursFound": "No international tours found.",
+  "failedToLoadIntlTours": "Failed to load international tour packages. Please try again later.",
+  "backToIntlTours": "Back to International Tours",
+  "intlTourNotFound": "International tour not found.",
+  "failedToLoadIntlTourDetails": "Failed to load international tour details. Please try again later."
+  
 }

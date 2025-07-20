@@ -24,12 +24,12 @@ export default function AdminTours() {
     try {
       const data: TourPackageResponse = await getTourPackages({
         per_page: 9999,
-        tour_type: 1,
+        tour_type: 3,
       });
       setTours(data.data);
     } catch (err) {
-      console.error('Gagal mengambil tur:', err);
-      setError('Gagal memuat data tur. Silakan coba lagi.');
+      console.error('Gagal mengambil tur internasional:', err);
+      setError('Gagal memuat data tur internasional. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -37,14 +37,14 @@ export default function AdminTours() {
 
   const handleDelete = useCallback(
     async (id: number) => {
-      if (!window.confirm('Apakah Anda yakin ingin menghapus tur ini?')) return;
+      if (!window.confirm('Apakah Anda yakin ingin menghapus tur internasional ini?')) return;
       try {
         await deleteTourPackage(id);
-        alert('Tur berhasil dihapus!');
+        alert('tur internasional berhasil dihapus!');
         fetchTours();
       } catch (err) {
-        console.error('Gagal menghapus tur:', err);
-        setError('Gagal menghapus tur. Silakan coba lagi.');
+        console.error('Gagal menghapus tur internasional:', err);
+        setError('Gagal menghapus tur internasional. Silakan coba lagi.');
       }
     },
     [fetchTours]
@@ -75,11 +75,11 @@ export default function AdminTours() {
 
     try {
       await swapTourOrder(firstPackageId, secondPackageId);
-      alert('Urutan tur berhasil diperbarui!');
+      alert('Urutan tur internasional berhasil diperbarui!');
       fetchTours(); // Re-fetch to get the confirmed order from the backend
     } catch (err) {
-      console.error('Gagal memperbarui urutan tur:', err);
-      setError('Gagal memperbarui urutan tur. Silakan coba lagi.');
+      console.error('Gagal memperbarui urutan tur internasional:', err);
+      setError('Gagal memperbarui urutan tur internasional. Silakan coba lagi.');
       // Revert UI on error
       fetchTours(); // Re-fetch original order
     }
@@ -88,7 +88,7 @@ export default function AdminTours() {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 text-center text-gray-600">
-        Memuat data tur...
+        Memuat data tur internasional...
       </div>
     );
   }
@@ -105,13 +105,13 @@ export default function AdminTours() {
     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Kelola Tur</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Kelola Tur Internasional</h1>
           <Link
-            to="/admin/tours/create"
+            to="/admin/international-tours/create"
             className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors flex items-center shadow-md"
           >
             <Plus className="h-5 w-5 mr-2" />
-            Tambah Tur
+            Tambah Tur Internasional
           </Link>
         </div>
         
@@ -149,7 +149,7 @@ export default function AdminTours() {
                       {tours.length === 0 ? (
                         <tr>
                           <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
-                            Tidak ada data tur
+                            Tidak ada data tur internasional
                           </td>
                         </tr>
                       ) : (
@@ -189,20 +189,20 @@ export default function AdminTours() {
                                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                   <div className="flex justify-end space-x-3">
                                     <Link
-                                        to={`/admin/tours/${tour.id}`}
+                                        to={`/admin/international-tours/${tour.id}`}
                                         className="text-secondary hover:text-opacity-80 transition-colors duration-200"
                                         title="Lihat Detail"
                                       >
                                         <Eye className="h-5 w-5" />
                                       </Link>
                                     <Link
-                                      to={`/admin/tours/edit/${tour.id}`}
+                                      to={`/admin/international-tours/edit/${tour.id}`}
                                       className="text-indigo-600 hover:text-indigo-900"
                                     >
                                       <Edit className="h-5 w-5" />
                                     </Link>
                                     <Link
-                                      to={`/admin/tours/create?copyFrom=${tour.id}`}
+                                      to={`/admin/international-tours/create?copyFrom=${tour.id}`}
                                       className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
                                       title="Salin Tur"
                                     >

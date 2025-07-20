@@ -1,14 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
-import { TourPackageCreatePayload, LanguageContent } from '../../../lib/types';
-import { addTourPackage, uploadTourImage, getTourPackageDetail } from '../../../lib/api'; // Import getTourPackageDetail
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { TourPackageUpdatePayload, LanguageContent } from '../../../lib/types';
+import { getTourPackageDetail, updateTourPackage, uploadTourImage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Plus, Trash2, Image as ImageIcon, ChevronDown } from 'lucide-react';
 
-const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' }; // Made constant
+const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' };
 
 interface ImagePreviewItem {
-  id?: number;
+  id?: number | string; 
   file?: File;
   path: string;
   order: number;
@@ -16,113 +16,22 @@ interface ImagePreviewItem {
   isNew: boolean;
 }
 
-export default function CreateTour() {
+export default function EditTour() {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // Initialize useSearchParams
-  const copyFromId = searchParams.get('copyFrom'); // Get copyFrom ID from URL
-
-  const [formData, setFormData] = useState<TourPackageCreatePayload>({
-    name: { ...initialLanguageContent },
-    tour_type: 1,
-    duration: { ...initialLanguageContent },
-    location: { ...initialLanguageContent },
-    prices: [],
-    starting_price: 0,
-    overview: { ...initialLanguageContent },
-    images: [],
-    highlights: [],
-    itineraries: [],
-    included_excluded: [],
-    faqs: [],
-    cancellation_policies: [],
-    tags: '',
-  });
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<TourPackageUpdatePayload | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [imagePreviews, setImagePreviews] = useState<ImagePreviewItem[]>([]);
+  const [draggedImageIndex, setDraggedImageIndex] = useState<number | null>(null); 
 
-  // Effect to handle copying tour data
   useEffect(() => {
-    if (copyFromId) {
-      const fetchCopiedTour = async () => {
-        setLoading(true); // Use existing loading state for fetching
-        setError(null);
-        try {
-          const copiedTour = await getTourPackageDetail(copyFromId);
-
-          // Transform the fetched tour data to fit the create payload
-          // and remove IDs to ensure new entries are created
-          const transformedData: TourPackageCreatePayload = {
-            ...copiedTour,
-            code: '', // Clear code, as it should be unique
-            order: undefined, // Clear order for new tour
-            starting_price: Number(copiedTour.starting_price) || 0, // Convert to number
-            original_price: copiedTour.original_price ? Number(copiedTour.original_price) : undefined, // Convert to number
-            rate: copiedTour.rate ? Number(copiedTour.rate) : undefined, // Convert to number
-            // Transform nested arrays to remove IDs and ensure correct structure for creation
-            prices: copiedTour.prices.map(p => ({
-              service_type: p.service_type,
-              price: p.price,
-              description: p.description,
-            })),
-            highlights: copiedTour.highlights.map(h => ({
-              description: h.description,
-            })),
-            itineraries: copiedTour.itineraries.map(it => ({
-              day: it.day,
-              title: it.title,
-              activities: it.activities.map(act => ({
-                time: act.time,
-                description: act.description,
-              })),
-              meals: it.meals.map(meal => ({
-                description: meal.description,
-              })),
-            })),
-            included_excluded: copiedTour.included_excluded.map(ie => ({
-              type: ie.type,
-              description: ie.description,
-            })),
-            faqs: copiedTour.faqs.map(faq => ({
-              question: faq.question,
-              answer: faq.answer,
-            })),
-            cancellation_policies: copiedTour.cancellation_policies.map(cp => ({
-              description: cp.description,
-            })),
-            // Images need special handling: copy path, but they are not "new" files
-            images: copiedTour.images.map(img => ({
-              path: img.path,
-              order: img.order,
-            })),
-          };
-
-          setFormData(transformedData);
-
-          // Also set image previews from existing paths
-          setImagePreviews(copiedTour.images.map(img => ({
-            id: img.id, // Keep ID for existing images if needed for other logic, but not sent to create API
-            path: img.path,
-            order: img.order,
-            previewUrl: img.path, // Use path directly as preview URL for existing images
-            isNew: false, // Mark as not a new file upload
-          })));
-
-          setSuccess('Konten tur berhasil disalin. Silakan sesuaikan dan simpan.');
-        } catch (err) {
-          console.error('Gagal menyalin tur:', err);
-          setError('Gagal memuat data tur yang akan disalin. Silakan coba lagi.');
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchCopiedTour();
+    if (id) {
+      fetchTourData(id);
     }
-  }, [copyFromId]); // Depend on copyFromId
+  }, [id]);
 
-  // Clean up object URLs when component unmounts
   useEffect(() => {
     return () => {
       imagePreviews.forEach(img => {
@@ -133,49 +42,99 @@ export default function CreateTour() {
     };
   }, [imagePreviews]);
 
+  const fetchTourData = useCallback(async (tourId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getTourPackageDetail(tourId);
+      setFormData({
+        code: data.code || '',
+        name: data.name,
+        duration: data.duration,
+        location: data.location,
+        prices: data.prices.map(p => ({ // Map existing prices
+          service_type: p.service_type,
+          price: p.price,
+          description: p.description,
+        })),
+        starting_price: Number(data.starting_price) || 0, // New field
+        original_price: data.original_price ? Number(data.original_price) : undefined,
+        rate: data.rate ? Number(data.rate) : undefined,
+        overview: data.overview,
+        highlights: data.highlights.map(h => ({ description: h.description })),
+        itineraries: data.itineraries.map(it => ({
+          day: it.day,
+          title: it.title,
+          activities: it.activities.map(act => ({ time: act.time, description: act.description })),
+          meals: it.meals.map(meal => ({ description: meal.description })),
+        })),
+        included_excluded: data.included_excluded.map(ie => ({ type: ie.type, description: ie.description })),
+        faqs: data.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
+        cancellation_policies: data.cancellation_policies.map(cp => ({ description: cp.description })),
+        tags: data.tags || '',
+      });
+
+      setImagePreviews(data.images.map(img => ({
+        id: img.id,
+        path: img.path,
+        order: img.order,
+        previewUrl: `${import.meta.env.VITE_BASE_URL}${img.path}`, // Use VITE_BASE_URL for existing images
+        isNew: false,
+      })).sort((a, b) => a.order - b.order));
+    } catch (err) {
+      console.error('Gagal mengambil data tur internasional:', err);
+      setError('Gagal memuat data tur internasional untuk diedit. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    if (!formData) return;
+
     if (name.includes('.')) {
       const [parent, child, grandChild] = name.split('.');
-      if (grandChild) { // For LanguageContent nested inside another object (e.g., name.en)
+      if (grandChild) {
         setFormData((prev) => ({
-          ...prev,
+          ...prev!,
           [parent]: {
-            ...(prev[parent as keyof TourPackageCreatePayload] as LanguageContent),
+            ...(prev![parent as keyof TourPackageUpdatePayload] as LanguageContent),
             [child]: {
-              ...((prev[parent as keyof TourPackageCreatePayload] as any)[child] as LanguageContent),
+              ...((prev![parent as keyof TourPackageUpdatePayload] as any)[child] as LanguageContent),
               [grandChild]: value,
             },
           },
         }));
-      } else { // For LanguageContent directly (e.g., name.en)
+      } else {
         setFormData((prev) => ({
-          ...prev,
+          ...prev!,
           [parent]: {
-            ...(prev[parent as keyof TourPackageCreatePayload] as LanguageContent),
+            ...(prev![parent as keyof TourPackageUpdatePayload] as LanguageContent),
             [child]: value,
           },
         }));
       }
     } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') { // Added starting_price
       setFormData((prev) => ({
-        ...prev,
+        ...prev!,
         [name]: Number(value) || undefined,
       }));
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev!, [name]: value }));
     }
-  }, []);
+  }, [formData]);
 
   const handleArrayItemPropertyChange = useCallback(
     (
-      arrayName: keyof TourPackageCreatePayload,
+      arrayName: keyof TourPackageUpdatePayload,
       itemIndex: number,
       propertyName: string,
       value: string | number, // Allow number for price
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
+        if (!prev) return null;
         const array = [...(prev[arrayName] as any[])];
         if (lang) {
           array[itemIndex] = {
@@ -207,7 +166,8 @@ export default function CreateTour() {
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
-        const newItineraries = [...prev.itineraries];
+        if (!prev) return null;
+        const newItineraries = [...prev.itineraries!];
         const targetArray = newItineraries[dayIndex][type];
         if (lang) {
           (targetArray[itemIndex] as any)[propertyName][lang] = value;
@@ -220,34 +180,44 @@ export default function CreateTour() {
     []
   );
 
-  const addNestedItem = useCallback((field: keyof TourPackageCreatePayload, initialValue: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: [...(prev[field] as any[]), initialValue],
-    }));
+  const addNestedItem = useCallback((field: keyof TourPackageUpdatePayload, initialValue: any) => {
+    setFormData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        [field]: [...(prev[field] as any[]), initialValue],
+      };
+    });
   }, []);
 
-  const removeNestedItem = useCallback((field: keyof TourPackageCreatePayload, index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: (prev[field] as any[]).filter((_, i) => i !== index),
-    }));
+  const removeNestedItem = useCallback((field: keyof TourPackageUpdatePayload, index: number) => {
+    setFormData((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        [field]: (prev[field] as any[]).filter((_, i) => i !== index),
+      };
+    });
   }, []);
 
   const handleImageFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const newImageItems: ImagePreviewItem[] = files.map((file, idx) => ({
+      const newImageItems: ImagePreviewItem[] = files.map((file) => ({
         file,
-        path: '', // Path will be filled after upload
-        order: imagePreviews.length + idx, // Assign a temporary order
+        path: '',
+        order: 0, // Will be updated by map later
         previewUrl: URL.createObjectURL(file),
         isNew: true,
+        id: `new-${Date.now()}-${Math.random()}`, // Temporary unique ID for new files
       }));
-      setImagePreviews((prev) => [...prev, ...newImageItems]);
-      e.target.value = ''; // Clear input so same file can be selected again
+      setImagePreviews((prev) => {
+        const combined = [...prev, ...newImageItems];
+        return combined.map((item, idx) => ({ ...item, order: idx })); // Ensure order is correct after adding
+      });
+      e.target.value = ''; // Clear the input
     }
-  }, [imagePreviews.length]);
+  }, []);
 
   const handleRemoveImage = useCallback((indexToRemove: number) => {
     setImagePreviews((prev) => {
@@ -255,86 +225,105 @@ export default function CreateTour() {
       if (removedImage.isNew && removedImage.previewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(removedImage.previewUrl);
       }
-      return prev.filter((_, index) => index !== indexToRemove);
+      const updatedImages = prev.filter((_, index) => index !== indexToRemove);
+      return updatedImages.map((item, idx) => ({ ...item, order: idx })); // Re-order after removal
     });
   }, []);
 
-  const handleImageOrderChange = useCallback((index: number, newOrder: number) => {
+  // Drag-and-drop handlers
+  const handleDragStart = useCallback((index: number) => {
+    setDraggedImageIndex(index);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault(); // Necessary to allow dropping
+    const target = e.currentTarget as HTMLElement;
+    if (target && !target.classList.contains('drag-over')) {
+      target.classList.add('drag-over');
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    const target = e.currentTarget as HTMLElement;
+    if (target && target.classList.contains('drag-over')) {
+      target.classList.remove('drag-over');
+    }
+  }, []);
+
+  const handleDrop = useCallback((dropIndex: number) => {
+    if (draggedImageIndex === null || draggedImageIndex === dropIndex) {
+      setDraggedImageIndex(null);
+      document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+      return;
+    }
+
     setImagePreviews((prev) => {
-      const updatedImages = [...prev];
-      const [movedItem] = updatedImages.splice(index, 1);
-      updatedImages.splice(newOrder, 0, movedItem);
-      // Re-assign orders based on new array position
-      return updatedImages.map((item, idx) => ({ ...item, order: idx }));
+      const newImages = [...prev];
+      const [draggedItem] = newImages.splice(draggedImageIndex, 1);
+      newImages.splice(dropIndex, 0, draggedItem);
+      return newImages.map((item, idx) => ({ ...item, order: idx }));
     });
+    setDraggedImageIndex(null);
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  }, [draggedImageIndex]);
+
+  const handleDragEnd = useCallback(() => {
+    setDraggedImageIndex(null);
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
   }, []);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      if (!id || !formData) return;
+
       setLoading(true);
       setError(null);
       setSuccess(null);
 
       try {
-        const uploadedImagePaths: { path: string; order: number }[] = [];
+        const finalImagesPayload: { path: string; order: number }[] = [];
+
         for (const img of imagePreviews) {
           if (img.isNew && img.file) {
             const uploaded = await uploadTourImage(img.file);
-            uploadedImagePaths.push({ path: uploaded.path, order: img.order });
-          } else {
-            uploadedImagePaths.push({ path: img.path, order: img.order });
+            finalImagesPayload.push({ path: uploaded.path, order: img.order });
+          } else if (!img.isNew) {
+            finalImagesPayload.push({ path: img.path, order: img.order });
           }
         }
 
         const payload = {
           ...formData,
-          prices: formData.prices.map(p => ({
+          prices: formData.prices?.map(p => ({ // Ensure prices is mapped
             service_type: p.service_type,
             price: Number(p.price) || 0,
             description: p.description,
-          })),
-          starting_price: Number(formData.starting_price) || 0,
+          })) || [],
+          starting_price: Number(formData.starting_price) || 0, // Ensure starting_price is number
           original_price: formData.original_price ? Number(formData.original_price) : undefined,
           rate: formData.rate ? Number(formData.rate) : undefined,
-          images: uploadedImagePaths.sort((a, b) => a.order - b.order),
-          cancellation_policies: formData.cancellation_policies.map(cp => ({ description: cp.description })),
+          images: finalImagesPayload.sort((a, b) => a.order - b.order),
+          cancellation_policies: formData.cancellation_policies?.map(cp => ({ description: cp.description })) || [],
         };
 
-        await addTourPackage(payload);
-        setSuccess('Tur berhasil ditambahkan!');
-        setFormData({ // Reset form
-          name: { ...initialLanguageContent },
-          tour_type: 1,
-          duration: { ...initialLanguageContent },
-          location: { ...initialLanguageContent },
-          prices: [], // Reset prices
-          starting_price: 0, // Reset starting_price
-          overview: { ...initialLanguageContent },
-          images: [],
-          highlights: [],
-          itineraries: [],
-          included_excluded: [],
-          faqs: [],
-          cancellation_policies: [],
-          tags: '',
-        });
-        setImagePreviews([]); // Reset image previews
-        navigate('/admin/tours'); // Redirect to tour list
+        await updateTourPackage(parseInt(id), payload);
+        setSuccess('tur internasional berhasil diperbarui!');
+        navigate('/admin/international-tours');
       } catch (err: any) {
-        console.error('Gagal menambahkan tur:', err);
-        setError(err.message || 'Terjadi kesalahan saat menambahkan tur.');
+        console.error('Gagal memperbarui tur internasional:', err);
+        setError(err.message || 'Terjadi kesalahan saat memperbarui tur internasional.');
       } finally {
         setLoading(false);
       }
     },
-    [formData, imagePreviews, navigate]
+    [id, formData, imagePreviews, navigate]
   );
 
   const renderLanguageInput = (
     label: string,
     namePrefix: string,
-    value: LanguageContent,
+    value: LanguageContent | undefined,
     isTextArea: boolean = false
   ) => (
     <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
@@ -346,7 +335,7 @@ export default function CreateTour() {
             <textarea
               id={`${namePrefix}.en`}
               name={`${namePrefix}.en`}
-              value={value.en}
+              value={value?.en || ''}
               onChange={handleChange}
               rows={3}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
@@ -357,7 +346,7 @@ export default function CreateTour() {
               type="text"
               id={`${namePrefix}.en`}
               name={`${namePrefix}.en`}
-              value={value.en}
+              value={value?.en || ''}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
               required
@@ -370,7 +359,7 @@ export default function CreateTour() {
             <textarea
               id={`${namePrefix}.id`}
               name={`${namePrefix}.id`}
-              value={value.id || ''}
+              value={value?.id || ''}
               onChange={handleChange}
               rows={3}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
@@ -380,7 +369,7 @@ export default function CreateTour() {
               type="text"
               id={`${namePrefix}.id`}
               name={`${namePrefix}.id`}
-              value={value.id || ''}
+              value={value?.id || ''}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
             />
@@ -392,7 +381,7 @@ export default function CreateTour() {
             <textarea
               id={`${namePrefix}.ru`}
               name={`${namePrefix}.ru`}
-              value={value.ru || ''}
+              value={value?.ru || ''}
               onChange={handleChange}
               rows={3}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
@@ -402,7 +391,7 @@ export default function CreateTour() {
               type="text"
               id={`${namePrefix}.ru`}
               name={`${namePrefix}.ru`}
-              value={value.ru || ''}
+              value={value?.ru || ''}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
             />
@@ -412,19 +401,46 @@ export default function CreateTour() {
     </div>
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex items-center justify-center">
+        <p className="text-lg text-gray-600">Memuat data tur internasional...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative shadow-md" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!formData) {
+    return (
+      <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex items-center justify-center">
+        <p className="text-lg text-gray-600">Data tur internasional tidak ditemukan atau gagal dimuat.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:px-0">
         <div className="flex items-center mb-8">
           <button
             type="button"
-            onClick={() => navigate('/admin/tours')}
+            onClick={() => navigate('/admin/international-tours')}
             className="bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 flex items-center justify-center transition duration-300 ease-in-out mr-4 shadow-md"
-            title="Kembali ke Daftar Tur"
+            title="Kembali ke Daftar Tur Internasional"
           >
             <FaArrowLeft className="text-xl" />
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Tambah Tur Baru</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Edit Tur: {formData.name?.id || formData.name?.en}</h1>
         </div>
 
         {success && (
@@ -488,7 +504,7 @@ export default function CreateTour() {
                   type="number"
                   id="starting_price"
                   name="starting_price"
-                  value={formData.starting_price}
+                  value={formData.starting_price || 0}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
                   required
@@ -523,7 +539,7 @@ export default function CreateTour() {
 
             <h3 className="text-xl font-semibold text-gray-800 mb-4 mt-6">Opsi Harga</h3>
             <div className="space-y-4">
-              {formData.prices.map((priceOption, index) => (
+              {formData.prices?.map((priceOption, index) => (
                 <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
                     <h4 className="text-lg font-medium text-gray-800">Opsi Harga {index + 1}</h4>
@@ -646,7 +662,7 @@ export default function CreateTour() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Gambar Tur</h2>
-            <p className="text-sm text-gray-600 mb-4">Pilih gambar untuk tur. Gambar akan diunggah ke server.</p>
+            <p className="text-sm text-gray-600 mb-4">Pilih gambar untuk tur. Gambar akan diunggah ke server. Seret dan lepas gambar untuk mengubah urutan.</p>
             <div className="mb-6">
               <label htmlFor="image-upload" className="sr-only">Unggah Gambar Baru</label>
               <input
@@ -667,7 +683,18 @@ export default function CreateTour() {
             {imagePreviews.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
                 {imagePreviews.map((image, index) => (
-                  <div key={index} className="relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white">
+                  <div
+                    key={image.id} // Use unique ID for key
+                    draggable="true"
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={handleDragOver}
+                    onDrop={() => handleDrop(index)}
+                    onDragLeave={handleDragLeave} 
+                    onDragEnd={handleDragEnd}
+                    className={`relative group border border-gray-200 rounded-lg overflow-hidden shadow-md bg-white cursor-grab
+                                ${draggedImageIndex === index ? 'opacity-50 border-primary ring-2 ring-primary ring-opacity-50' : ''}
+                                transition-all duration-200 ease-in-out`}
+                  >
                     <img
                       src={image.previewUrl}
                       alt={`Preview ${index + 1}`}
@@ -682,17 +709,6 @@ export default function CreateTour() {
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
-                    </div>
-                    <div className="p-3 bg-gray-50 border-t border-gray-200">
-                      <label htmlFor={`image-order-${index}`} className="block text-xs font-medium text-gray-600 mb-1">Urutan</label>
-                      <input
-                        type="number"
-                        id={`image-order-${index}`}
-                        value={image.order}
-                        onChange={(e) => handleImageOrderChange(index, parseInt(e.target.value))}
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-1.5"
-                        min="0"
-                      />
                     </div>
                   </div>
                 ))}
@@ -710,7 +726,7 @@ export default function CreateTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Highlights</h2>
             <div className="space-y-4">
-              {formData.highlights.map((highlight, index) => (
+              {formData.highlights?.map((highlight, index) => (
                 <details key={index} className="group border border-gray-200 rounded-lg shadow-sm bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
                     <h3 className="text-lg font-medium text-gray-800">Highlight {index + 1}</h3>
@@ -780,7 +796,7 @@ export default function CreateTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Itinerary</h2>
             <div className="space-y-6">
-              {formData.itineraries.map((itinerary, dayIndex) => (
+              {formData.itineraries?.map((itinerary, dayIndex) => (
                 <details key={dayIndex} className="group border border-gray-300 rounded-lg shadow-md bg-gray-50 animate-slide-up-fade-in" open>
                   <summary className="flex justify-between items-center p-4 cursor-pointer bg-gray-100 rounded-t-lg hover:bg-gray-200 transition-colors">
                     <h3 className="text-lg font-medium text-gray-900">Urutan {itinerary.day}</h3>
@@ -798,7 +814,7 @@ export default function CreateTour() {
                   </summary>
                   <div className="p-5 border-t border-gray-300 space-y-6">
                     <div className="mb-4">
-                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor Urutan</label>
+                      <label htmlFor={`itinerary-day-${dayIndex}`} className="block text-sm font-medium text-gray-700 mb-1">Nomor urutan</label>
                       <input
                         type="number"
                         id={`itinerary-day-${dayIndex}`}
@@ -1274,7 +1290,7 @@ export default function CreateTour() {
           <div className="mt-8 flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => navigate('/admin/tours')}
+              onClick={() => navigate('/admin/international-tours')}
               className="px-8 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
             >
               Batal
@@ -1284,7 +1300,7 @@ export default function CreateTour() {
               className="px-8 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               disabled={loading}
             >
-              {loading ? 'Menyimpan...' : 'Simpan Tur'}
+              {loading ? 'Menyimpan...' : 'Simpan Perubahan'}
             </button>
           </div>
         </form>
