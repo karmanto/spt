@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { OutletContext, TourPackage } from '../lib/types';
-import TourCard from '../components/TourCard';
+import IntlTourCard from '../components/IntlTourCard';
 import { getTourPackages } from '../lib/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
@@ -208,7 +208,7 @@ const TourList: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {tours.map((tour: TourPackage) => (
-                <TourCard
+                <IntlTourCard
                   key={tour.id}
                   tour={tour}
                   currentPage={currentPage} 
