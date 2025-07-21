@@ -24,12 +24,12 @@ const TourDetail: React.FC = () => {
 
   const fetchTourDetail = async () => {
     if (!slug) {
-      navigate('/tours');
+      navigate('/domestic-tours');
       return;
     }
     const id = slug.split('-').pop();
     if (!id) {
-      setError(t('tourNotFound'));
+      setError(t('domesticTourNotFound'));
       setLoading(false);
       return;
     }
@@ -41,7 +41,7 @@ const TourDetail: React.FC = () => {
       setTour(foundTour);
     } catch (err) {
       console.error("Failed to fetch tour detail:", err);
-      setError(t('failedToLoadTourDetails'));
+      setError(t('failedToLoadDomesticTourDetails'));
     } finally {
       setLoading(false);
     }
@@ -70,7 +70,7 @@ const TourDetail: React.FC = () => {
   if (!tour) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-gray-50">
-        <p className="text-base text-gray-700">{t('tourNotFound')}</p>
+        <p className="text-base text-gray-700">{t('domesticTourNotFound')}</p>
       </div>
     );
   }
@@ -105,9 +105,9 @@ const TourDetail: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
         <div className="flex justify-between items-center mb-8">
           <button
-            onClick={() => navigate('/tours')}
+            onClick={() => navigate('/domestic-tours')}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-            aria-label={t('backToTours')}
+            aria-label={t('backToDomesticTours')}
           >
             <FaArrowLeft className="text-lg" />
           </button>

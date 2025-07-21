@@ -18,17 +18,16 @@ interface ImagePreviewItem {
 
 export default function CreateTour() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams(); 
   const copyFromId = searchParams.get('copyFrom'); 
 
   const [formData, setFormData] = useState<TourPackageCreatePayload>({
     name: { ...initialLanguageContent },
-    tour_type: 1,
+    tour_type: 2,
     duration: { ...initialLanguageContent },
     location: { ...initialLanguageContent },
     prices: [],
     starting_price: 0,
-    currency: '',
     overview: { ...initialLanguageContent },
     images: [],
     highlights: [],
@@ -37,6 +36,7 @@ export default function CreateTour() {
     faqs: [],
     cancellation_policies: [],
     tags: '',
+    currency: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,13 +101,13 @@ export default function CreateTour() {
             path: img.path,
             order: img.order,
             previewUrl: img.path, 
-            isNew: false, 
+            isNew: false,
           })));
 
-          setSuccess('Konten tur berhasil disalin. Silakan sesuaikan dan simpan.');
+          setSuccess('Konten tur domestik berhasil disalin. Silakan sesuaikan dan simpan.');
         } catch (err) {
-          console.error('Gagal menyalin tur:', err);
-          setError('Gagal memuat data tur yang akan disalin. Silakan coba lagi.');
+          console.error('Gagal menyalin tur domestik:', err);
+          setError('Gagal memuat data tur domestik yang akan disalin. Silakan coba lagi.');
         } finally {
           setLoading(false);
         }
@@ -142,7 +142,7 @@ export default function CreateTour() {
             },
           },
         }));
-      } else { 
+      } else {
         setFormData((prev) => ({
           ...prev,
           [parent]: {
@@ -166,7 +166,7 @@ export default function CreateTour() {
       arrayName: keyof TourPackageCreatePayload,
       itemIndex: number,
       propertyName: string,
-      value: string | number, 
+      value: string | number,
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
@@ -234,7 +234,7 @@ export default function CreateTour() {
       const newImageItems: ImagePreviewItem[] = files.map((file, idx) => ({
         file,
         path: '', 
-        order: imagePreviews.length + idx,
+        order: imagePreviews.length + idx, 
         previewUrl: URL.createObjectURL(file),
         isNew: true,
       }));
@@ -295,10 +295,10 @@ export default function CreateTour() {
         };
 
         await addTourPackage(payload);
-        setSuccess('Tur berhasil ditambahkan!');
+        setSuccess('tur domestik berhasil ditambahkan!');
         setFormData({ 
           name: { ...initialLanguageContent },
-          tour_type: 1,
+          tour_type: 2,
           duration: { ...initialLanguageContent },
           location: { ...initialLanguageContent },
           prices: [], 
@@ -314,10 +314,10 @@ export default function CreateTour() {
           currency: '',
         });
         setImagePreviews([]); 
-        navigate('/admin/tours'); 
+        navigate('/admin/domestic-tours'); 
       } catch (err: any) {
-        console.error('Gagal menambahkan tur:', err);
-        setError(err.message || 'Terjadi kesalahan saat menambahkan tur.');
+        console.error('Gagal menambahkan tur domestik:', err);
+        setError(err.message || 'Terjadi kesalahan saat menambahkan tur domestik.');
       } finally {
         setLoading(false);
       }
@@ -412,13 +412,13 @@ export default function CreateTour() {
         <div className="flex items-center mb-8">
           <button
             type="button"
-            onClick={() => navigate('/admin/tours')}
+            onClick={() => navigate('/admin/domestic-tours')}
             className="bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 flex items-center justify-center transition duration-300 ease-in-out mr-4 shadow-md"
-            title="Kembali ke Daftar Tur"
+            title="Kembali ke Daftar Tur Domestik"
           >
             <FaArrowLeft className="text-xl" />
           </button>
-          <h1 className="text-3xl font-bold text-gray-900">Tambah Tur Baru</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Tambah Tur Domestik Baru</h1>
         </div>
 
         {success && (
@@ -1279,7 +1279,7 @@ export default function CreateTour() {
           <div className="mt-8 flex justify-end space-x-4">
             <button
               type="button"
-              onClick={() => navigate('/admin/tours')}
+              onClick={() => navigate('/admin/domestic-tours')}
               className="px-8 py-3 border border-gray-300 rounded-lg shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
             >
               Batal

@@ -38,8 +38,8 @@ export default function ShowTour() {
       const data = await getTourPackageDetail(tourId);
       setTour(data);
     } catch (err) {
-      console.error('Gagal mengambil detail tur internasional:', err);
-      setError('Gagal memuat detail tur internasional. Silakan coba lagi.');
+      console.error('Gagal mengambil detail tur domestik:', err);
+      setError('Gagal memuat detail tur domestik. Silakan coba lagi.');
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export default function ShowTour() {
 
   const handleDelete = useCallback(async () => {
     if (!id) return;
-    if (!window.confirm('Apakah Anda yakin ingin menghapus tur internasional ini? Tindakan ini tidak dapat dibatalkan.')) {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus tur domestik ini? Tindakan ini tidak dapat dibatalkan.')) {
       return;
     }
     setLoading(true);
@@ -55,11 +55,11 @@ export default function ShowTour() {
     setSuccess(null);
     try {
       await deleteTourPackage(parseInt(id));
-      setSuccess('tur internasional berhasil dihapus!');
-      navigate('/admin/international-tours'); 
+      setSuccess('tur domestik berhasil dihapus!');
+      navigate('/admin/domestic-tours'); 
     } catch (err: any) {
-      console.error('Gagal menghapus tur internasional:', err);
-      setError(err.message || 'Terjadi kesalahan saat menghapus tur internasional.');
+      console.error('Gagal menghapus tur domestik:', err);
+      setError(err.message || 'Terjadi kesalahan saat menghapus tur domestik.');
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function ShowTour() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex justify-center items-center">
-        <p className="text-lg text-gray-600">Memuat detail tur internasional...</p>
+        <p className="text-lg text-gray-600">Memuat detail tur domestik...</p>
       </div>
     );
   }
@@ -84,7 +84,7 @@ export default function ShowTour() {
   if (!tour) {
     return (
       <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8 flex justify-center items-center">
-        <p className="text-lg text-gray-600">tur internasional tidak ditemukan.</p>
+        <p className="text-lg text-gray-600">tur domestik tidak ditemukan.</p>
       </div>
     );
   }
@@ -112,9 +112,9 @@ export default function ShowTour() {
       <div className="max-w-7xl mx-auto px-4 py-6 sm:px-0">
         <button
           type="button"
-          onClick={() => navigate('/admin/international-tours')}
+          onClick={() => navigate('/admin/domestic-tours')}
           className="bg-gray-300 text-gray-800 p-3 rounded-lg hover:bg-gray-400 mb-2 flex items-center justify-center transition duration-300 ease-in-out shadow-md"
-          title="Kembali ke Daftar Tur Internasional"
+          title="Kembali ke Daftar Tur Domestik"
         >
           <FaArrowLeft className="text-xl" />
         </button>
@@ -126,7 +126,7 @@ export default function ShowTour() {
           <div className="flex space-x-3">
             <button
               type="button"
-              onClick={() => navigate(`/admin/international-tours/edit/${tour.id}`)}
+              onClick={() => navigate(`/admin/domestic-tours/edit/${tour.id}`)}
               className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center shadow-md"
               title="Edit Tur"
             >

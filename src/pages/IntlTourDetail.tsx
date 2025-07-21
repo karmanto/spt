@@ -305,7 +305,7 @@ const TourDetail: React.FC = () => {
                           <tr key={priceOption.id} className="border-b border-gray-100">
                             <td className="py-4 px-6 font-medium text-md text-gray-900">{getLocalizedContent(priceOption.service_type)}</td>
                             <td className="py-4 px-6 text-center text-md font-bold text-blue-600">
-                              US${parseFloat(String(priceOption.price ?? '')).toLocaleString()}
+                              {tour.currency || ''}{parseFloat(String(priceOption.price ?? '')).toLocaleString()}
                             </td>
                             <td className="py-4 px-6 text-sm text-gray-600">{getLocalizedContent(priceOption.description)}</td>
                           </tr>

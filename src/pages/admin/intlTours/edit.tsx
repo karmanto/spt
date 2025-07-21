@@ -52,12 +52,12 @@ export default function EditTour() {
         name: data.name,
         duration: data.duration,
         location: data.location,
-        prices: data.prices.map(p => ({ // Map existing prices
+        prices: data.prices.map(p => ({
           service_type: p.service_type,
           price: p.price,
           description: p.description,
         })),
-        starting_price: Number(data.starting_price) || 0, // New field
+        starting_price: Number(data.starting_price) || 0,
         original_price: data.original_price ? Number(data.original_price) : undefined,
         rate: data.rate ? Number(data.rate) : undefined,
         overview: data.overview,
@@ -72,13 +72,14 @@ export default function EditTour() {
         faqs: data.faqs.map(faq => ({ question: faq.question, answer: faq.answer })),
         cancellation_policies: data.cancellation_policies.map(cp => ({ description: cp.description })),
         tags: data.tags || '',
+        currency: data.currency || '',
       });
 
       setImagePreviews(data.images.map(img => ({
         id: img.id,
         path: img.path,
         order: img.order,
-        previewUrl: `${import.meta.env.VITE_BASE_URL}${img.path}`, // Use VITE_BASE_URL for existing images
+        previewUrl: `${import.meta.env.VITE_BASE_URL}${img.path}`,
         isNew: false,
       })).sort((a, b) => a.order - b.order));
     } catch (err) {
@@ -115,7 +116,7 @@ export default function EditTour() {
           },
         }));
       }
-    } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') { // Added starting_price
+    } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') {
       setFormData((prev) => ({
         ...prev!,
         [name]: Number(value) || undefined,
@@ -130,7 +131,7 @@ export default function EditTour() {
       arrayName: keyof TourPackageUpdatePayload,
       itemIndex: number,
       propertyName: string,
-      value: string | number, // Allow number for price
+      value: string | number,
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
@@ -206,16 +207,16 @@ export default function EditTour() {
       const newImageItems: ImagePreviewItem[] = files.map((file) => ({
         file,
         path: '',
-        order: 0, // Will be updated by map later
+        order: 0,
         previewUrl: URL.createObjectURL(file),
         isNew: true,
-        id: `new-${Date.now()}-${Math.random()}`, // Temporary unique ID for new files
+        id: `new-${Date.now()}-${Math.random()}`, 
       }));
       setImagePreviews((prev) => {
         const combined = [...prev, ...newImageItems];
-        return combined.map((item, idx) => ({ ...item, order: idx })); // Ensure order is correct after adding
+        return combined.map((item, idx) => ({ ...item, order: idx }));
       });
-      e.target.value = ''; // Clear the input
+      e.target.value = ''; 
     }
   }, []);
 
@@ -226,17 +227,16 @@ export default function EditTour() {
         URL.revokeObjectURL(removedImage.previewUrl);
       }
       const updatedImages = prev.filter((_, index) => index !== indexToRemove);
-      return updatedImages.map((item, idx) => ({ ...item, order: idx })); // Re-order after removal
+      return updatedImages.map((item, idx) => ({ ...item, order: idx })); 
     });
   }, []);
 
-  // Drag-and-drop handlers
   const handleDragStart = useCallback((index: number) => {
     setDraggedImageIndex(index);
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault(); // Necessary to allow dropping
+    e.preventDefault(); 
     const target = e.currentTarget as HTMLElement;
     if (target && !target.classList.contains('drag-over')) {
       target.classList.add('drag-over');
@@ -295,12 +295,12 @@ export default function EditTour() {
 
         const payload = {
           ...formData,
-          prices: formData.prices?.map(p => ({ // Ensure prices is mapped
+          prices: formData.prices?.map(p => ({
             service_type: p.service_type,
             price: Number(p.price) || 0,
             description: p.description,
           })) || [],
-          starting_price: Number(formData.starting_price) || 0, // Ensure starting_price is number
+          starting_price: Number(formData.starting_price) || 0,
           original_price: formData.original_price ? Number(formData.original_price) : undefined,
           rate: formData.rate ? Number(formData.rate) : undefined,
           images: finalImagesPayload.sort((a, b) => a.order - b.order),
@@ -499,6 +499,18 @@ export default function EditTour() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               <div>
+                <label htmlFor="currency" className="block text-sm font-medium text-gray-700 mb-1">Mata Uang</label>
+                <input
+                  type="text"
+                  id="currency"
+                  name="currency"
+                  value={formData.currency || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  required
+                />
+              </div>
+              <div>
                 <label htmlFor="starting_price" className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <input
                   type="number"
@@ -684,7 +696,7 @@ export default function EditTour() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
                 {imagePreviews.map((image, index) => (
                   <div
-                    key={image.id} // Use unique ID for key
+                    key={image.id}
                     draggable="true"
                     onDragStart={() => handleDragStart(index)}
                     onDragOver={handleDragOver}

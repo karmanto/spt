@@ -93,11 +93,11 @@ const IntlTourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentP
               <div className="text-xs text-gray-500">{t('startingFrom')}</div>
               <div className="flex-col items-center gap-2">
                 <div className="text-2xl font-bold text-gray-900">
-                  US${startingPriceNum.toLocaleString()}
+                  {tour.currency || ''}{startingPriceNum.toLocaleString()}
                 </div>
                 {originalPriceNum > startingPriceNum && (
                   <div className="text-sm text-gray-400 line-through decoration-red-500 decoration-1">
-                    US${originalPriceNum.toLocaleString()}
+                    {tour.currency || ''}{originalPriceNum.toLocaleString()}
                   </div>
                 )}
               </div>

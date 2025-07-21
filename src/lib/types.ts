@@ -131,6 +131,7 @@ export interface TourPackage {
   prices: TourPriceOption[]; 
   starting_price: string; 
   original_price?: string; 
+  currency?: string;
   rate?: string;
   images: TourImage[];
   overview: LanguageContent;
@@ -169,6 +170,7 @@ export interface TourPackageCreatePayload {
   }[];
   starting_price: number; 
   original_price?: number; 
+  currency?: string;
   rate?: number; 
   images: { path: string; order: number }[]; 
   overview: LanguageContent;

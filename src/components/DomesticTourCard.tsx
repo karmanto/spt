@@ -4,7 +4,7 @@ import { MapPin, Clock, Tag, Star } from 'lucide-react';
 import { TourCardProps, LanguageContent } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
 
-const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage }, ref) => { 
+const DomesticTourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage }, ref) => { 
   const { t, language } = useLanguage();
 
   const getLocalizedContent = (content: LanguageContent) => {
@@ -36,7 +36,7 @@ const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage 
       className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
       data-aos="fade-up"
     >
-      <Link to={`/tours/${tour.slug}`} onClick={handleCardClick}>
+      <Link to={`/domestic-tours/${tour.slug}`} onClick={handleCardClick}>
         <div className="relative h-64 overflow-hidden">
           <img
             src={
@@ -90,13 +90,13 @@ const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage 
 
           <div className="flex items-center justify-between">
             <div className="text-left">
-              <div className="text-sm text-gray-500">{t('startingFrom')}</div>
-              <div className="flex items-center gap-2">
+              <div className="text-xs text-gray-500">{t('startingFrom')}</div>
+              <div className="flex-col items-center gap-2">
                 <div className="text-2xl font-bold text-gray-900">
                   {tour.currency || ''}{startingPriceNum.toLocaleString()}
                 </div>
                 {originalPriceNum > startingPriceNum && (
-                  <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
+                  <div className="text-sm text-gray-400 line-through decoration-red-500 decoration-1">
                     {tour.currency || ''}{originalPriceNum.toLocaleString()}
                   </div>
                 )}
@@ -113,4 +113,4 @@ const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage 
   );
 });
 
-export default TourCard;
+export default DomesticTourCard;

@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom'; // Import useSearchParams
+import { useNavigate, useSearchParams } from 'react-router-dom'; 
 import { TourPackageCreatePayload, LanguageContent } from '../../../lib/types';
-import { addTourPackage, uploadTourImage, getTourPackageDetail } from '../../../lib/api'; // Import getTourPackageDetail
+import { addTourPackage, uploadTourImage, getTourPackageDetail } from '../../../lib/api'; 
 import { FaArrowLeft } from 'react-icons/fa';
 import { Plus, Trash2, Image as ImageIcon, ChevronDown } from 'lucide-react';
 
-const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' }; // Made constant
+const initialLanguageContent: LanguageContent = { en: '', id: '', ru: '' }; 
 
 interface ImagePreviewItem {
   id?: number;
@@ -18,8 +18,8 @@ interface ImagePreviewItem {
 
 export default function CreateTour() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // Initialize useSearchParams
-  const copyFromId = searchParams.get('copyFrom'); // Get copyFrom ID from URL
+  const [searchParams] = useSearchParams(); 
+  const copyFromId = searchParams.get('copyFrom'); 
 
   const [formData, setFormData] = useState<TourPackageCreatePayload>({
     name: { ...initialLanguageContent },
@@ -36,31 +36,28 @@ export default function CreateTour() {
     faqs: [],
     cancellation_policies: [],
     tags: '',
+    currency: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [imagePreviews, setImagePreviews] = useState<ImagePreviewItem[]>([]);
 
-  // Effect to handle copying tour data
   useEffect(() => {
     if (copyFromId) {
       const fetchCopiedTour = async () => {
-        setLoading(true); // Use existing loading state for fetching
+        setLoading(true); 
         setError(null);
         try {
           const copiedTour = await getTourPackageDetail(copyFromId);
 
-          // Transform the fetched tour data to fit the create payload
-          // and remove IDs to ensure new entries are created
           const transformedData: TourPackageCreatePayload = {
             ...copiedTour,
-            code: '', // Clear code, as it should be unique
-            order: undefined, // Clear order for new tour
-            starting_price: Number(copiedTour.starting_price) || 0, // Convert to number
-            original_price: copiedTour.original_price ? Number(copiedTour.original_price) : undefined, // Convert to number
-            rate: copiedTour.rate ? Number(copiedTour.rate) : undefined, // Convert to number
-            // Transform nested arrays to remove IDs and ensure correct structure for creation
+            code: '', 
+            order: undefined, 
+            starting_price: Number(copiedTour.starting_price) || 0, 
+            original_price: copiedTour.original_price ? Number(copiedTour.original_price) : undefined, 
+            rate: copiedTour.rate ? Number(copiedTour.rate) : undefined, 
             prices: copiedTour.prices.map(p => ({
               service_type: p.service_type,
               price: p.price,
@@ -91,7 +88,6 @@ export default function CreateTour() {
             cancellation_policies: copiedTour.cancellation_policies.map(cp => ({
               description: cp.description,
             })),
-            // Images need special handling: copy path, but they are not "new" files
             images: copiedTour.images.map(img => ({
               path: img.path,
               order: img.order,
@@ -100,13 +96,12 @@ export default function CreateTour() {
 
           setFormData(transformedData);
 
-          // Also set image previews from existing paths
           setImagePreviews(copiedTour.images.map(img => ({
-            id: img.id, // Keep ID for existing images if needed for other logic, but not sent to create API
+            id: img.id, 
             path: img.path,
             order: img.order,
-            previewUrl: img.path, // Use path directly as preview URL for existing images
-            isNew: false, // Mark as not a new file upload
+            previewUrl: img.path, 
+            isNew: false,
           })));
 
           setSuccess('Konten tur internasional berhasil disalin. Silakan sesuaikan dan simpan.');
@@ -120,9 +115,8 @@ export default function CreateTour() {
 
       fetchCopiedTour();
     }
-  }, [copyFromId]); // Depend on copyFromId
+  }, [copyFromId]); 
 
-  // Clean up object URLs when component unmounts
   useEffect(() => {
     return () => {
       imagePreviews.forEach(img => {
@@ -137,7 +131,7 @@ export default function CreateTour() {
     const { name, value } = e.target;
     if (name.includes('.')) {
       const [parent, child, grandChild] = name.split('.');
-      if (grandChild) { // For LanguageContent nested inside another object (e.g., name.en)
+      if (grandChild) { 
         setFormData((prev) => ({
           ...prev,
           [parent]: {
@@ -148,7 +142,7 @@ export default function CreateTour() {
             },
           },
         }));
-      } else { // For LanguageContent directly (e.g., name.en)
+      } else {
         setFormData((prev) => ({
           ...prev,
           [parent]: {
@@ -157,7 +151,7 @@ export default function CreateTour() {
           },
         }));
       }
-    } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') { // Added starting_price
+    } else if (name === 'original_price' || name === 'rate' || name === 'starting_price') { 
       setFormData((prev) => ({
         ...prev,
         [name]: Number(value) || undefined,
@@ -172,7 +166,7 @@ export default function CreateTour() {
       arrayName: keyof TourPackageCreatePayload,
       itemIndex: number,
       propertyName: string,
-      value: string | number, // Allow number for price
+      value: string | number,
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
@@ -239,13 +233,13 @@ export default function CreateTour() {
       const files = Array.from(e.target.files);
       const newImageItems: ImagePreviewItem[] = files.map((file, idx) => ({
         file,
-        path: '', // Path will be filled after upload
-        order: imagePreviews.length + idx, // Assign a temporary order
+        path: '', 
+        order: imagePreviews.length + idx, 
         previewUrl: URL.createObjectURL(file),
         isNew: true,
       }));
       setImagePreviews((prev) => [...prev, ...newImageItems]);
-      e.target.value = ''; // Clear input so same file can be selected again
+      e.target.value = ''; 
     }
   }, [imagePreviews.length]);
 
@@ -264,7 +258,6 @@ export default function CreateTour() {
       const updatedImages = [...prev];
       const [movedItem] = updatedImages.splice(index, 1);
       updatedImages.splice(newOrder, 0, movedItem);
-      // Re-assign orders based on new array position
       return updatedImages.map((item, idx) => ({ ...item, order: idx }));
     });
   }, []);
@@ -303,13 +296,13 @@ export default function CreateTour() {
 
         await addTourPackage(payload);
         setSuccess('tur internasional berhasil ditambahkan!');
-        setFormData({ // Reset form
+        setFormData({ 
           name: { ...initialLanguageContent },
           tour_type: 3,
           duration: { ...initialLanguageContent },
           location: { ...initialLanguageContent },
-          prices: [], // Reset prices
-          starting_price: 0, // Reset starting_price
+          prices: [], 
+          starting_price: 0, 
           overview: { ...initialLanguageContent },
           images: [],
           highlights: [],
@@ -318,9 +311,10 @@ export default function CreateTour() {
           faqs: [],
           cancellation_policies: [],
           tags: '',
+          currency: '',
         });
-        setImagePreviews([]); // Reset image previews
-        navigate('/admin/international-tours'); // Redirect to tour list
+        setImagePreviews([]); 
+        navigate('/admin/international-tours'); 
       } catch (err: any) {
         console.error('Gagal menambahkan tur internasional:', err);
         setError(err.message || 'Terjadi kesalahan saat menambahkan tur internasional.');
@@ -482,6 +476,17 @@ export default function CreateTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label htmlFor="currency" className="block text-sm font-medium text-gray-700 mb-1">Mata Uang</label>
+                <input
+                  type="text"
+                  id="currency"
+                  name="currency"
+                  value={formData.currency}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                />
+              </div>
               <div>
                 <label htmlFor="starting_price" className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <input

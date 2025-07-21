@@ -9,16 +9,18 @@ export default function Dashboard() {
     tours: 0,
     blogs: 0, 
     intlTours: 0,
+    domesticTours: 0,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [promosResponse, toursResponse, blogsResponse, intlTourResponse] = await Promise.all([ 
+        const [promosResponse, toursResponse, blogsResponse, intlTourResponse, domesticTourResponse] = await Promise.all([ 
           getPromos(),
           getTourPackages({ per_page: 1, tour_type: 1 }), 
           getBlogs({ per_page: 1 }), 
           getTourPackages({ per_page: 1, tour_type: 3 }), 
+          getTourPackages({ per_page: 1, tour_type: 2 }), 
         ]);
 
         setDataCounts({
@@ -26,6 +28,7 @@ export default function Dashboard() {
           tours: toursResponse.pagination.total,
           blogs: blogsResponse.pagination.total, 
           intlTours: intlTourResponse.pagination.total,
+          domesticTours: domesticTourResponse.pagination.total,
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -53,6 +56,12 @@ export default function Dashboard() {
       icon: Globe, 
       link: '/admin/international-tours',
       count: dataCounts.intlTours,
+    },
+    {
+      title: 'Paket Tur Domestik', 
+      icon: Globe, 
+      link: '/admin/domestic-tours',
+      count: dataCounts.domesticTours,
     },
     {
       title: 'Blog', 

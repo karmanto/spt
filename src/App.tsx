@@ -30,6 +30,13 @@ import IntlCreateTour from './pages/admin/intlTours/create';
 import IntlEditTour from './pages/admin/intlTours/edit';
 import IntlShowTour from './pages/admin/intlTours/show';
 
+import DomesticTourList from './pages/DomesticTourList';
+import DomesticTourDetail from './pages/DomesticTourDetail';
+import DomesticAdminTours from './pages/admin/domesticTours';
+import DomesticCreateTour from './pages/admin/domesticTours/create';
+import DomesticEditTour from './pages/admin/domesticTours/edit';
+import DomesticShowTour from './pages/admin/domesticTours/show';
+
 // New Blog Imports
 const BlogList = lazy(() => import('./pages/BlogList'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
@@ -142,6 +149,11 @@ function App() {
             </Route>
 
             <Route element={<TourLayout />}>
+              <Route path="/domestic-tours" element={<DomesticTourList />} />
+              <Route path="/domestic-tours/:slug" element={<DomesticTourDetail />} />
+            </Route>
+
+            <Route element={<TourLayout />}>
               <Route path="/blogs" element={<BlogList />} />
               <Route path="/blogs/:slug" element={<BlogDetail />} />
             </Route>
@@ -195,6 +207,19 @@ function App() {
               <Route path="create" element={<IntlCreateTour />} />
               <Route path="edit/:id" element={<IntlEditTour />} />
               <Route path=":id" element={<IntlShowTour />} />
+            </Route>
+            <Route
+              path="/admin/domestic-tours"
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<DomesticAdminTours />} />
+              <Route path="create" element={<DomesticCreateTour />} />
+              <Route path="edit/:id" element={<DomesticEditTour />} />
+              <Route path=":id" element={<DomesticShowTour />} />
             </Route>
             <Route
               path="/admin/blogs"

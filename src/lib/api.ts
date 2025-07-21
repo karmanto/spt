@@ -254,6 +254,7 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
     })),
     starting_price: tour.starting_price, 
     original_price: tour.original_price,
+    currency: tour.currency,
     rate: tour.rate,
     overview: JSON.stringify(tour.overview),
     highlights: tour.highlights.map(h => ({
@@ -303,6 +304,7 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
     })) }),
     ...(tour.starting_price !== undefined && { starting_price: tour.starting_price }), 
     ...(tour.original_price !== undefined && { original_price: tour.original_price }),
+    ...(tour.currency !== undefined && { currency: tour.currency }),
     ...(tour.rate !== undefined && { rate: tour.rate }),
     ...(tour.overview && { overview: JSON.stringify(tour.overview) }),
     ...(tour.highlights && { highlights: tour.highlights.map(h => ({

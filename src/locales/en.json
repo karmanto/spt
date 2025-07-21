@@ -235,6 +235,15 @@
   "failedToLoadIntlTours": "Failed to load international tour packages. Please try again later.",
   "backToIntlTours": "Back to International Tours",
   "intlTourNotFound": "International tour not found.",
-  "failedToLoadIntlTourDetails": "Failed to load international tour details. Please try again later."
+  "failedToLoadIntlTourDetails": "Failed to load international tour details. Please try again later.",
+  "domesticTour": "Domestic",
+  "domesticTourListTitle": "Domestic Tour Packages",
+  "domesticTourListSubtitle": "Explore breathtaking domestic destinations with our curated tour packages.",
+  "allDomesticTours": "All Domestic Tours",
+  "noDomesticToursFound": "No domestic tours found.",
+  "failedToLoadDomesticTours": "Failed to load domestic tour packages. Please try again later.",
+  "backToDomesticTours": "Back to Domestic Tours",
+  "domesticTourNotFound": "Domestic tour not found.",
+  "failedToLoadDomesticTourDetails": "Failed to load domestic tour details. Please try again later."
   
 }

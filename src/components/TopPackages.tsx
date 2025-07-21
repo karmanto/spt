@@ -17,7 +17,7 @@ const TopPackages: React.FC = () => {
     try {
       setLoading(true);
       setError(null); 
-      const response = await getTourPackages({ per_page: 3 });
+      const response = await getTourPackages({ per_page: 3, tour_type: 1 });
       setTours(response.data); 
     } catch (err) {
       console.error("Failed to fetch tours:", err);
@@ -162,11 +162,11 @@ const TopPackages: React.FC = () => {
                         <div className="text-sm text-gray-500">{t('startingFrom')}</div>
                         <div className="flex items-center gap-2">
                           <div className="text-2xl font-bold text-gray-900">
-                            ฿{startingPriceNum.toLocaleString()}
+                            {tour.currency || ''}{startingPriceNum.toLocaleString()}
                           </div>
                           {originalPriceNum > startingPriceNum && (
                             <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
-                              ฿{originalPriceNum.toLocaleString()}
+                              {tour.currency || ''}{originalPriceNum.toLocaleString()}
                             </div>
                           )}
                         </div>

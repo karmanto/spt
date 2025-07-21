@@ -234,5 +234,14 @@
   "failedToLoadIntlTours": "Gagal memuat paket tur internasional. Silakan coba lagi nanti.",
   "backToIntlTours": "Kembali ke Tur Internasional",
   "intlTourNotFound": "Tur internasional tidak ditemukan.",
-  "failedToLoadIntlTourDetails": "Gagal memuat detail tur internasional. Silakan coba lagi nanti."
+  "failedToLoadIntlTourDetails": "Gagal memuat detail tur internasional. Silakan coba lagi nanti.",
+  "domesticTour": "Domestik",
+  "domesticTourListTitle": "Paket Tur Domestik",
+  "domesticTourListSubtitle": "Jelajahi destinasi domestik yang menakjubkan dengan paket tur pilihan kami.",
+  "allDomesticTours": "Semua Tur Domestik",
+  "noDomesticToursFound": "Tidak ada tur domestik yang ditemukan.",
+  "failedToLoadDomesticTours": "Gagal memuat paket tur domestik. Silakan coba lagi nanti.",
+  "backToDomesticTours": "Kembali ke Tur Domestik",
+  "domesticTourNotFound": "Tur domestik tidak ditemukan.",
+  "failedToLoadDomesticTourDetails": "Gagal memuat detail tur domestik. Silakan coba lagi nanti."
 }

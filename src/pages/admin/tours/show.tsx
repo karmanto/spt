@@ -5,7 +5,6 @@ import { getTourPackageDetail, deleteTourPackage } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Image as ImageIcon, Edit, Trash2, ChevronDown } from 'lucide-react';
 
-// Helper function to get display name for tour tags
 const getTagDisplayName = (tag: string | undefined): string => {
   if (!tag) return 'Tidak ada';
   switch (tag) {
@@ -13,7 +12,7 @@ const getTagDisplayName = (tag: string | undefined): string => {
     case 'open_trip': return 'Open Trip';
     case 'multi_day_trip': return 'Multi-Day Trip';
     case 'private_service': return 'Other'; 
-    default: return tag; // Fallback to the raw tag if not found
+    default: return tag; 
   }
 };
 
@@ -57,7 +56,7 @@ export default function ShowTour() {
     try {
       await deleteTourPackage(parseInt(id));
       setSuccess('Tur berhasil dihapus!');
-      navigate('/admin/tours'); // Redirect to tour list after deletion
+      navigate('/admin/tours');
     } catch (err: any) {
       console.error('Gagal menghapus tur:', err);
       setError(err.message || 'Terjadi kesalahan saat menghapus tur.');
@@ -187,15 +186,21 @@ export default function ShowTour() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
               <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mata Uang</label>
+                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                  {tour.currency ? tour.currency : <span className="text-gray-400 italic">Tidak ada</span>}
+                </div>
+              </div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.starting_price ? `฿${(tour.starting_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                  {tour.starting_price ? `${(tour.starting_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Harga Asli (opsional)</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.original_price ? `฿${(tour.original_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                  {tour.original_price ? `${(tour.original_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
             </div>
@@ -215,7 +220,7 @@ export default function ShowTour() {
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Harga</label>
                         <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                          {priceOption.price ? `฿${priceOption.price.toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                          {priceOption.price ? `${tour.currency || ''}${priceOption.price.toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                         </div>
                       </div>
                     </div>

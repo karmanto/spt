@@ -104,6 +104,14 @@ const AdminLayout: React.FC = () => {
             kelola paket tur internasional
           </Link>
           <Link
+            to="/admin/domestic-tours"
+            className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
+            onClick={() => setMenuOpen(false)}
+          >
+            <Globe className=" h-4 w-4 mr-2" />
+            kelola paket tur domestic
+          </Link>
+          <Link
             to="/admin/blogs"
             className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
             onClick={() => setMenuOpen(false)}

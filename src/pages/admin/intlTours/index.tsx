@@ -5,7 +5,7 @@ import { Plus, Edit, Trash2, Eye, Copy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getTourPackages, deleteTourPackage, swapTourOrder } from '../../../lib/api';
 import { FaArrowLeft } from 'react-icons/fa';
-import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'; // Changed import
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'; 
 
 export default function AdminTours() {
   const navigate = useNavigate();
@@ -51,7 +51,6 @@ export default function AdminTours() {
   );
 
   const onDragEnd = useCallback(async (result: DropResult) => {
-    console.log('onDragEnd triggered', result); // Debugging log
     if (!result.destination) {
       return;
     }
@@ -67,7 +66,6 @@ export default function AdminTours() {
     const [removed] = reorderedTours.splice(sourceIndex, 1);
     reorderedTours.splice(destinationIndex, 0, removed);
 
-    // Optimistically update UI
     setTours(reorderedTours);
 
     const firstPackageId = tours[sourceIndex].id;
@@ -76,12 +74,11 @@ export default function AdminTours() {
     try {
       await swapTourOrder(firstPackageId, secondPackageId);
       alert('Urutan tur internasional berhasil diperbarui!');
-      fetchTours(); // Re-fetch to get the confirmed order from the backend
+      fetchTours();
     } catch (err) {
       console.error('Gagal memperbarui urutan tur internasional:', err);
       setError('Gagal memperbarui urutan tur internasional. Silakan coba lagi.');
-      // Revert UI on error
-      fetchTours(); // Re-fetch original order
+      fetchTours(); 
     }
   }, [tours, fetchTours]);
 
@@ -181,7 +178,7 @@ export default function AdminTours() {
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {tour.starting_price ? (
-                                    `฿${tour.starting_price.toLocaleString()}`
+                                    `${tour.currency}${tour.starting_price.toLocaleString()}`
                                   ) : (
                                     `tidak ada`
                                   )}

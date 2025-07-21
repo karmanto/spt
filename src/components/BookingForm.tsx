@@ -91,11 +91,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
         if (qty > 0) {
           const serviceType = getLocalizedContent(option.service_type);
           const description = getLocalizedContent(option.description);
-          serviceDetails += `- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ฿${option.price.toLocaleString()} = ฿${(option.price * qty).toLocaleString()}
+          serviceDetails += `- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ${tour.currency || ''}${option.price.toLocaleString()} = ${tour.currency || ''}${(option.price * qty).toLocaleString()}
 `;
           if (!index) {
             serviceDetails = `
-- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ฿${option.price.toLocaleString()} = ฿${(option.price * qty).toLocaleString()}
+- ${serviceType}${description ? ` (${description})` : ''}: ${qty} x ${tour.currency || ''}${option.price.toLocaleString()} = ${tour.currency || ''}${(option.price * qty).toLocaleString()}
 `;
           }
         }
@@ -113,7 +113,7 @@ ${t('nationality')}: ${nationality || t('notSpecified')}
 ${t('hotelName')}: ${hotelName || t('notSpecified')}
 ${t('serviceType')}: 
 ${serviceDetails}
-${t('totalCost')}: ฿${totalCost.toLocaleString()}
+${t('totalCost')}: ${tour.currency || ''}${totalCost.toLocaleString()}
 ${notes ? `${t('notes')}: ${notes}` : ''}
 
 ${t('lookingForwardToConfirmation')}
@@ -229,7 +229,7 @@ ${t('lookingForwardToConfirmation')}
                 <div className="flex-1 mb-4 sm:mb-0 sm:mr-4">
                   <div className="font-medium text-gray-900">{getLocalizedContent(option.service_type)} </div>
                   <div className="text-sm text-gray-600 block">{getLocalizedContent(option.description)}</div>
-                  <div className="text-md font-bold text-blue-600">฿{parseFloat(String(option.price ?? '')).toLocaleString()}</div>
+                  <div className="text-md font-bold text-blue-600">{tour.currency || ''}{parseFloat(String(option.price ?? '')).toLocaleString()}</div>
                 </div>
                 <div className="flex items-center border border-gray-300 rounded-md shadow-sm overflow-hidden">
                   <button
@@ -273,7 +273,7 @@ ${t('lookingForwardToConfirmation')}
 
         <div className="flex justify-between items-center bg-blue-50 p-4 rounded-lg">
           <span className="text-lg font-semibold text-gray-900">{t('totalCost')}:</span>
-          <span className="text-2xl font-bold text-blue-600">฿{totalCost.toLocaleString()}</span>
+          <span className="text-2xl font-bold text-blue-600">{tour.currency || ''}{totalCost.toLocaleString()}</span>
         </div>
         <button
           type="submit"
