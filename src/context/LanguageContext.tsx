@@ -70,13 +70,13 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     if (!getLanguageFromLocalStorage()) {
       const detectLanguageFromIP = async () => {
         try {
-          const urlGetLanguageFromIp = import.meta.env.VITE_GET_LOCAL_LANGUAGE_URL || 'http://ip-api.com/json/?fields=countryCode';
+          const urlGetLanguageFromIp = 'https://get.geojs.io/v1/ip/country.json';
           const response = await fetch(urlGetLanguageFromIp);
           const data = await response.json();
           let detectedLang: Language = 'en';
 
-          if (data.countryCode) {
-            const countryCode = data.countryCode.toLowerCase();
+          if (data.country) {
+            const countryCode = data.country.toLowerCase();
             if (countryCode === 'id') {
               detectedLang = 'id';
             } else if (countryCode === 'ru') {
