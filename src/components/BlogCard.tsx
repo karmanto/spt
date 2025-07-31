@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BlogCardProps } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Tag } from 'lucide-react';
 
 const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
   const { t, language: currentLanguage } = useLanguage();
@@ -44,9 +44,15 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
             {getLocalizedTitle()}
           </h3>
-          <div className="flex items-center text-sm text-gray-500 mb-4">
-            <CalendarDays className="w-4 h-4 mr-1" />
-            <span>{formattedDate}</span>
+          <div className="flex text-sm text-gray-500 mb-4 w-full">
+            <div className='flex mr-4'>
+              <CalendarDays className="w-4 h-4 mr-1" />
+              <span>{formattedDate}</span>
+            </div>
+            <div className='flex'>
+              <Tag className="w-4 h-4 mr-1" />
+              <span>{blog.category ?? "-"}</span>
+            </div>
           </div>
           <p className="text-gray-700 text-base mb-4 line-clamp-3">
             {getLocalizedContentSnippet()}

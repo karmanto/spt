@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getBlogs } from '../lib/api';
 import { Blog } from '../lib/types';
 import BlogCard from '../components/BlogCard';
@@ -17,7 +17,13 @@ const BlogList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const blogsPerPage = 9; // Number of blogs per page
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const blogsPerPage = 9;
+
+  const filtersContainerRef = useRef<HTMLDivElement>(null); 
+
+  const prevSearchTermRef = useRef(searchTerm);
+  const prevSelectedCategoryRef = useRef(selectedCategory);
 
   const fetchBlogs = useCallback(async () => {
     try {
@@ -27,6 +33,7 @@ const BlogList: React.FC = () => {
         page: currentPage,
         per_page: blogsPerPage,
         search: debouncedSearchTerm,
+        category: selectedCategory,
       });
       setBlogs(response.data);
       setTotalPages(response.pagination.last_page);
@@ -36,23 +43,35 @@ const BlogList: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, debouncedSearchTerm, t]);
+  }, [currentPage, debouncedSearchTerm, selectedCategory, t]); 
 
   useEffect(() => {
     fetchBlogs();
   }, [fetchBlogs]);
 
-  // Debounce search term
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-      setCurrentPage(1); 
-    }, 2000); 
+    }, 2000);
 
     return () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
+
+  useEffect(() => {
+    const searchTermChanged = searchTerm !== prevSearchTermRef.current;
+    const selectedCategoryChanged = selectedCategory !== prevSelectedCategoryRef.current;
+
+    if (searchTermChanged || selectedCategoryChanged) {
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    }
+
+    prevSearchTermRef.current = searchTerm;
+    prevSelectedCategoryRef.current = selectedCategory;
+  }, [searchTerm, selectedCategory]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -63,17 +82,37 @@ const BlogList: React.FC = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleFilter = (category: string) => {
+    setSelectedCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setSelectedCategory('');
+    setSearchTerm('');
+    setCurrentPage(1);
+  };
+
+  const blogFilterOptions = [
+    { label: 'tips', category: 'blog_tips' },
+    { label: 'kuliner', category: 'blog_kuliner'},
+    { label: 'budaya', category: 'blog_budaya'},
+    { label: 'testimoni', category: 'blog_testimoni'},
+    { label: 'berita', category: 'blog_berita'},
+    { label: 'inspirasi', category: 'blog_inspirasi'},
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-8">
+        <h1 className="text-4xl font-extrabold text-gray-900 text-center mb-8" data-aos="fade-up">
           {t('ourBlog')}
         </h1>
-        <p className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
+        <p className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
           {t('blogIntroText')}
         </p>
 
-        <div className="mb-10 flex justify-center">
+        <div className="mb-10 flex justify-center" data-aos="fade-up" data-aos-delay="200">
           <div className="relative w-full max-w-md">
             <input
               type="text"
@@ -83,6 +122,43 @@ const BlogList: React.FC = () => {
               className="w-full pl-12 pr-4 py-3 rounded-full border-2 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all shadow-sm"
             />
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Scrollable Filter Buttons */}
+        <div
+          ref={filtersContainerRef}
+          className="flex overflow-x-auto pb-4 mb-6 -mx-4 px-4 scrollbar-hide"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <div className="flex space-x-3 min-w-max">
+            {blogFilterOptions.map((option, index) => {
+              const isActive = selectedCategory === option.label;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleFilter(option.label)}
+                  className={`flex items-center px-4 py-2 text-sm rounded-full font-medium transition-all duration-300 ease-in-out shadow-lg whitespace-nowrap
+                    ${isActive
+                      ? 'bg-primary text-white'
+                      : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
+                    }`}
+                >
+                  {t(option.category)}
+                </button>
+              );
+            })}
+            <button
+              onClick={handleResetFilters}
+              className={`flex items-center px-4 py-2 text-sm rounded-full font-medium transition-all duration-300 ease-in-out shadow-lg whitespace-nowrap
+                ${selectedCategory === 'all' && searchTerm === ''
+                  ? 'bg-primary text-white'
+                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
+                }`}
+            >
+              {t('allBlogs')}
+            </button>
           </div>
         </div>
 

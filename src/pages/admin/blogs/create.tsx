@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { addBlog } from '../../../lib/api';
 import { BlogCreatePayload } from '../../../lib/types';
 import { toast } from 'react-toastify';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ChevronDown } from 'lucide-react';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Import Quill styles
+import 'react-quill/dist/quill.snow.css';
 
 const CreateBlog: React.FC = () => {
   const navigate = useNavigate();
@@ -16,16 +16,20 @@ const CreateBlog: React.FC = () => {
     content_id: '',
     content_en: '',
     content_ru: '',
-    posting_date: new Date().toISOString().split('T')[0], // Default to today's date
+    posting_date: new Date().toISOString().split('T')[0],
+    category: '',
     image: undefined,
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | React.ChangeEvent<HTMLTextAreaElement>>) => {
-    const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -34,6 +38,7 @@ const CreateBlog: React.FC = () => {
       });
     }
   };
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -71,6 +76,7 @@ const CreateBlog: React.FC = () => {
     if (!formData.content_id.trim()) newErrors.content_id = "Konten (ID) wajib diisi.";
     if (!formData.content_en.trim()) newErrors.content_en = "Konten (EN) wajib diisi.";
     if (!formData.posting_date) newErrors.posting_date = "Tanggal posting wajib diisi.";
+    if (!formData.category) newErrors.category = "Kategori wajib diisi.";
     if (!formData.image) newErrors.image = "Gambar wajib diunggah.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -102,6 +108,7 @@ const CreateBlog: React.FC = () => {
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
       ['link', 'image'],
+      [{ 'color': [] }, { 'background': [] }], // Added color and background
       ['clean']
     ],
   };
@@ -110,7 +117,8 @@ const CreateBlog: React.FC = () => {
     'header',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
-    'link', 'image'
+    'link', 'image',
+    'color', 'background' // Added color and background
   ];
 
   return (
@@ -225,6 +233,31 @@ const CreateBlog: React.FC = () => {
             className={`mt-1 block w-full rounded-md border ${errors.posting_date ? 'border-red-500' : 'border-gray-300'} shadow-sm p-2`}
           />
           {errors.posting_date && <p className="mt-1 text-sm text-red-600">{errors.posting_date}</p>}
+        </div>
+
+        <div className="mb-6">
+          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+            Kategori <span className="text-red-500">*</span>
+          </label>
+          <div className="relative">
+            <select
+              id="category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className={`mt-1 block w-full rounded-md border ${errors.category ? 'border-red-500' : 'border-gray-300'} shadow-sm p-2 pr-10 appearance-none`}
+            >
+              <option value="">Pilih kategori</option>
+              <option value="tips">Tips</option>
+              <option value="kuliner">Kuliner</option>
+              <option value="budaya">Budaya</option>
+              <option value="testimoni">Testimoni</option>
+              <option value="berita">Berita</option>
+              <option value="inspirasi">Inspirasi</option>
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+          </div>
+          {errors.category && <p className="mt-1 text-sm text-red-600">{errors.category}</p>}
         </div>
 
         <div className="mb-6">

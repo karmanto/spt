@@ -355,13 +355,6 @@ export const uploadTourImage = async (imageFile: File): Promise<{ path: string; 
   });
 };
 
-// Removed boostTourPackage
-// export const boostTourPackage = async (id: number) => {
-//   return fetchData<TourPackage>(`packages/${id}/boost-product`, {
-//     method: 'POST',
-//   });
-// };
-
 // New function to swap tour package order
 export const swapTourOrder = async (firstPackageId: number, secondPackageId: number) => {
   return fetchData<void>(`packages/swap-order`, {
@@ -374,11 +367,12 @@ export const swapTourOrder = async (firstPackageId: number, secondPackageId: num
 };
 
 // ==== API Blog ====
-export const getBlogs = async (params?: { per_page?: number; page?: number; search?: string; }) => {
+export const getBlogs = async (params?: { per_page?: number; page?: number; search?: string; category?: string;}) => {
   const query = new URLSearchParams();
   if (params?.per_page) query.append('per_page', params.per_page.toString());
   if (params?.page) query.append('page', params.page.toString());
   if (params?.search) query.append('search', params.search); 
+  if (params?.category) query.append('category', params.category); 
 
   const queryString = query.toString();
   const endpoint = `blogs${queryString ? `?${queryString}` : ''}`;
@@ -401,6 +395,7 @@ export const addBlog = async (blog: BlogCreatePayload) => {
   formData.append('content_en', blog.content_en);
   formData.append('content_ru', blog.content_ru);
   formData.append('posting_date', blog.posting_date);
+  formData.append('category', blog.category);
   if (blog.image) {
     formData.append('image', blog.image);
   }
@@ -417,6 +412,7 @@ export const updateBlog = async (id: number, blog: BlogUpdatePayload) => {
   if (blog.content_en) formData.append('content_en', blog.content_en);
   if (blog.content_ru) formData.append('content_ru', blog.content_ru);
   if (blog.posting_date) formData.append('posting_date', blog.posting_date);
+  if (blog.category) formData.append('category', blog.category);
   if (blog.image) {
     formData.append('image', blog.image);
   }

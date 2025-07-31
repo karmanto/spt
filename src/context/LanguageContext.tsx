@@ -1,7 +1,7 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 
 type Language = 'id' | 'en' | 'ru';
-type TranslationKeys = { [key: string]: string }; // Define a type for translation keys
+type TranslationKeys = { [key: string]: string };
 
 interface LanguageContextType {
   language: Language;
@@ -23,25 +23,30 @@ interface LanguageProviderProps {
   children: ReactNode;
 }
 
-// Helper function to determine initial language based on browser settings
-const getInitialLanguage = (): Language => {
-  const browserLanguage = navigator.language.toLowerCase();
-  if (browserLanguage.startsWith('id')) {
-    return 'id';
+const getLanguageFromLocalStorage = (): Language | null => {
+  const storedLang = localStorage.getItem('userLanguage');
+  if (storedLang === 'id' || storedLang === 'en' || storedLang === 'ru') {
+    return storedLang;
   }
-  if (browserLanguage.startsWith('ru')) {
-    return 'ru';
-  }
-  // Default to 'en' if browser language is not 'id' or 'ru'
-  // The useEffect will handle fallback to 'id' if 'en' fails to load
-  return 'en';
+  return null;
+};
+
+const saveLanguageToLocalStorage = (lang: Language) => {
+  localStorage.setItem('userLanguage', lang);
 };
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>(getInitialLanguage()); // Set initial language dynamically
+  const initialLanguage = getLanguageFromLocalStorage() || 'en';
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
   const [currentTranslations, setCurrentTranslations] = useState<TranslationKeys>({});
-  const [defaultTranslations, setDefaultTranslations] = useState<TranslationKeys>({}); 
+  const [defaultTranslations, setDefaultTranslations] = useState<TranslationKeys>({});
 
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    saveLanguageToLocalStorage(lang);
+  }, []);
+
+  // Effect to load translations
   useEffect(() => {
     const loadTranslations = async () => {
       try {
@@ -54,13 +59,46 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
         setCurrentTranslations(module.default);
       } catch (error) {
         console.error(`Failed to load translations for ${language}:`, error);
-        // Fallback to default translations if the selected language file fails to load
         setCurrentTranslations(defaultTranslations);
       }
     };
 
     loadTranslations();
-  }, [language, defaultTranslations]); // Re-run when language or defaultTranslations change
+  }, [language]);
+
+  useEffect(() => {
+    if (!getLanguageFromLocalStorage()) {
+      const detectLanguageFromIP = async () => {
+        try {
+          const urlGetLanguageFromIp = import.meta.env.VITE_GET_LOCAL_LANGUAGE_URL || 'http://ip-api.com/json/?fields=countryCode';
+          const response = await fetch(urlGetLanguageFromIp);
+          const data = await response.json();
+          let detectedLang: Language = 'en';
+
+          if (data.countryCode) {
+            const countryCode = data.countryCode.toLowerCase();
+            if (countryCode === 'id') {
+              detectedLang = 'id';
+            } else if (countryCode === 'ru') {
+              detectedLang = 'ru';
+            } 
+          }
+          
+          if (language !== detectedLang) {
+            setLanguage(detectedLang); 
+          }
+
+          saveLanguageToLocalStorage(detectedLang);
+        } catch (error) {
+          console.error('Failed to detect language from IP:', error);
+          setLanguage("en");
+          saveLanguageToLocalStorage("en");
+        }
+      };
+
+      detectLanguageFromIP();
+    }
+  }, []);
 
   const t = (key: string): string => {
     if (currentTranslations[key]) {

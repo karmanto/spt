@@ -245,5 +245,12 @@
   "failedToLoadDomesticTours": "Не удалось загрузить пакеты внутренних туров. Пожалуйста, попробуйте позже.",
   "backToDomesticTours": "Назад к внутренним турам",
   "domesticTourNotFound": "Внутренний тур не найден.",
-  "failedToLoadDomesticTourDetails": "Не удалось загрузить подробности внутреннего тура. Пожалуйста, попробуйте позже."
+  "failedToLoadDomesticTourDetails": "Не удалось загрузить подробности внутреннего тура. Пожалуйста, попробуйте позже.",
+  "blog_tips": "Советы путешественникам",
+  "blog_kuliner": "Кулинария",
+  "blog_budaya": "Культура",
+  "blog_testimoni": "Отзывы",
+  "blog_berita": "Новости",
+  "blog_inspirasi": "Вдохновение",
+  "allBlogs": "Все блоги"
 }

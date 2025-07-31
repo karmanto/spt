@@ -6,14 +6,14 @@ import { getBlogDetail } from '../lib/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
 import { FaArrowLeft } from 'react-icons/fa';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Tag } from 'lucide-react';
 
 const BlogDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>(); 
   const navigate = useNavigate();
   const { t, language: currentLanguage } = useLanguage();
   const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
 
   const fetchBlogDetail = useCallback(async () => {
@@ -89,6 +89,24 @@ const BlogDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
+      {/* Scoped CSS for BlogDetail h2 - using !important for specificity */}
+      <style>{`
+        /* Target h2 directly within blog-detail-content */
+        .blog-detail-content h2 {
+          font-size: 1.5rem !important; /* text-2xl (24px) for mobile */
+          line-height: 2rem !important; /* leading-8 */
+          margin-top: 2em;
+          margin-bottom: 1em;
+        }
+
+        @media (min-width: 768px) { /* md breakpoint and up */
+          .blog-detail-content h2 {
+            font-size: 1.875rem !important; /* text-3xl (30px) for desktop */
+            line-height: 2.25rem !important; /* leading-9 */
+          }
+        }
+      `}</style>
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-8">
           <button
@@ -112,13 +130,19 @@ const BlogDetail: React.FC = () => {
             {getLocalizedTitle()}
           </h1>
 
-          <div className="flex items-center text-gray-500 text-sm mb-8">
-            <CalendarDays className="w-4 h-4 mr-2" />
-            <span>{formattedDate}</span>
+          <div className="flex text-sm text-gray-500 mb-4 w-full">
+            <div className='flex mr-4'>
+              <CalendarDays className="w-4 h-4 mr-1" />
+              <span>{formattedDate}</span>
+            </div>
+            <div className='flex'>
+              <Tag className="w-4 h-4 mr-1" />
+              <span>{blog.category ?? "-"}</span>
+            </div>
           </div>
 
           <div
-            className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+            className="prose prose-lg max-w-none text-gray-700 leading-relaxed blog-detail-content"
             dangerouslySetInnerHTML={{ __html: getLocalizedContent() }}
           />
         </div>

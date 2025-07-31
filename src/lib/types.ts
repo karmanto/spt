@@ -294,6 +294,7 @@ export interface Blog {
   content_ru: string;
   image: string;
   posting_date: string;
+  category: string;
   slug?: string; // Added slug property
 }
 

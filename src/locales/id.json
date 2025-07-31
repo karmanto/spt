@@ -243,5 +243,12 @@
   "failedToLoadDomesticTours": "Gagal memuat paket tur domestik. Silakan coba lagi nanti.",
   "backToDomesticTours": "Kembali ke Tur Domestik",
   "domesticTourNotFound": "Tur domestik tidak ditemukan.",
-  "failedToLoadDomesticTourDetails": "Gagal memuat detail tur domestik. Silakan coba lagi nanti."
+  "failedToLoadDomesticTourDetails": "Gagal memuat detail tur domestik. Silakan coba lagi nanti.",
+  "blog_tips": "Tips",
+  "blog_kuliner": "Kuliner",
+  "blog_budaya": "Budaya",
+  "blog_testimoni": "Testimoni",
+  "blog_berita": "Berita",
+  "blog_inspirasi": "Inspirasi",
+  "allBlogs": "Semua Blog"
 }

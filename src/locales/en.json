@@ -244,6 +244,12 @@
   "failedToLoadDomesticTours": "Failed to load domestic tour packages. Please try again later.",
   "backToDomesticTours": "Back to Domestic Tours",
   "domesticTourNotFound": "Domestic tour not found.",
-  "failedToLoadDomesticTourDetails": "Failed to load domestic tour details. Please try again later."
-  
+  "failedToLoadDomesticTourDetails": "Failed to load domestic tour details. Please try again later.",
+  "blog_tips": "Travel Tips",
+  "blog_kuliner": "Culinary",
+  "blog_budaya": "Culture",
+  "blog_testimoni": "Testimonials",
+  "blog_berita": "News",
+  "blog_inspirasi": "Inspiration",
+  "allBlogs": "All Blog"
 }

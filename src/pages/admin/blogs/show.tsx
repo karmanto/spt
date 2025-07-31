@@ -6,7 +6,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import ErrorDisplay from '../../../components/ErrorDisplay';
 import { toast } from 'react-toastify';
 // Menggunakan react-icons/fa untuk konsistensi dengan halaman promo
-import { FaEdit, FaTrash, FaArrowLeft, FaCalendarAlt } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaArrowLeft, FaCalendarAlt, FaTag } from 'react-icons/fa'; // Menambahkan FaTag
 
 const ShowBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -192,6 +192,13 @@ const ShowBlog: React.FC = () => {
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
                   <FaCalendarAlt className="w-4 h-4 mr-2 text-gray-500" />
                   <span>{formattedDate}</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                  <FaTag className="w-4 h-4 mr-2 text-gray-500" /> {/* Mengganti ikon di sini */}
+                  <span>{blog.category ?? '-'}</span>
                 </div>
               </div>
             </div>
