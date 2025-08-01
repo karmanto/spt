@@ -318,4 +318,5 @@ export interface BlogResponse {
 
 export interface BlogCardProps {
   blog: Blog;
+  currentPage: number; 
 }

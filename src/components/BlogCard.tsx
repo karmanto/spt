@@ -1,10 +1,10 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { BlogCardProps } from '../lib/types';
 import { useLanguage } from '../context/LanguageContext';
 import { CalendarDays, Tag } from 'lucide-react';
+import { forwardRef } from 'react';
 
-const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
+const BlogCard = forwardRef<HTMLDivElement, BlogCardProps>(({ blog, currentPage }, ref) => { 
   const { t, language: currentLanguage } = useLanguage();
 
   const getLocalizedTitle = () => {
@@ -30,9 +30,17 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
     day: 'numeric',
   });
 
+  const handleCardClick = () => {
+    sessionStorage.setItem('lastViewedBlogId', blog.id.toString());
+    sessionStorage.setItem('lastViewedPage', currentPage.toString()); 
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
-      <Link to={`/blogs/${blog.slug}`} className="block">
+    <div 
+      ref={ref} 
+      className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl"
+    >
+      <Link to={`/blogs/${blog.slug}`} className="block" onClick={handleCardClick}>
         <div className="relative w-full h-48 overflow-hidden">
           <img
             src={`${import.meta.env.VITE_BASE_URL}/storage/${blog.image}`}
@@ -64,6 +72,6 @@ const BlogCard: React.FC<BlogCardProps> = ({ blog }) => {
       </Link>
     </div>
   );
-};
+});
 
 export default BlogCard;

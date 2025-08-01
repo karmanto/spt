@@ -1,25 +1,34 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { getBlogs } from '../lib/api';
-import { Blog } from '../lib/types';
+import { Blog, OutletContext } from '../lib/types';
 import BlogCard from '../components/BlogCard';
 import Pagination from '../components/Pagination';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
 import { useLanguage } from '../context/LanguageContext';
 import { Search } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 
 const BlogList: React.FC = () => {
   const { t } = useLanguage();
+
+  const { searchTerm, selectedCategory, setSearchTerm, setSelectedCategory } = useOutletContext<OutletContext>();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+  const storedPage = sessionStorage.getItem('lastViewedPage');
+    if (storedPage) {
+      return parseInt(storedPage, 10);
+    }
+    return 1;
+  });
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const blogsPerPage = 9;
+  const blogsPerPage = 12;
 
+
+  const blogCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
   const filtersContainerRef = useRef<HTMLDivElement>(null); 
 
   const prevSearchTermRef = useRef(searchTerm);
@@ -37,6 +46,7 @@ const BlogList: React.FC = () => {
       });
       setBlogs(response.data);
       setTotalPages(response.pagination.last_page);
+      sessionStorage.removeItem('lastViewedPage');
     } catch (err) {
       console.error("Failed to fetch blogs:", err);
       setError(t('failedToLoadBlogs'));
@@ -72,6 +82,22 @@ const BlogList: React.FC = () => {
     prevSearchTermRef.current = searchTerm;
     prevSelectedCategoryRef.current = selectedCategory;
   }, [searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    if (!loading && blogs.length > 0) {
+      const lastViewedBlogId = sessionStorage.getItem('lastViewedBlogId');
+      if (lastViewedBlogId) {
+        const tourIdNum = parseInt(lastViewedBlogId, 10);
+        const targetCard = blogCardRefs.current.get(tourIdNum);
+        if (targetCard) {
+          requestAnimationFrame(() => {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          });
+          sessionStorage.removeItem('lastViewedBlogId'); 
+        }
+      }
+    }
+  }, [loading, blogs]); 
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -152,7 +178,7 @@ const BlogList: React.FC = () => {
             <button
               onClick={handleResetFilters}
               className={`flex items-center px-4 py-2 text-sm rounded-full font-medium transition-all duration-300 ease-in-out shadow-lg whitespace-nowrap
-                ${selectedCategory === 'all' && searchTerm === ''
+                ${selectedCategory === '' && searchTerm === ''
                   ? 'bg-primary text-white'
                   : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
                 }`}
@@ -176,7 +202,18 @@ const BlogList: React.FC = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogs.map((blog) => (
-                <BlogCard key={blog.id} blog={blog} />
+                <BlogCard 
+                  key={blog.id} 
+                  blog={blog} 
+                  currentPage={currentPage}
+                  ref={(el) => {
+                    if (el) {
+                      blogCardRefs.current.set(blog.id, el);
+                    } else {
+                      blogCardRefs.current.delete(blog.id);
+                    }
+                  }}
+                />
               ))}
             </div>
             <Pagination

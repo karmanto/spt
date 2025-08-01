@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import TourLayout from './layouts/TourLayout';
+import BlogLayout from './layouts/BlogLayout';
 import AdminLayout from './layouts/AdminLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/admin/Dashboard';
@@ -153,7 +154,7 @@ function App() {
               <Route path="/domestic-tours/:slug" element={<DomesticTourDetail />} />
             </Route>
 
-            <Route element={<TourLayout />}>
+            <Route element={<BlogLayout />}>
               <Route path="/blogs" element={<BlogList />} />
               <Route path="/blogs/:slug" element={<BlogDetail />} />
             </Route>
