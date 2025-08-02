@@ -13,11 +13,10 @@ const PromoSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Effect to fetch promos
   const fetchPromosData = useCallback(async () => {
     try {
       setLoading(true);
-      setError(null); // Clear any previous errors
+      setError(null); 
       const data = await getPromos();
       setPromos(data);
     } catch (err) {
@@ -32,9 +31,7 @@ const PromoSection: React.FC = () => {
     fetchPromosData();
   }, [fetchPromosData]);
 
-  // Effect for countdowns, depends on promos and loading state
   useEffect(() => {
-    // If no promos or still loading, clear countdowns and return
     if (promos.length === 0 && !loading) {
       setCountdowns({});
       return;
@@ -55,46 +52,36 @@ const PromoSection: React.FC = () => {
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
           newCountdowns[promo.id.toString()] = { days, hours, minutes, seconds };
         }
-        // If timeLeft <= 0, the promo is simply not added to newCountdowns.
-        // No need to explicitly delete from newCountdowns based on old state.
       });
 
-      // Use functional update to compare with previous state and prevent unnecessary re-renders
       setCountdowns(prevCountdowns => {
         const prevKeys = Object.keys(prevCountdowns);
         const newKeys = Object.keys(newCountdowns);
 
-        // If the number of promos with active countdowns changes, update
         if (prevKeys.length !== newKeys.length) {
           return newCountdowns;
         }
 
-        // Check if any individual countdown value has changed
         for (const key of newKeys) {
           const prev = prevCountdowns[key];
           const current = newCountdowns[key];
 
-          // If a key exists in new but not prev, or any value is different, update
           if (!prev || prev.days !== current.days || prev.hours !== current.hours ||
               prev.minutes !== current.minutes || prev.seconds !== current.seconds) {
             return newCountdowns;
           }
         }
 
-        // If no changes detected, return the previous state to prevent re-render
         return prevCountdowns;
       });
     };
 
-    // Initial update
     updateCountdowns();
 
-    // Set up interval to update countdowns every second
     const timer = setInterval(updateCountdowns, 1000);
 
-    // Cleanup on unmount or when promos/loading state changes
     return () => clearInterval(timer);
-  }, [promos, loading]); // Removed 'countdowns' from dependencies
+  }, [promos, loading]); 
 
   if (loading) {
     return (

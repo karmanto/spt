@@ -5,8 +5,7 @@ import { Blog } from '../../../lib/types';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import ErrorDisplay from '../../../components/ErrorDisplay';
 import { toast } from 'react-toastify';
-// Menggunakan react-icons/fa untuk konsistensi dengan halaman promo
-import { FaEdit, FaTrash, FaArrowLeft, FaCalendarAlt, FaTag } from 'react-icons/fa'; // Menambahkan FaTag
+import { FaEdit, FaTrash, FaArrowLeft, FaCalendarAlt, FaTag } from 'react-icons/fa'; 
 
 const ShowBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +13,7 @@ const ShowBlog: React.FC = () => {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null); // Menambahkan state sukses
+  const [success, setSuccess] = useState<string | null>(null); 
 
   const fetchBlogDetail = useCallback(async () => {
     if (!id) {
@@ -42,30 +41,29 @@ const ShowBlog: React.FC = () => {
     if (!id) return;
     if (window.confirm("Apakah Anda yakin ingin menghapus blog ini? Tindakan ini tidak dapat dibatalkan.")) {
       try {
-        setLoading(true); // Set loading true selama proses penghapusan
+        setLoading(true); 
         setError(null);
         setSuccess(null);
         await deleteBlog(parseInt(id));
-        setSuccess("Blog berhasil dihapus!"); // Set pesan sukses
+        setSuccess("Blog berhasil dihapus!"); 
         toast.success("Blog berhasil dihapus!");
         navigate('/admin/blogs');
       } catch (err) {
         console.error("Failed to delete blog:", err);
-        setError("Gagal menghapus blog."); // Set pesan error
+        setError("Gagal menghapus blog."); 
         toast.error("Gagal menghapus blog.");
       } finally {
-        setLoading(false); // Reset loading
+        setLoading(false); 
       }
     }
   };
 
-  // Fungsi helper untuk menampilkan konten multibahasa, meniru renderPromoLanguageContentDisplay
   const renderBlogLanguageContentDisplay = (
     label: string,
     idContent: string | undefined,
     enContent: string | undefined,
     ruContent: string | undefined,
-    isHtmlContent: boolean = false // Parameter baru untuk menangani konten HTML
+    isHtmlContent: boolean = false 
   ) => (
     <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
       <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>

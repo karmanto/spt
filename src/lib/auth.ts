@@ -78,7 +78,6 @@ export const getCurrentUser = async (): Promise<any | null> => {
     });
 
     if (!response.ok) {
-      // Jika respons 401, panggil handler kesalahan autentikasi
       if (response.status === 401) {
         handleAuthError();
         return null; 

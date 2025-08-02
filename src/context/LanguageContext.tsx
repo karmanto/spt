@@ -1,12 +1,15 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Language } from '../lib/types'; 
 
-type Language = 'id' | 'en' | 'ru';
 type TranslationKeys = { [key: string]: string };
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  setLanguageFromUrl: (lang: Language) => void;
   t: (key: string) => string;
+  isLoading: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -36,69 +39,95 @@ const saveLanguageToLocalStorage = (lang: Language) => {
 };
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  const initialLanguage = getLanguageFromLocalStorage() || 'en';
-  const [language, setLanguageState] = useState<Language>(initialLanguage);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [language, setLanguageState] = useState<Language>('en');
+  const [isLoading, setIsLoading] = useState(true);
   const [currentTranslations, setCurrentTranslations] = useState<TranslationKeys>({});
   const [defaultTranslations, setDefaultTranslations] = useState<TranslationKeys>({});
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     saveLanguageToLocalStorage(lang);
+
+    const path = location.pathname;
+    const pathSegments = path.split('/').filter(Boolean);
+    const currentLangInUrl = pathSegments[0];
+
+    let newPath = `/${lang}`;
+    if (['id', 'en', 'ru'].includes(currentLangInUrl)) {
+      newPath += `/${pathSegments.slice(1).join('/')}`;
+    } else {
+      newPath += path === '/' ? '' : path;
+    }
+    navigate(newPath);
+  }, [navigate, location.pathname]);
+
+  const setLanguageFromUrl = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    saveLanguageToLocalStorage(lang);
   }, []);
 
-  // Effect to load translations
+  useEffect(() => {
+    const path = location.pathname;
+    const pathSegments = path.split('/').filter(Boolean);
+    const langInUrl = pathSegments[0];
+
+    const initializeLanguage = async () => {
+      if (['id', 'en', 'ru'].includes(langInUrl)) {
+        setLanguageState(langInUrl as Language);
+        saveLanguageToLocalStorage(langInUrl as Language);
+      } else {
+        const storedLang = getLanguageFromLocalStorage();
+        if (storedLang) {
+          setLanguageState(storedLang);
+        } else {
+          try {
+            const urlGetLanguageFromIp = 'https://get.geojs.io/v1/ip/country.json';
+            const response = await fetch(urlGetLanguageFromIp);
+            const data = await response.json();
+            let detectedLang: Language = 'en';
+
+            if (data.country) {
+              const countryCode = data.country.toLowerCase();
+              if (countryCode === 'id') {
+                detectedLang = 'id';
+              } else if (countryCode === 'ru') {
+                detectedLang = 'ru';
+              }
+            }
+            setLanguageState(detectedLang);
+            saveLanguageToLocalStorage(detectedLang);
+          } catch (error) {
+            console.error('Failed to detect language from IP:', error);
+            setLanguageState("en");
+            saveLanguageToLocalStorage("en");
+          }
+        }
+      }
+      setIsLoading(false); 
+    };
+
+    initializeLanguage();
+  }, [location.pathname]); 
+
   useEffect(() => {
     const loadTranslations = async () => {
       try {
-        // Always load 'id' as the default fallback
         const defaultModule = await import(`../locales/id.json`);
         setDefaultTranslations(defaultModule.default);
 
-        // Load the selected language
         const module = await import(`../locales/${language}.json`);
         setCurrentTranslations(module.default);
       } catch (error) {
         console.error(`Failed to load translations for ${language}:`, error);
-        setCurrentTranslations(defaultTranslations);
+        setCurrentTranslations(defaultTranslations); 
       }
     };
 
     loadTranslations();
-  }, [language]);
-
-  useEffect(() => {
-    if (!getLanguageFromLocalStorage()) {
-      const detectLanguageFromIP = async () => {
-        try {
-          const urlGetLanguageFromIp = 'https://get.geojs.io/v1/ip/country.json';
-          const response = await fetch(urlGetLanguageFromIp);
-          const data = await response.json();
-          let detectedLang: Language = 'en';
-
-          if (data.country) {
-            const countryCode = data.country.toLowerCase();
-            if (countryCode === 'id') {
-              detectedLang = 'id';
-            } else if (countryCode === 'ru') {
-              detectedLang = 'ru';
-            } 
-          }
-          
-          if (language !== detectedLang) {
-            setLanguage(detectedLang); 
-          }
-
-          saveLanguageToLocalStorage(detectedLang);
-        } catch (error) {
-          console.error('Failed to detect language from IP:', error);
-          setLanguage("en");
-          saveLanguageToLocalStorage("en");
-        }
-      };
-
-      detectLanguageFromIP();
-    }
-  }, []);
+  }, [language, defaultTranslations]); 
 
   const t = (key: string): string => {
     if (currentTranslations[key]) {
@@ -111,7 +140,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, setLanguageFromUrl, t, isLoading }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -172,7 +172,6 @@ ${t('lookingForwardToConfirmation')}
           />
         </div>
 
-        {/* New: Nationality Field */}
         <div>
           <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-1">
             {t('nationality')}
@@ -191,7 +190,6 @@ ${t('lookingForwardToConfirmation')}
           </select>
         </div>
 
-        {/* New: Hotel Name Field (Optional) */}
         <div>
           <label htmlFor="hotelName" className="block text-sm font-medium text-gray-700 mb-1">
             {t('hotelName')} ({t('optional')})
@@ -206,7 +204,6 @@ ${t('lookingForwardToConfirmation')}
           />
         </div>
 
-        {/* New: Notes Field (Optional) */}
         <div>
           <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
             {t('notes')} ({t('optional')})

@@ -24,7 +24,6 @@ const AdminLayout: React.FC = () => {
             />
           </a>
         </div>
-        {/* Mobile menu button */}
         <button
           className="sm:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
           onClick={toggleMenu}
@@ -34,28 +33,25 @@ const AdminLayout: React.FC = () => {
         </button>
       </header>
 
-      {/* Overlay for mobile menu - appears when menu is open */}
       {menuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 sm:hidden"
-          onClick={toggleMenu} // Close menu when clicking overlay
+          onClick={toggleMenu} 
           aria-hidden="true"
         ></div>
       )}
 
-      {/* Mobile navigation menu (slides in from left) */}
       <nav className={
         `fixed inset-y-0 left-0 w-64 bg-surface shadow-lg z-40 transform transition-transform duration-300 ease-in-out ` +
         (menuOpen ? 'translate-x-0' : '-translate-x-full') +
         ' sm:relative sm:translate-x-0 sm:block sm:w-auto sm:h-auto sm:bg-transparent sm:shadow-none sm:py-0 sm:px-0'
       }>
-        {/* Header for mobile menu (logo + close button) */}
         <div className="p-4 flex items-center justify-between border-b border-border sm:hidden">
           <a href="/" aria-label="Simbolon Phuket Tour Homepage">
             <img
               src={logoUrl}
               alt={t('home')}
-              className="h-10 w-auto" // Slightly smaller logo for mobile menu header
+              className="h-10 w-auto" 
               loading="eager"
               decoding="async"
             />
@@ -69,7 +65,6 @@ const AdminLayout: React.FC = () => {
           </button>
         </div>
 
-        {/* Navigation links - common for mobile and desktop, but layout changes */}
         <div className="flex flex-col p-4 sm:flex-row sm:flex-wrap sm:gap-2 sm:gap-4 sm:text-sm sm:font-medium sm:p-0 sm:max-w-7xl sm:mx-auto">
           <Link
             to="/admin"

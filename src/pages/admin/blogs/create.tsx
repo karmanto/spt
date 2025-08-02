@@ -108,7 +108,7 @@ const CreateBlog: React.FC = () => {
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
       ['link', 'image'],
-      [{ 'color': [] }, { 'background': [] }], // Added color and background
+      [{ 'color': [] }, { 'background': [] }], 
       ['clean']
     ],
   };
@@ -118,7 +118,7 @@ const CreateBlog: React.FC = () => {
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
     'link', 'image',
-    'color', 'background' // Added color and background
+    'color', 'background' 
   ];
 
   return (

@@ -6,7 +6,6 @@ const WhatsAppButton: React.FC = () => {
   
   const isRussian = language === 'ru';
   
-  // Use environment variables for contact numbers
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 

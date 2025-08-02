@@ -151,7 +151,6 @@ const BlogList: React.FC = () => {
           </div>
         </div>
 
-        {/* Scrollable Filter Buttons */}
         <div
           ref={filtersContainerRef}
           className="flex overflow-x-auto pb-4 mb-6 -mx-4 px-4 scrollbar-hide"

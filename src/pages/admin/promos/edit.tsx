@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPromo, updatePromo } from '../../../lib/api';
 import { Promo } from '../../../lib/types';
 import { useState, useEffect } from 'react';
-import { FaSave, FaArrowLeft } from 'react-icons/fa'; // Import icons
+import { FaSave, FaArrowLeft } from 'react-icons/fa'; 
 
 export default function EditPromo() {
   const { id } = useParams<{ id: string }>();

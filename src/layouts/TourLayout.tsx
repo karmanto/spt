@@ -10,8 +10,6 @@ const TourLayout: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // const isTourDetailPage = useMatch('/tours/:id');
-
   const toggleLanguage = () => {
     const next = language === 'id' ? 'en' : language === 'en' ? 'ru' : 'id';
     setLanguage(next);

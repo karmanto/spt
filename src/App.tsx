@@ -1,6 +1,5 @@
-// App.tsx
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
@@ -22,7 +21,10 @@ import CreateTour from './pages/admin/tours/create';
 import EditTour from './pages/admin/tours/edit';
 import ShowTour from './pages/admin/tours/show';
 import { setAuthErrorHandler } from './lib/auth';
-import LoadingSpinner from './components/LoadingSpinner'; 
+import LoadingSpinner from './components/LoadingSpinner';
+import { useLanguage } from './context/LanguageContext'; 
+import seoContentJson from './constants/seoContent.json'; 
+import { Language, HreflangLinks, SEOContent } from './lib/types';
 
 import IntlTourList from './pages/IntlTourList';
 import IntlTourDetail from './pages/IntlTourDetail';
@@ -38,7 +40,6 @@ import DomesticCreateTour from './pages/admin/domesticTours/create';
 import DomesticEditTour from './pages/admin/domesticTours/edit';
 import DomesticShowTour from './pages/admin/domesticTours/show';
 
-// New Blog Imports
 const BlogList = lazy(() => import('./pages/BlogList'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const AdminBlog = lazy(() => import('./pages/admin/blogs'));
@@ -53,63 +54,95 @@ const LazyTestimonials = lazy(() => import('./components/Testimonials'));
 const LazyAdvantages = lazy(() => import('./components/Advantages'));
 const LazyAboutSection = lazy(() => import('./components/AboutSection'));
 const LazyFAQ = lazy(() => import('./components/FAQ'));
-const LazyGallery = lazy(() => import('./components/Gallery')); 
+const LazyGallery = lazy(() => import('./components/Gallery'));
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { language, setLanguageFromUrl, isLoading } = useLanguage(); 
+
+  const seoContent: SEOContent = seoContentJson as SEOContent;
 
   useEffect(() => {
-    document.title = 'Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi';
-
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute(
-        'content',
-        'Simbolon Phuket Tour - Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries for Phuket, Bangkok, Krabi, and Phi Phi Island.'
-      );
+    if (isLoading) {
+      return;
     }
 
-    document.querySelectorAll('link[hreflang]').forEach(link => link.remove());
+    const path = location.pathname;
+    const pathSegments = path.split('/').filter(Boolean);
+    const currentLangInUrl = pathSegments[0];
+    const isPublicRoute = !path.startsWith('/admin');
 
-    const hreflangEn = document.createElement('link');
-    hreflangEn.rel = 'alternate';
-    hreflangEn.hreflang = 'en';
-    hreflangEn.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangEn);
+    if (isPublicRoute) {
+      if (['id', 'en', 'ru'].includes(currentLangInUrl)) {
+        if (currentLangInUrl !== language) {
+          setLanguageFromUrl(currentLangInUrl as Language);
+        }
+      } else {
+        const targetPath = `/${language}${path === '/' ? '' : path}`;
+        navigate(targetPath, { replace: true });
+      }
+    }
+  }, [location.pathname, navigate, language, setLanguageFromUrl, isLoading]); 
 
-    const hreflangId = document.createElement('link');
-    hreflangId.rel = 'alternate';
-    hreflangId.hreflang = 'id';
-    hreflangId.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangId);
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
 
-    const hreflangRu = document.createElement('link');
-    hreflangRu.rel = 'alternate';
-    hreflangRu.hreflang = 'ru';
-    hreflangRu.href = 'https://simbolonphukettour.com/ru';
-    document.head.appendChild(hreflangRu);
+    const path = location.pathname;
+    const pathSegments = path.split('/').filter(Boolean);
+    const currentLangInUrl = pathSegments[0];
+    const actualLanguage = ['id', 'en', 'ru'].includes(currentLangInUrl) ? currentLangInUrl : language;
 
-    const hreflangDefault = document.createElement('link');
-    hreflangDefault.rel = 'alternate';
-    hreflangDefault.hreflang = 'x-default';
-    hreflangDefault.href = 'https://simbolonphukettour.com/';
-    document.head.appendChild(hreflangDefault);
+    let pageKey: keyof typeof seoContent = 'home';
+    if (path.includes('/blogs')) {
+      pageKey = 'blogs';
+    } else if (path.includes('/international-tours')) {
+      pageKey = 'intlTours';
+    } else if (path.includes('/domestic-tours')) {
+      pageKey = 'domesticTours';
+    } else if (path.includes('/tours')) {
+      pageKey = 'tours';
+    }
 
+    const seoData = seoContent[pageKey]?.[actualLanguage as Language];
+
+    if (seoData) {
+      document.title = seoData.title;
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', seoData.description);
+      }
+
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => link.remove());
+
+      for (const langCode in seoData.hreflang) {
+        const link = document.createElement('link');
+        link.rel = 'alternate';
+        link.hreflang = langCode;
+        link.href = seoData.hreflang[langCode as keyof HreflangLinks];
+        document.head.appendChild(link);
+      }
+    }
+  }, [language, location.pathname, seoContent, isLoading]); 
+
+  useEffect(() => {
     setAuthErrorHandler(() => {
       navigate('/login', { replace: true });
     });
   }, [navigate]);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  const toggleMobileMenu = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
 
   return (
       <div className="min-h-screen bg-white">
         <main role="main">
           <Routes>
-            <Route path="/" element={
+            <Route path="/:lang?" element={
               <>
                 <Header mobileMenuOpen={mobileMenuOpen} toggleMobileMenu={toggleMobileMenu} />
                 <Hero />
@@ -140,25 +173,26 @@ function App() {
             } />
 
             <Route element={<TourLayout />}>
-              <Route path="/tours" element={<TourList />} />
-              <Route path="/tours/:slug" element={<TourDetail />} />
+              <Route path="/:lang?/tours" element={<TourList />} />
+              <Route path="/:lang?/tours/:slug" element={<TourDetail />} />
             </Route>
 
             <Route element={<TourLayout />}>
-              <Route path="/international-tours" element={<IntlTourList />} />
-              <Route path="/international-tours/:slug" element={<IntlTourDetail />} />
+              <Route path="/:lang?/international-tours" element={<IntlTourList />} />
+              <Route path="/:lang?/international-tours/:slug" element={<IntlTourDetail />} />
             </Route>
 
             <Route element={<TourLayout />}>
-              <Route path="/domestic-tours" element={<DomesticTourList />} />
-              <Route path="/domestic-tours/:slug" element={<DomesticTourDetail />} />
+              <Route path="/:lang?/domestic-tours" element={<DomesticTourList />} />
+              <Route path="/:lang?/domestic-tours/:slug" element={<DomesticTourDetail />} />
             </Route>
 
             <Route element={<BlogLayout />}>
-              <Route path="/blogs" element={<BlogList />} />
-              <Route path="/blogs/:slug" element={<BlogDetail />} />
+              <Route path="/:lang?/blogs" element={<BlogList />} />
+              <Route path="/:lang?/blogs/:slug" element={<BlogDetail />} />
             </Route>
 
+            {/* Admin Routes (no language prefix) */}
             <Route path="/login" element={<Login />} />
             <Route
               path="/admin"

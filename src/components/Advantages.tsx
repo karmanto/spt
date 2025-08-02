@@ -59,7 +59,6 @@ const getAdvantageIcon = (iconName: string) => {
 const Advantages: React.FC = () => {
   const { t, language } = useLanguage();
 
-  // Get environment variables
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
   const whatsappMessage = encodeURIComponent(t('whatsappMessage'));

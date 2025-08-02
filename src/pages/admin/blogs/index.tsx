@@ -64,7 +64,7 @@ const AdminBlogs: React.FC = () => {
   };
 
   const getLocalizedTitle = (blog: Blog) => {
-    return blog.title_id; // Always use Indonesian title
+    return blog.title_id;
   };
 
   const handlePageChange = (page: number) => {

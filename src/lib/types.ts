@@ -1,3 +1,26 @@
+export type Language = 'id' | 'en' | 'ru';
+
+export interface HreflangLinks {
+  en: string;
+  id: string;
+  ru: string;
+  'x-default': string;
+}
+
+export interface PageSEO {
+  title: string;
+  description: string;
+  hreflang: HreflangLinks;
+}
+
+export interface SEOContent {
+  home: { [key in Language]: PageSEO };
+  blogs: { [key in Language]: PageSEO };
+  tours: { [key in Language]: PageSEO }; 
+  intlTours: { [key in Language]: PageSEO };
+  domesticTours: { [key in Language]: PageSEO };
+}
+
 export interface CountdownState {
   days: number;
   hours: number;
@@ -39,7 +62,6 @@ export interface LanguageContent {
   ru?: string;
 }
 
-// New interfaces for TourPackage nested data based on API response
 export interface TourImage {
   id: number;
   imageable_type: string;
@@ -144,7 +166,7 @@ export interface TourPackage {
   order?: number; 
   created_at: string;
   updated_at: string;
-  slug?: string; // Added slug property
+  slug?: string; 
 }
 
 export interface TourPackageResponse {
@@ -295,7 +317,7 @@ export interface Blog {
   image: string;
   posting_date: string;
   category: string;
-  slug?: string; // Added slug property
+  slug?: string; 
 }
 
 export interface BlogCreatePayload extends Omit<Blog, 'id' | 'image'> {

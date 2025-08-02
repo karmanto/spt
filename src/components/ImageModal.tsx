@@ -36,7 +36,6 @@ const ImageModal: React.FC<ImageModalProps> = ({ images, currentIndex, altText, 
     draggable: true,
     beforeChange: (_: number, newIndex: number) => {
       onNavigate(newIndex);
-      // Reset zoom & panning when slide changes:
       if (transformRef.current) {
         transformRef.current.resetTransform();
         setCanPan(false);

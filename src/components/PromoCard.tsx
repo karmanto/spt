@@ -5,7 +5,6 @@ import { PromoCardProps } from '../lib/types';
 const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
   const { t, language } = useLanguage();
 
-  // Get environment variables
   const whatsappNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 

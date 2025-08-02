@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import 'flag-icons/css/flag-icons.min.css';
-import { HeaderProps } from '../lib/types'; 
+import { HeaderProps } from '../lib/types';
 
 const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => {
   const { language, setLanguage, t } = useLanguage();
@@ -11,21 +11,21 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
   const logoUrl = "/spt_logo.png"
 
   const navLinks = [
-    { name: t('home'), href: '#home' },
-    { name: t('topPackages'), href: '#packages' },
-    { name: t('about'), href: '#about' },
-    { name: t('gallery'), href: '#gallery' },
-    { name: t('faq'), href: '#faq' },
-    { name: t('contact'), href: '#contact' },
-    { name: t('blog'), href: '/blogs' }, 
-    { name: t('intlTour'), href: '/international-tours' }, 
-    // { name: t('domesticTour'), href: '/domestic-tours' }, 
+    { name: t('home'), href: `/${language}` },
+    { name: t('topPackages'), href: `/${language}#packages` },
+    { name: t('about'), href: `/${language}#about` },
+    { name: t('gallery'), href: `/${language}#gallery` },
+    { name: t('faq'), href: `/${language}#faq` },
+    { name: t('contact'), href: `/${language}#contact` },
+    { name: t('blog'), href: `/${language}/blogs` },
+    { name: t('intlTour'), href: `/${language}/international-tours` },
+    // { name: t('domesticTour'), href: `/${language}/domestic-tours` },
     { name: t('admin'), href: '/admin' },
   ];
 
   const toggleLanguage = () => {
     const next = language === 'id' ? 'en' : language === 'en' ? 'ru' : 'id';
-    setLanguage(next);
+    setLanguage(next); 
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
       <div className="max-w-7xl mx-auto px-2 sm:px-2 lg:px-4">
         <div className="flex justify-between items-center lg:space-x-4">
           <div className="flex justify-start">
-            <a href="/" aria-label="Simbolon Phuket Tour Homepage">
+            <a href={`/${language}`} aria-label="Simbolon Phuket Tour Homepage"> 
               <img
                 src={logoUrl}
                 alt={t('heroTitle')}

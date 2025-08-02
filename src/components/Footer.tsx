@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import 'flag-icons/css/flag-icons.min.css';
 
 const Footer: React.FC = () => {
-  const { t, language } = useLanguage(); // Destructure language from useLanguage
+  const { t, language } = useLanguage(); 
   const navigate = useNavigate();
   const currentYear = new Date().getFullYear();
 
@@ -21,7 +21,6 @@ const Footer: React.FC = () => {
 
   const companyLinks = [
     { key: 'privacyPolicyLink', label: t('privacyPolicy'), href: '/Kebijakan Privasi - SPT.pdf' },
-    // Conditionally add payment method link for Russian language
     ...(language === 'ru' ? [{ key: 'paymentMethodLink', label: t('paymentMethod'), href: '/Russian Payment.pdf' }] : []),
   ];
 

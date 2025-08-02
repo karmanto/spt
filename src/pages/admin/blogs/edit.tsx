@@ -47,7 +47,6 @@ const EditBlog: React.FC = () => {
         content_ru: blog.content_ru,
         posting_date: formatDateToYYYYMMDD(blog.posting_date),
         category: blog.category,
-        // image will be handled separately, not directly set from API response
       });
       setImagePreview(`${import.meta.env.VITE_BASE_URL}/storage/${blog.image}`);
     } catch (err) {
@@ -91,7 +90,6 @@ const EditBlog: React.FC = () => {
       }
     } else {
       setFormData((prev) => ({ ...prev, image: undefined }));
-      // Keep existing image preview if no new file is selected
     }
   };
 
@@ -146,7 +144,7 @@ const EditBlog: React.FC = () => {
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
       ['link', 'image'],
-      [{ 'color': [] }, { 'background': [] }], // Added color and background
+      [{ 'color': [] }, { 'background': [] }], 
       ['clean']
     ],
   };
@@ -156,7 +154,7 @@ const EditBlog: React.FC = () => {
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
     'link', 'image',
-    'color', 'background' // Added color and background
+    'color', 'background' 
   ];
 
   if (loading) {

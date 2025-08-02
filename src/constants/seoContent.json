@@ -1,0 +1,162 @@
+{
+  "home": {
+    "id": {
+      "title": "Simbolon Phuket Tour - Halal Thailand Tours | Pemandu Indonesia | Phuket Bangkok Krabi",
+      "description": "Simbolon Phuket Tour - Mitra terpercaya Anda untuk perjalanan halal dan nyaman di Thailand. Kami menyediakan layanan tur dengan pemandu berbahasa Indonesia, makanan halal, dan itinerary yang dapat disesuaikan untuk Phuket, Bangkok, Krabi, dan Phi Phi Island.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en",
+        "id": "https://simbolonphukettour.com/id",
+        "ru": "https://simbolonphukettour.com/ru",
+        "x-default": "https://simbolonphukettour.com/en"
+      }
+    },
+    "en": {
+      "title": "Simbolon Phuket Tour - Halal Thailand Tours | Indonesian Guide | Phuket Bangkok Krabi",
+      "description": "Simbolon Phuket Tour - Your trusted partner for halal and comfortable travel in Thailand. We provide tour services with Indonesian-speaking guides, halal food, and customizable itineraries for Phuket, Bangkok, Krabi, and Phi Phi Island.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en",
+        "id": "https://simbolonphukettour.com/id",
+        "ru": "https://simbolonphukettour.com/ru",
+        "x-default": "https://simbolonphukettour.com/en"
+      }
+    },
+    "ru": {
+      "title": "Simbolon Phuket Tour - Халяльные туры по Таиланду | Индонезийский гид | Пхукет Бангкок Краби",
+      "description": "Simbolon Phuket Tour - Ваш надежный партнер для халяльных и комфортных путешествий по Таиланду. Мы предоставляем туристические услуги с индонезийскоязычными гидами, халяльной едой и настраиваемыми маршрутами для Пхукета, Бангкока, Краби и острова Пхи-Пхи.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en",
+        "id": "https://simbolonphukettour.com/id",
+        "ru": "https://simbolonphukettour.com/ru",
+        "x-default": "https://simbolonphukettour.com/en"
+      }
+    }
+  },
+  "blogs": {
+    "id": {
+      "title": "Blog Simbolon Phuket Tour - Artikel Perjalanan Halal",
+      "description": "Baca artikel terbaru kami tentang tips perjalanan halal, kuliner Thailand, budaya lokal, dan testimoni pelanggan di blog Simbolon Phuket Tour.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/blogs",
+        "id": "https://simbolonphukettour.com/id/blogs",
+        "ru": "https://simbolonphukettour.com/ru/blogs",
+        "x-default": "https://simbolonphukettour.com/en/blogs"
+      }
+    },
+    "en": {
+      "title": "Simbolon Phuket Tour Blog - Halal Travel Articles",
+      "description": "Read our latest articles on halal travel tips, Thai cuisine, local culture, and customer testimonials on the Simbolon Phuket Tour blog.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/blogs",
+        "id": "https://simbolonphukettour.com/id/blogs",
+        "ru": "https://simbolonphukettour.com/ru/blogs",
+        "x-default": "https://simbolonphukettour.com/en/blogs"
+      }
+    },
+    "ru": {
+      "title": "Блог Simbolon Phuket Tour - Статьи о халяльных путешествиях",
+      "description": "Читайте наши последние статьи о халяльных советах по путешествиям, тайской кухне, местной культуре и отзывах клиентов в блоге Simbolon Phuket Tour.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/blogs",
+        "id": "https://simbolonphukettour.com/id/blogs",
+        "ru": "https://simbolonphukettour.com/ru/blogs",
+        "x-default": "https://simbolonphukettour.com/en/blogs"
+      }
+    }
+  },
+  "tours": {
+    "id": {
+      "title": "Daftar Tur Halal Thailand - Simbolon Phuket Tour",
+      "description": "Jelajahi berbagai paket tur halal kami di Thailand, termasuk Phuket, Bangkok, Krabi, dan Phi Phi Island, dengan pemandu berbahasa Indonesia.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/tours",
+        "id": "https://simbolonphukettour.com/id/tours",
+        "ru": "https://simbolonphukettour.com/ru/tours",
+        "x-default": "https://simbolonphukettour.com/en/tours"
+      }
+    },
+    "en": {
+      "title": "Halal Thailand Tour Packages - Simbolon Phuket Tour",
+      "description": "Explore our diverse halal tour packages in Thailand, including Phuket, Bangkok, Krabi, and Phi Phi Island, with Indonesian-speaking guides.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/tours",
+        "id": "https://simbolonphukettour.com/id/tours",
+        "ru": "https://simbolonphukettour.com/ru/tours",
+        "x-default": "https://simbolonphukettour.com/en/tours"
+      }
+    },
+    "ru": {
+      "title": "Халяльные туры по Таиланду - Simbolon Phuket Tour",
+      "description": "Исследуйте наши разнообразные халяльные турпакеты в Таиланде, включая Пхукет, Бангкок, Краби и остров Пхи-Пхи, с индонезийскоязычными гидами.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/tours",
+        "id": "https://simbolonphukettour.com/id/tours",
+        "ru": "https://simbolonphukettour.com/ru/tours",
+        "x-default": "https://simbolonphukettour.com/en/tours"
+      }
+    }
+  },
+  "intlTours": {
+    "id": {
+      "title": "Tur Internasional Halal - Simbolon Phuket Tour",
+      "description": "Temukan paket tur internasional halal kami yang dirancang untuk pengalaman tak terlupakan di luar Thailand.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/international-tours",
+        "id": "https://simbolonphukettour.com/id/international-tours",
+        "ru": "https://simbolonphukettour.com/ru/international-tours",
+        "x-default": "https://simbolonphukettour.com/en/international-tours"
+      }
+    },
+    "en": {
+      "title": "Halal International Tours - Simbolon Phuket Tour",
+      "description": "Discover our halal international tour packages designed for unforgettable experiences beyond Thailand.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/international-tours",
+        "id": "https://simbolonphukettour.com/id/international-tours",
+        "ru": "https://simbolonphukettour.com/ru/international-tours",
+        "x-default": "https://simbolonphukettour.com/en/international-tours"
+      }
+    },
+    "ru": {
+      "title": "Халяльные международные туры - Simbolon Phuket Tour",
+      "description": "Откройте для себя наши халяльные международные турпакеты, разработанные для незабываемых впечатлений за пределами Таиланда.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/international-tours",
+        "id": "https://simbolonphukettour.com/id/international-tours",
+        "ru": "https://simbolonphukettour.com/ru/international-tours",
+        "x-default": "https://simbolonphukettour.com/en/international-tours"
+      }
+    }
+  },
+  "domesticTours": {
+    "id": {
+      "title": "Tur Domestik Halal - Simbolon Phuket Tour",
+      "description": "Jelajahi keindahan Indonesia dengan paket tur domestik halal kami, dirancang untuk kenyamanan dan pengalaman otentik.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/domestic-tours",
+        "id": "https://simbolonphukettour.com/id/domestic-tours",
+        "ru": "https://simbolonphukettour.com/ru/domestic-tours",
+        "x-default": "https://simbolonphukettour.com/en/domestic-tours"
+      }
+    },
+    "en": {
+      "title": "Halal Domestic Tours - Simbolon Phuket Tour",
+      "description": "Explore the beauty of Indonesia with our halal domestic tour packages, designed for comfort and authentic experiences.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/domestic-tours",
+        "id": "https://simbolonphukettour.com/id/domestic-tours",
+        "ru": "https://simbolonphukettour.com/ru/domestic-tours",
+        "x-default": "https://simbolonphukettour.com/en/domestic-tours"
+      }
+    },
+    "ru": {
+      "title": "Халяльные внутренние туры - Simbolon Phuket Tour",
+      "description": "Исследуйте красоту Индонезии с нашими халяльными внутренними турпакетами, разработанными для комфорта и аутентичных впечатлений.",
+      "hreflang": {
+        "en": "https://simbolonphukettour.com/en/domestic-tours",
+        "id": "https://simbolonphukettour.com/id/domestic-tours",
+        "ru": "https://simbolonphukettour.com/ru/domestic-tours",
+        "x-default": "https://simbolonphukettour.com/en/domestic-tours"
+      }
+    }
+  }
+}

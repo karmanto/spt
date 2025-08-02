@@ -6,10 +6,9 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     if (hash) {
-      const id = hash.substring(1); // Remove the '#'
+      const id = hash.substring(1); 
       console.log(`[ScrollToTop] Attempting to scroll to ID: ${id}`);
 
-      // Use a longer timeout to ensure lazy-loaded components have time to render
       const scrollTimeout = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
@@ -18,14 +17,13 @@ const ScrollToTop = () => {
         } else {
           console.warn(`[ScrollToTop] Element with ID "${id}" not found after 1000ms. Make sure the element exists and has the correct ID.`);
         }
-      }, 1000); // Increased delay to 1 second
+      }, 1000);
 
-      return () => clearTimeout(scrollTimeout); // Cleanup timeout on unmount or dependency change
+      return () => clearTimeout(scrollTimeout);
     } else {
-      // If no hash, scroll to the top of the page
       window.scrollTo(0, 0);
     }
-  }, [pathname, hash]); // Re-run effect when pathname or hash changes
+  }, [pathname, hash]); 
 
   return null;
 };

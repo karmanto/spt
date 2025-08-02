@@ -19,7 +19,6 @@ const BlogCard = forwardRef<HTMLDivElement, BlogCardProps>(({ blog, currentPage 
     else if (currentLanguage === 'ru') content = blog.content_ru || blog.content_en;
     else content = blog.content_en;
 
-    // Strip HTML tags and truncate
     const strippedContent = content.replace(/<[^>]*>?/gm, '');
     return strippedContent.length > 150 ? strippedContent.substring(0, 150) + '...' : strippedContent;
   };

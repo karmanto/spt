@@ -1,6 +1,6 @@
 import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, Blog, BlogCreatePayload, BlogUpdatePayload, BlogResponse } from './types';
-import { handleAuthError } from './auth'; // Import fungsi handleAuthError
-import { slugify } from './utils'; // Import slugify
+import { handleAuthError } from './auth'; 
+import { slugify } from './utils'; 
 
 const API_URL = import.meta.env.VITE_API_URL;
 interface FetchOptions extends RequestInit {
@@ -27,7 +27,6 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
   parsedTour.location = safeJSONParse<LanguageContent>(tour.location) as LanguageContent;
   parsedTour.overview = safeJSONParse<LanguageContent>(tour.overview) as LanguageContent;
 
-  // Parse the new 'prices' array
   parsedTour.prices = tour.prices.map(p => ({
     ...p,
     service_type: safeJSONParse<LanguageContent>(p.service_type) as LanguageContent,
@@ -63,31 +62,24 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
     answer: safeJSONParse<LanguageContent>(faq.answer) as LanguageContent
   }));
 
-  // Parse cancellation_policies
   parsedTour.cancellation_policies = tour.cancellation_policies.map(cp => ({
     ...cp,
     description: safeJSONParse<LanguageContent>(cp.description) as LanguageContent
   }));
 
-  // Generate slug for URL
   parsedTour.slug = `${slugify(parsedTour.name.en)}-${tour.id}`;
 
   return parsedTour;
 };
 
-// New function to parse Blog data
 const parseBlogData = (blog: Blog): Blog => {
   const parsedBlog = { ...blog };
-  // Removed safeJSONParse for title and content fields as they are plain strings, not JSON strings.
-  // The Blog interface already defines them as strings, so no parsing is needed.
-
-  // Generate slug for URL
+  
   parsedBlog.slug = `${slugify(parsedBlog.title_en)}-${blog.id}`;
 
   return parsedBlog;
 };
 
-// === Fungsi fetch untuk request JSON ===
 export const fetchData = async <T>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
   const headers: HeadersInit = { 'Content-Type': 'application/json' };
   const token = localStorage.getItem('token'); 
@@ -124,7 +116,6 @@ export const fetchData = async <T>(endpoint: string, options: FetchOptions = {})
   return response.json();
 };
 
-// === Fungsi fetch untuk request multipart/form-data (upload file) ===
 export const fetchMultipartData = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
   const headers: HeadersInit = {};
   const token = localStorage.getItem('token'); 
@@ -246,7 +237,6 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
     tour_type: tour.tour_type,
     duration: JSON.stringify(tour.duration),
     location: JSON.stringify(tour.location),
-    // New 'prices' array handling
     prices: tour.prices.map(p => ({
       service_type: JSON.stringify(p.service_type),
       price: p.price,
@@ -296,7 +286,6 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
     ...(tour.name && { name: JSON.stringify(tour.name) }),
     ...(tour.duration && { duration: JSON.stringify(tour.duration) }),
     ...(tour.location && { location: JSON.stringify(tour.location) }),
-    // New 'prices' array handling for update
     ...(tour.prices && { prices: tour.prices.map(p => ({
       service_type: JSON.stringify(p.service_type),
       price: p.price,
@@ -355,7 +344,6 @@ export const uploadTourImage = async (imageFile: File): Promise<{ path: string; 
   });
 };
 
-// New function to swap tour package order
 export const swapTourOrder = async (firstPackageId: number, secondPackageId: number) => {
   return fetchData<void>(`packages/swap-order`, {
     method: 'POST',
@@ -417,10 +405,10 @@ export const updateBlog = async (id: number, blog: BlogUpdatePayload) => {
     formData.append('image', blog.image);
   }
 
-  formData.append('_method', 'PUT'); // Laravel expects _method for PUT with form-data
+  formData.append('_method', 'PUT');
 
   return fetchMultipartData<Blog>(`blogs/${id}`, {
-    method: 'POST', // Use POST with _method for file uploads
+    method: 'POST', 
     body: formData,
   });
 };

@@ -115,7 +115,6 @@ const TourList: React.FC = () => {
     }
   };
 
-  // Fungsi umum untuk filter
   const handleFilter = (search: string, category: string) => {
     setSearchTerm(search);
     setSelectedCategory(category);
@@ -128,7 +127,6 @@ const TourList: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // Konfigurasi tombol filter
   const filterOptions = [
     { 
       label: 'multiDayTrip', 
@@ -222,7 +220,7 @@ const TourList: React.FC = () => {
                 />
               ))}
             </div>
-            {totalPages > 1 && ( // Only render pagination if there's more than one page
+            {totalPages > 1 && ( 
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

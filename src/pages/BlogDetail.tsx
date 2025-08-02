@@ -89,7 +89,6 @@ const BlogDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
-      {/* Scoped CSS for BlogDetail h2 - using !important for specificity */}
       <style>{`
         /* Target h2 directly within blog-detail-content */
         .blog-detail-content h2 {

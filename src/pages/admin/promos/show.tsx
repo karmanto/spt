@@ -54,7 +54,6 @@ export default function ShowPromo() {
     }
   }, [id, navigate]);
 
-  // Helper function to render language-specific content, mimicking Tour's renderLanguageContentDisplay
   const renderPromoLanguageContentDisplay = (
     label: string,
     idContent: string | undefined,

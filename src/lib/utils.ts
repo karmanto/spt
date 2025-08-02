@@ -1,4 +1,3 @@
-// src/lib/utils.ts
 export const slugify = (text: string): string => {
   if (!text) return '';
   return text
