@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { TourPackage, LanguageContent } from '../lib/types';
-import { MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle } from 'lucide-react';
+import { 
+  MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle
+} from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa';
 import BookingForm from '../components/BookingForm';
 import ItineraryDocument from '../components/ItineraryDocument';
@@ -16,9 +18,9 @@ const TourDetail: React.FC = () => {
   const navigate = useNavigate();
   const { t, language: currentLanguage } = useLanguage();
   const [tour, setTour] = useState<TourPackage | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'itinerary' | 'pricing' | 'booking'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'includedExcluded' | 'itinerary' | 'pricing' | 'faq' | 'booking'>('overview');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
 
@@ -89,7 +91,9 @@ const TourDetail: React.FC = () => {
 
   const tabs = [
     { id: 'overview', label: t('overview') },
+    { id: 'includedExcluded', label: t('whatsIncludedAndExcluded') },
     { id: 'itinerary', label: t('itinerary') },
+    { id: 'faq', label: t('faq') },
     { id: 'pricing', label: t('pricingTab') },
     { id: 'booking', label: t('booking') }
   ];
@@ -203,16 +207,16 @@ const TourDetail: React.FC = () => {
 
       <div className="w-full border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8 overflow-scroll" aria-label="Tabs">
+          <nav className="flex space-x-2 overflow-scroll" aria-label="Tabs">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
-                  activeTab === tab.id ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+                className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap flex items-center
+                  ${activeTab === tab.id ? 'border-blue-500 text-blue-600 gap-2' : 'border-transparent text-gray-500 hover:text-gray-700 justify-center'}
+                `}
               >
-                {tab.label}
+                <span>{tab.label}</span>
               </button>
             ))}
           </nav>
@@ -229,49 +233,51 @@ const TourDetail: React.FC = () => {
                   {getLocalizedContent(tour.overview)}
                 </p>
               </div>
+            </div>
+          )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white rounded-2xl p-8 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
-                    {t('whatsIncluded')}
-                  </h3>
-                  {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
-                    <ul className="space-y-3">
-                      {tour.included_excluded
-                        .filter(item => item.type === 'included')
-                        .map((item) => (
-                          <li key={item.id} className="flex items-start gap-2">
-                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-600 italic">{t('noIncludedItems') || 'No included items available.'}</p>
-                  )}
-                </div>
+          {activeTab === 'includedExcluded' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <CheckCircle className="w-6 h-6 text-green-500" />
+                  {t('whatsIncluded')}
+                </h3>
+                {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
+                  <ul className="space-y-3">
+                    {tour.included_excluded
+                      .filter(item => item.type === 'included')
+                      .map((item) => (
+                        <li key={item.id} className="flex items-start gap-2">
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                        </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 italic">{t('noIncludedItems') || 'No included items available.'}</p>
+                )}
+              </div>
 
-                <div className="bg-white rounded-2xl p-8 shadow-sm">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <XCircle className="w-6 h-6 text-red-500" />
-                    {t('whatsNotIncluded')}
-                  </h3>
-                  {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
-                    <ul className="space-y-3">
-                      {tour.included_excluded
-                        .filter(item => item.type === 'excluded')
-                        .map((item) => (
-                          <li key={item.id} className="flex items-start gap-2">
-                            <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-600 italic">{t('noExcludedItems') || 'No excluded items available.'}</p>
-                  )}
-                </div>
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <XCircle className="w-6 h-6 text-red-500" />
+                  {t('whatsNotIncluded')}
+                </h3>
+                {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
+                  <ul className="space-y-3">
+                    {tour.included_excluded
+                      .filter(item => item.type === 'excluded')
+                      .map((item) => (
+                        <li key={item.id} className="flex items-start gap-2">
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                        </li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-600 italic">{t('noExcludedItems') || 'No excluded items available.'}</p>
+                )}
               </div>
             </div>
           )}
@@ -318,22 +324,6 @@ const TourDetail: React.FC = () => {
                 )}
               </div>
 
-              <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
-                {tour.faqs.length > 0 ? (
-                  <div className="space-y-6">
-                    {tour.faqs.map((faq) => (
-                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
-                        <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
-                        <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-600 italic">{t('noFaqsAvailable') || 'No FAQs available for this tour.'}</p>
-                )}
-              </div>
-
               <div className="bg-yellow-50 rounded-2xl p-8">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">{t('cancellationPolicy')}</h2>
                 {tour.cancellation_policies.length > 0 ? (
@@ -348,6 +338,24 @@ const TourDetail: React.FC = () => {
                   <p className="text-gray-600 italic">{t('noCancellationPolicy') || 'No cancellation policy available.'}</p>
                 )}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'faq' && (
+            <div className="bg-white rounded-2xl p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
+              {tour.faqs.length > 0 ? (
+                <div className="space-y-6">
+                  {tour.faqs.map((faq) => (
+                    <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+                      <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
+                      <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-600 italic">{t('noFaqsAvailable') || 'No FAQs available for this tour.'}</p>
+              )}
             </div>
           )}
 
