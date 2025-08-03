@@ -187,7 +187,7 @@ const TourDetail: React.FC = () => {
             </div>
 
             <div className="bg-blue-50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('tourHighlights')}</h2>
               {tour.highlights && tour.highlights.length > 0 ? (
                 <ul className="space-y-2">
                   {tour.highlights.map((highlight) => (
@@ -225,143 +225,146 @@ const TourDetail: React.FC = () => {
 
       <div className="w-full bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12">
-          {activeTab === 'overview' && (
-            <div className="space-y-8">
-              <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('tourOverview')}</h2>
-                <p className="text-gray-700 leading-relaxed">
-                  {getLocalizedContent(tour.overview)}
-                </p>
+          {/* Wrap all conditional tab content in a fragment */}
+          <>
+            {activeTab === 'overview' && (
+              <div className="space-y-8">
+                <div className="bg-white rounded-2xl p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('tourOverview')}</h2>
+                  <p className="text-gray-700 leading-relaxed">
+                    {getLocalizedContent(tour.overview)}
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {activeTab === 'includedExcluded' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <CheckCircle className="w-6 h-6 text-green-500" />
-                  {t('whatsIncluded')}
-                </h3>
-                {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
-                  <ul className="space-y-3">
-                    {tour.included_excluded
-                      .filter(item => item.type === 'included')
-                      .map((item) => (
-                        <li key={item.id} className="flex items-start gap-2">
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
-                        </li>
-                      ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600 italic">{t('noIncludedItems') || 'No included items available.'}</p>
-                )}
-              </div>
-
-              <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <XCircle className="w-6 h-6 text-red-500" />
-                  {t('whatsNotIncluded')}
-                </h3>
-                {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
-                  <ul className="space-y-3">
-                    {tour.included_excluded
-                      .filter(item => item.type === 'excluded')
-                      .map((item) => (
-                        <li key={item.id} className="flex items-start gap-2">
-                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
-                        </li>
-                      ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600 italic">{t('noExcludedItems') || 'No excluded items available.'}</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'itinerary' && (
-            tour.itineraries.length > 0 ? (
-              <ItineraryDocument tour={tour} />
-            ) : (
-              <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
-                <p className="text-gray-600 italic">{t('noItineraryAvailable') || 'No itinerary available for this tour.'}</p>
-              </div>
-            )
-          )}
-
-          {activeTab === 'pricing' && (
-            <div className="space-y-8">
-              <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('pricingInfo')}</h2>
-                {tour.prices && tour.prices.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('serviceType')}</th>
-                          <th className="text-center py-4 px-6 font-semibold text-sm text-gray-900">{t('price')}</th>
-                          <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('description')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {tour.prices.map((priceOption) => (
-                          <tr key={priceOption.id} className="border-b border-gray-100">
-                            <td className="py-4 px-6 font-medium text-md text-gray-900">{getLocalizedContent(priceOption.service_type)}</td>
-                            <td className="py-4 px-6 text-center text-md font-bold text-blue-600">
-                              {tour.currency || ''}{parseFloat(String(priceOption.price ?? '')).toLocaleString()}
-                            </td>
-                            <td className="py-4 px-6 text-sm text-gray-600">{getLocalizedContent(priceOption.description)}</td>
-                          </tr>
+            {activeTab === 'includedExcluded' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white rounded-2xl p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <CheckCircle className="w-6 h-6 text-green-500" />
+                    {t('whatsIncluded')}
+                  </h2>
+                  {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
+                    <ul className="space-y-3">
+                      {tour.included_excluded
+                        .filter(item => item.type === 'included')
+                        .map((item) => (
+                          <li key={item.id} className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                          </li>
                         ))}
-                      </tbody>
-                    </table>
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noIncludedItems') || 'No included items available.'}</p>
+                  )}
+                </div>
+
+                <div className="bg-white rounded-2xl p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <XCircle className="w-6 h-6 text-red-500" />
+                    {t('whatsNotIncluded')}
+                  </h2>
+                  {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
+                    <ul className="space-y-3">
+                      {tour.included_excluded
+                        .filter(item => item.type === 'excluded')
+                        .map((item) => (
+                          <li key={item.id} className="flex items-start gap-2">
+                            <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                            <span className="text-gray-700">{getLocalizedContent(item.description)}</span>
+                          </li>
+                        ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noExcludedItems') || 'No excluded items available.'}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'itinerary' && (
+              tour.itineraries.length > 0 ? (
+                <ItineraryDocument tour={tour} />
+              ) : (
+                <div className="bg-white rounded-2xl p-8 shadow-sm text-center">
+                  <p className="text-gray-600 italic">{t('noItineraryAvailable') || 'No itinerary available for this tour.'}</p>
+                </div>
+              )
+            )}
+
+            {activeTab === 'pricing' && (
+              <div className="space-y-8">
+                <div className="bg-white rounded-2xl p-8 shadow-sm">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('pricingInfo')}</h2>
+                  {tour.prices && tour.prices.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-200">
+                            <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('serviceType')}</th>
+                            <th className="text-center py-4 px-6 font-semibold text-sm text-gray-900">{t('price')}</th>
+                            <th className="text-left py-4 px-6 font-semibold text-sm text-gray-900">{t('description')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {tour.prices.map((priceOption) => (
+                            <tr key={priceOption.id} className="border-b border-gray-100">
+                              <td className="py-4 px-6 font-medium text-md text-gray-900">{getLocalizedContent(priceOption.service_type)}</td>
+                              <td className="py-4 px-6 text-center text-md font-bold text-blue-600">
+                                {tour.currency || ''}{parseFloat(String(priceOption.price ?? '')).toLocaleString()}
+                              </td>
+                              <td className="py-4 px-6 text-sm text-gray-600">{getLocalizedContent(priceOption.description)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noPricingInfo')}</p>
+                  )}
+                </div>
+
+                <div className="bg-yellow-50 rounded-2xl p-8">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">{t('cancellationPolicy')}</h2>
+                  {tour.cancellation_policies.length > 0 ? (
+                    <ul className="space-y-2 text-gray-700">
+                      {tour.cancellation_policies.map((policy) => (
+                        <li key={policy.id}>
+                          {getLocalizedContent(policy.description)}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600 italic">{t('noCancellationPolicy') || 'No cancellation policy available.'}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'faq' && (
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
+                {tour.faqs.length > 0 ? (
+                  <div className="space-y-6">
+                    {tour.faqs.map((faq) => (
+                      <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
+                        <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
+                        <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <p className="text-gray-600 italic">{t('noPricingInfo')}</p>
+                  <p className="text-gray-600 italic">{t('noFaqsAvailable') || 'No FAQs available for this tour.'}</p>
                 )}
               </div>
+            )}
 
-              <div className="bg-yellow-50 rounded-2xl p-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">{t('cancellationPolicy')}</h2>
-                {tour.cancellation_policies.length > 0 ? (
-                  <ul className="space-y-2 text-gray-700">
-                    {tour.cancellation_policies.map((policy) => (
-                      <li key={policy.id}>
-                        {getLocalizedContent(policy.description)}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-gray-600 italic">{t('noCancellationPolicy') || 'No cancellation policy available.'}</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'faq' && (
-            <div className="bg-white rounded-2xl p-8 shadow-sm">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('faq')}</h2>
-              {tour.faqs.length > 0 ? (
-                <div className="space-y-6">
-                  {tour.faqs.map((faq) => (
-                    <div key={faq.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
-                      <h3 className="font-semibold text-gray-900 mb-3">{getLocalizedContent(faq.question)}</h3>
-                      <p className="text-gray-700">{getLocalizedContent(faq.answer)}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-600 italic">{t('noFaqsAvailable') || 'No FAQs available for this tour.'}</p>
-              )}
-            </div>
-          )}
-
-          {activeTab === 'booking' && (
-            <BookingForm tour={tour} />
-          )}
+            {activeTab === 'booking' && (
+              <BookingForm tour={tour} />
+            )}
+          </>
         </div>
       </div>
 

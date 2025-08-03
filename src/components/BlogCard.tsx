@@ -48,9 +48,9 @@ const BlogCard = forwardRef<HTMLDivElement, BlogCardProps>(({ blog, currentPage 
           />
         </div>
         <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
             {getLocalizedTitle()}
-          </h3>
+          </h2>
           <div className="flex text-sm text-gray-500 mb-4 w-full">
             <div className='flex mr-4'>
               <CalendarDays className="w-4 h-4 mr-1" />

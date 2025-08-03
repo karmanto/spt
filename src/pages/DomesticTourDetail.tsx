@@ -187,7 +187,7 @@ const TourDetail: React.FC = () => {
             </div>
 
             <div className="bg-blue-50 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tourHighlights')}</h3>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('tourHighlights')}</h2>
               {tour.highlights && tour.highlights.length > 0 ? (
                 <ul className="space-y-2">
                   {tour.highlights.map((highlight) => (
@@ -239,10 +239,10 @@ const TourDetail: React.FC = () => {
           {activeTab === 'includedExcluded' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                   <CheckCircle className="w-6 h-6 text-green-500" />
                   {t('whatsIncluded')}
-                </h3>
+                </h2>
                 {tour.included_excluded.filter(item => item.type === 'included').length > 0 ? (
                   <ul className="space-y-3">
                     {tour.included_excluded
@@ -260,10 +260,10 @@ const TourDetail: React.FC = () => {
               </div>
 
               <div className="bg-white rounded-2xl p-8 shadow-sm">
-                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                   <XCircle className="w-6 h-6 text-red-500" />
                   {t('whatsNotIncluded')}
-                </h3>
+                </h2>
                 {tour.included_excluded.filter(item => item.type === 'excluded').length > 0 ? (
                   <ul className="space-y-3">
                     {tour.included_excluded

@@ -1,4 +1,4 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, Blog, BlogCreatePayload, BlogUpdatePayload, BlogResponse } from './types';
+import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, Blog, BlogCreatePayload, BlogUpdatePayload, BlogResponse, Language } from './types';
 import { handleAuthError } from './auth'; 
 import { slugify } from './utils'; 
 
@@ -19,8 +19,32 @@ const safeJSONParse = <T>(jsonString: string | T): T | string => {
   return jsonString; 
 };
 
+// Helper to get the current language from localStorage
+const getCurrentLanguage = (): Language => {
+  const storedLang = localStorage.getItem('userLanguage');
+  if (storedLang === 'id' || storedLang === 'en' || storedLang === 'ru') {
+    return storedLang;
+  }
+  return 'en'; // Default to 'en' if not found or invalid
+};
+
+// Helper to get the correct title based on LanguageContent and active language
+const getLocalizedTitle = (content: LanguageContent, lang: Language): string => {
+  if (lang === 'id' && content.id) return content.id;
+  if (lang === 'ru' && content.ru) return content.ru;
+  return content.en; // Fallback to English
+};
+
+// Helper to get the correct blog title based on Blog object and active language
+const getLocalizedBlogTitle = (blog: Blog, lang: Language): string => {
+  if (lang === 'id') return blog.title_id;
+  if (lang === 'ru') return blog.title_ru;
+  return blog.title_en; // Fallback to English
+};
+
 const parseTourPackageData = (tour: TourPackage): TourPackage => {
   const parsedTour = { ...tour };
+  const currentLang = getCurrentLanguage(); // Get language here
 
   parsedTour.name = safeJSONParse<LanguageContent>(tour.name) as LanguageContent;
   parsedTour.duration = safeJSONParse<LanguageContent>(tour.duration) as LanguageContent;
@@ -67,15 +91,20 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
     description: safeJSONParse<LanguageContent>(cp.description) as LanguageContent
   }));
 
-  parsedTour.slug = `${slugify(parsedTour.name.en)}-${tour.id}`;
+  // Use the localized title for slugification
+  const localizedName = getLocalizedTitle(parsedTour.name, currentLang);
+  parsedTour.slug = `${slugify(localizedName)}-${tour.id}`;
 
   return parsedTour;
 };
 
 const parseBlogData = (blog: Blog): Blog => {
   const parsedBlog = { ...blog };
+  const currentLang = getCurrentLanguage(); // Get language here
   
-  parsedBlog.slug = `${slugify(parsedBlog.title_en)}-${blog.id}`;
+  // Use the localized title for slugification
+  const localizedTitle = getLocalizedBlogTitle(parsedBlog, currentLang);
+  parsedBlog.slug = `${slugify(localizedTitle)}-${blog.id}`;
 
   return parsedBlog;
 };

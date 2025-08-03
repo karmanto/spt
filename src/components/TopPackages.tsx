@@ -105,7 +105,7 @@ const TopPackages: React.FC = () => {
                 key={tour.id}
                 className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group cursor-pointer"
               >
-                <Link to={`/tours/${tour.id}`}>
+                <Link to={`/tours/${tour.slug}`}>
                   <div className="relative h-64 overflow-hidden">
                     <img
                       src={

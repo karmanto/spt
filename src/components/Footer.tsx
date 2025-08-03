@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div itemScope itemType="https://schema.org/Organization">
-            <h3 className="text-xl font-bold mb-4" itemProp="name">Simbolon Phuket Tour</h3>
+            <h2 className="text-xl font-bold mb-4" itemProp="name">Simbolon Phuket Tour</h2>
             <p className="text-gray-400 mb-4" itemProp="description">{t('footerTagline')}</p>
             <div className="flex space-x-4" itemProp="sameAs">
               <a
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">{t('packages')}</h3>
+            <h2 className="text-xl font-bold mb-4">{t('packages')}</h2>
             <ul className="space-y-2">
               {packageLinks.map(item => (
                 <li key={item.key}>
@@ -128,7 +128,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">{t('contact')}</h3>
+            <h2 className="text-xl font-bold mb-4">{t('contact')}</h2>
             <ul className="space-y-4" itemScope itemType="https://schema.org/TravelAgency">
               <li className="flex items-center">
                 <Phone size={20} className="mr-2 text-blue-400 flex-shrink-0" />
@@ -158,7 +158,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-bold mb-4">{t('address')}</h3>
+            <h2 className="text-xl font-bold mb-4">{t('address')}</h2>
             <ul className="space-y-4" itemScope itemType="https://schema.org/PostalAddress">
               <li className="flex items-start" itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
                 <span className="fi fi-th mr-2 h-5 w-5 flex-shrink-0 mt-1" aria-label="Thailand" />

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import 'flag-icons/css/flag-icons.min.css';
 import Footer from '../components/Footer';
+import WhatsAppButton from '../components/WhatsAppButton';
 
 const BlogLayout: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -52,6 +53,7 @@ const BlogLayout: React.FC = () => {
       </header>
       <Outlet context={{ searchTerm, selectedCategory, setSearchTerm, setSelectedCategory }} /> 
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 };

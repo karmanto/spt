@@ -155,9 +155,9 @@ const TourList: React.FC = () => {
     <section id="tour-list" className="pt-10 min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="text-center mb-6">
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-text mb-4 leading-tight" data-aos="fade-up">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-text mb-4 leading-tight" data-aos="fade-up">
             {t('domesticTourListTitle')}
-          </h2>
+          </h1>
           <p className="text-xl text-textSecondary max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
             {t('domesticTourListSubtitle')}
           </p>

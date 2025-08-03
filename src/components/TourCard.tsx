@@ -65,9 +65,9 @@ const TourCard = forwardRef<HTMLDivElement, TourCardProps>(({ tour, currentPage 
             <span>{tourLocation}</span>
           </div>
 
-          <h3 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">
+          <h2 className="text-xl font-bold text-gray-900 mb-1 line-clamp-2">
             {tourName}
-          </h3>
+          </h2>
 
           <p className="text-gray-600 mb-4 line-clamp-2">
             {tourOverview}
