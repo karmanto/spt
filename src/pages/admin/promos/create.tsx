@@ -14,6 +14,8 @@ export default function CreatePromo() {
   const [descriptionRu, setDescriptionRu] = useState('');
   const [price, setPrice] = useState('');
   const [oldPrice, setOldPrice] = useState('');
+  const [price2, setPrice2] = useState(''); // New state for price2
+  const [oldPrice2, setOldPrice2] = useState(''); // New state for oldPrice2
   const [endDate, setEndDate] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -30,6 +32,8 @@ export default function CreatePromo() {
         description_ru: descriptionRu,
         price: price,
         old_price: oldPrice || undefined,
+        price2: price2 || undefined, // Include price2
+        old_price2: oldPrice2 || undefined, // Include old_price2
         end_date: endDate,
         pdf_url: pdfUrl,
         image: image || undefined,
@@ -72,12 +76,22 @@ export default function CreatePromo() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Harga</label>
+          <label className="block text-sm font-medium text-gray-700">Harga 1</label>
           <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" required />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Harga Lama (Opsional)</label>
+          <label className="block text-sm font-medium text-gray-700">Harga Lama 1 (Opsional)</label>
           <input type="text" value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+        </div>
+
+        {/* New fields for price2 and old_price2 */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Harga 2 (Opsional)</label>
+          <input type="text" value={price2} onChange={(e) => setPrice2(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Harga Lama 2 (Opsional)</label>
+          <input type="text" value={oldPrice2} onChange={(e) => setOldPrice2(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
         </div>
 
         <div>

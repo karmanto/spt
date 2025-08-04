@@ -72,7 +72,7 @@ function App() {
     const path = location.pathname;
     const pathSegments = path.split('/').filter(Boolean);
     const currentLangInUrl = pathSegments[0];
-    const isPublicRoute = !path.startsWith('/admin');
+    const isPublicRoute = !path.startsWith('/admin') && !path.startsWith('/login');
 
     if (isPublicRoute) {
       if (['id', 'en', 'ru'].includes(currentLangInUrl)) {

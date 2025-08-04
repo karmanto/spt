@@ -63,8 +63,11 @@ export default function AdminPromos() {
                     Judul
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Harga
+                    Harga 1
                   </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Harga 2
+                  </th> {/* New Header */}
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Tanggal Berakhir
                   </th>
@@ -76,7 +79,7 @@ export default function AdminPromos() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {promos.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
+                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500"> {/* colSpan changed to 6 */}
                       Tidak ada data promo
                     </td>
                   </tr>
@@ -108,6 +111,21 @@ export default function AdminPromos() {
                             </>
                           ) : (
                             <span className="font-bold">{promo.price}</span>
+                          )}
+                        </div>
+                      </td>
+                      {/* New TD for Harga 2 */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {promo.old_price2 ? (
+                            <>
+                              <span className="line-through text-gray-500 mr-2">
+                                {promo.old_price2}
+                              </span>
+                              <span className="font-bold text-red-600">{promo.price2}</span>
+                            </>
+                          ) : (
+                            <span className="font-bold">{promo.price2}</span>
                           )}
                         </div>
                       </td>

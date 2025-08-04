@@ -75,18 +75,42 @@ const PromoCard: React.FC<PromoCardProps> = ({ promo, countdown }) => {
         </p>
 
         <div className="flex-col items-center justify-between mb-4"> 
-          <div className="text-left mb-2">
-            <span className="text-sm text-gray-500">{t('startFrom')}</span> 
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-gray-900"> 
-                {promo.price}
-              </span>
-              {promo.old_price && 
-              <span className="text-md text-gray-400 line-through decoration-red-500 decoration-2"> 
-                {promo.old_price}
-              </span>}
-            </div>
+          <table className="w-full text-left mb-4">
+  <thead>
+    <tr className="border-b">
+      <th className="py-2 text-sm text-gray-500">{t('startFrom')}</th>
+      <th className="py-2 text-sm text-gray-500"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="hover:bg-gray-50">
+      <td className="py-3">
+        <div className="text-2xl font-bold text-gray-900">{promo.price}</div>
+        {promo.old_price && (
+          <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
+            {promo.old_price}
           </div>
+        )}
+      </td>
+      <td className="py-3">
+        {promo.price2 ? (
+          <>
+            <div className="text-2xl font-bold text-gray-900">{promo.price2}</div>
+            {promo.old_price2 && (
+              <div className="text-md text-gray-400 line-through decoration-red-500 decoration-2">
+                {promo.old_price2}
+              </div>
+            )}
+          </>
+        ) : (
+          ""
+        )}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
           
           <div className={`flex gap-2`}> 
             <a

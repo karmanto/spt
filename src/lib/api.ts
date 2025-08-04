@@ -197,6 +197,13 @@ export const addPromo = async (promo: PromoCreatePayload) => {
   if (promo.old_price) {
     formData.append('old_price', promo.old_price);
   }
+  // Add price2 and old_price2
+  if (promo.price2) {
+    formData.append('price2', promo.price2);
+  }
+  if (promo.old_price2) {
+    formData.append('old_price2', promo.old_price2);
+  }
   formData.append('end_date', promo.end_date);
   formData.append('pdf_url', promo.pdf_url);
   if (promo.image) {
@@ -218,6 +225,9 @@ export const updatePromo = async (
   if (promo.description_ru) formData.append('description_ru', promo.description_ru);
   if (promo.price)         formData.append('price', promo.price);
   if (promo.old_price)      formData.append('old_price', promo.old_price);
+  // Add price2 and old_price2
+  if (promo.price2)         formData.append('price2', promo.price2);
+  if (promo.old_price2)      formData.append('old_price2', promo.old_price2);
   if (promo.end_date) formData.append('end_date', promo.end_date);
   if (promo.pdf_url)  formData.append('pdf_url', promo.pdf_url);
   if (promo.image) {

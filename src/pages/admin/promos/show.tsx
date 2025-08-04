@@ -165,15 +165,29 @@ export default function ShowPromo() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Umum</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Harga 1</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
                   {promo.price}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Lama (opsional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Lama 1 (opsional)</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
                   {promo.old_price ? <s className="text-red-500">{promo.old_price}</s> : <span className="text-gray-400 italic">Tidak ada</span>}
+                </div>
+              </div>
+              {/* Display for price2 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Harga 2 (opsional)</label>
+                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                  {promo.price2 || <span className="text-gray-400 italic">Tidak ada</span>}
+                </div>
+              </div>
+              {/* Display for old_price2 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Lama 2 (opsional)</label>
+                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+                  {promo.old_price2 ? <s className="text-red-500">{promo.old_price2}</s> : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
               <div>

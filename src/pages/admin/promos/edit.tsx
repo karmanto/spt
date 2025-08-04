@@ -17,6 +17,8 @@ export default function EditPromo() {
   const [descriptionRu, setDescriptionRu] = useState('');
   const [price, setPrice] = useState('');
   const [oldPrice, setOldPrice] = useState('');
+  const [price2, setPrice2] = useState(''); 
+  const [oldPrice2, setOldPrice2] = useState(''); 
   const [endDate, setEndDate] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
   const [image, setImage] = useState<File | null>(null);
@@ -36,6 +38,8 @@ export default function EditPromo() {
         setPrice(data.price);
         setPdfUrl(data.pdf_url);
         setOldPrice(data.old_price || '');
+        setPrice2(data.price2 || ''); 
+        setOldPrice2(data.old_price2 || ''); 
         setEndDate(data.end_date.split('T')[0]);
       } catch (error) {
         console.error('Gagal mengambil promo:', error);
@@ -56,7 +60,9 @@ export default function EditPromo() {
         description_en: descriptionEn,
         description_ru: descriptionRu,
         price: price,
-        old_price: oldPrice || undefined,
+        old_price: oldPrice || "",
+        price2: price2 || "",
+        old_price2: oldPrice2 || "", 
         end_date: endDate,
         pdf_url: pdfUrl,
         image: image || undefined,
@@ -101,12 +107,22 @@ export default function EditPromo() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Harga</label>
+          <label className="block text-sm font-medium text-gray-700">Harga 1</label>
           <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" required />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Harga Lama (Opsional)</label>
+          <label className="block text-sm font-medium text-gray-700">Harga Lama 1 (Opsional)</label>
           <input type="text" value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+        </div>
+
+        {/* New fields for price2 and old_price2 */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Harga 2 (Opsional)</label>
+          <input type="text" value={price2} onChange={(e) => setPrice2(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Harga Lama 2 (Opsional)</label>
+          <input type="text" value={oldPrice2} onChange={(e) => setOldPrice2(e.target.value)} className="p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm" />
         </div>
 
         <div>
@@ -132,7 +148,7 @@ export default function EditPromo() {
             </div>
           )}
         </div>
-        <div className="flex space-x-4"> {/* Flex container for buttons */}
+        <div className="flex space-x-4"> 
           <button
             type="submit"
             className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 flex items-center justify-center transition duration-300 ease-in-out"

@@ -37,7 +37,9 @@ export interface Promo {
   description_en: string;
   description_ru: string;
   price: string;
-  old_price?: string;
+  old_price: string | null; // Changed to allow null
+  price2: string | null; // Changed to allow null
+  old_price2: string | null; // Changed to allow null
   image: string;
   end_date: string;
   pdf_url: string;
