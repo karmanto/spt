@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Globe, Newspaper } from 'lucide-react'; 
+import { FileText, Globe, Newspaper, Settings, BookOpen } from 'lucide-react'; 
 import { getPromos, getTourPackages, getBlogs } from '../../lib/api'; 
 
 export default function Dashboard() {
@@ -65,9 +65,15 @@ export default function Dashboard() {
     },
     {
       title: 'Blog', 
-      icon: Newspaper,
+      icon: BookOpen, // Changed to BookOpen for blog
       link: '/admin/blogs',
       count: dataCounts.blogs,
+    },
+    {
+      title: 'Pengaturan SEO', // New module
+      icon: Settings,
+      link: '/admin/seo-settings',
+      count: 'N/A', // SEO content doesn't have a count like other entities
     },
   ];
 
@@ -95,9 +101,12 @@ export default function Dashboard() {
                           {module.title}
                         </dt>
                         <dd className="flex items-baseline">
-                          <div className="text-2xl font-semibold text-gray-900">
-                            {module.count}
-                          </div>
+                          {/* Conditional rendering: only show count if it's not 'N/A' */}
+                          {module.count !== 'N/A' && (
+                            <div className="text-2xl font-semibold text-gray-900">
+                              {module.count}
+                            </div>
+                          )}
                         </dd>
                       </dl>
                     </div>

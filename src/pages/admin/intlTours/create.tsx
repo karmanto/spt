@@ -37,6 +37,12 @@ export default function CreateTour() {
     cancellation_policies: [],
     tags: '',
     currency: '',
+    seo_title_id: '', // New field
+    seo_description_id: '', // New field
+    seo_title_en: '', // New field
+    seo_description_en: '', // New field
+    seo_title_ru: '', // New field
+    seo_description_ru: '', // New field
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -92,6 +98,12 @@ export default function CreateTour() {
               path: img.path,
               order: img.order,
             })),
+            seo_title_id: copiedTour.seo_title_id || '', // Copy new field
+            seo_description_id: copiedTour.seo_description_id || '', // Copy new field
+            seo_title_en: copiedTour.seo_title_en || '', // Copy new field
+            seo_description_en: copiedTour.seo_description_en || '', // Copy new field
+            seo_title_ru: copiedTour.seo_title_ru || '', // Copy new field
+            seo_description_ru: copiedTour.seo_description_ru || '', // Copy new field
           };
 
           setFormData(transformedData);
@@ -166,7 +178,7 @@ export default function CreateTour() {
       arrayName: keyof TourPackageCreatePayload,
       itemIndex: number,
       propertyName: string,
-      value: string | number,
+      value: string | number, 
       lang?: 'en' | 'id' | 'ru'
     ) => {
       setFormData((prev) => {
@@ -312,6 +324,12 @@ export default function CreateTour() {
           cancellation_policies: [],
           tags: '',
           currency: '',
+          seo_title_id: '', // Reset new field
+          seo_description_id: '', // Reset new field
+          seo_title_en: '', // Reset new field
+          seo_description_en: '', // Reset new field
+          seo_title_ru: '', // Reset new field
+          seo_description_ru: '', // Reset new field
         });
         setImagePreviews([]); 
         navigate('/admin/international-tours'); 
@@ -435,6 +453,88 @@ export default function CreateTour() {
         )}
 
         <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-xl p-8 space-y-8">
+          {/* New SEO Fields Section */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">SEO Metadata</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label htmlFor="seo_title_id" className="block text-sm font-medium text-gray-700 mb-1">SEO Title (ID)</label>
+                <input
+                  type="text"
+                  id="seo_title_id"
+                  name="seo_title_id"
+                  value={formData.seo_title_id || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="Judul SEO untuk mesin pencari (ID)"
+                />
+              </div>
+              <div>
+                <label htmlFor="seo_title_en" className="block text-sm font-medium text-gray-700 mb-1">SEO Title (EN)</label>
+                <input
+                  type="text"
+                  id="seo_title_en"
+                  name="seo_title_en"
+                  value={formData.seo_title_en || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="SEO Title for search engines (EN)"
+                />
+              </div>
+              <div>
+                <label htmlFor="seo_title_ru" className="block text-sm font-medium text-gray-700 mb-1">SEO Title (RU)</label>
+                <input
+                  type="text"
+                  id="seo_title_ru"
+                  name="seo_title_ru"
+                  value={formData.seo_title_ru || ''}
+                  onChange={handleChange}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="SEO Title for search engines (RU)"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+              <div>
+                <label htmlFor="seo_description_id" className="block text-sm font-medium text-gray-700 mb-1">SEO Description (ID)</label>
+                <textarea
+                  id="seo_description_id"
+                  name="seo_description_id"
+                  value={formData.seo_description_id || ''}
+                  onChange={handleChange}
+                  rows={4}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="Deskripsi meta untuk mesin pencari (ID)"
+                />
+              </div>
+              <div>
+                <label htmlFor="seo_description_en" className="block text-sm font-medium text-gray-700 mb-1">SEO Description (EN)</label>
+                <textarea
+                  id="seo_description_en"
+                  name="seo_description_en"
+                  value={formData.seo_description_en || ''}
+                  onChange={handleChange}
+                  rows={4}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="Meta description for search engines (EN)"
+                />
+              </div>
+              <div>
+                <label htmlFor="seo_description_ru" className="block text-sm font-medium text-gray-700 mb-1">SEO Description (RU)</label>
+                <textarea
+                  id="seo_description_ru"
+                  name="seo_description_ru"
+                  value={formData.seo_description_ru || ''}
+                  onChange={handleChange}
+                  rows={4}
+                  className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm p-2"
+                  placeholder="Meta description for search engines (RU)"
+                />
+              </div>
+            </div>
+          </section>
+          {/* End New SEO Fields Section */}
+          
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Dasar</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

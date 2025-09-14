@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Language } from '../lib/types'; 
+import { Language } from '../lib/types';
 
 type TranslationKeys = { [key: string]: string };
 
@@ -45,7 +45,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const [language, setLanguageState] = useState<Language>('en');
   const [isLoading, setIsLoading] = useState(true);
   const [currentTranslations, setCurrentTranslations] = useState<TranslationKeys>({});
-  const [defaultTranslations, setDefaultTranslations] = useState<TranslationKeys>({});
+  const [fallbackTranslations, setFallbackTranslations] = useState<TranslationKeys>({}); // Mengganti defaultTranslations
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
@@ -69,6 +69,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     saveLanguageToLocalStorage(lang);
   }, []);
 
+  // Effect untuk menginisialisasi bahasa dari URL, localStorage, atau IP
   useEffect(() => {
     const path = location.pathname;
     const pathSegments = path.split('/').filter(Boolean);
@@ -106,35 +107,46 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
           }
         }
       }
-      setIsLoading(false); 
+      setIsLoading(false);
     };
 
     initializeLanguage();
-  }, [location.pathname]); 
+  }, [location.pathname]);
 
   useEffect(() => {
-    const loadTranslations = async () => {
+    const loadFallbackTranslations = async () => {
       try {
-        const defaultModule = await import(`../locales/id.json`);
-        setDefaultTranslations(defaultModule.default);
+        const module = await import(`../locales/en.json`); 
+        setFallbackTranslations(module.default);
+      } catch (error) {
+        console.error('Failed to load fallback (en) translations:', error);
+      }
+    };
+    loadFallbackTranslations();
+  }, []); 
 
+  useEffect(() => {
+    const loadCurrentTranslations = async () => {
+      if (!language) return; 
+
+      try {
         const module = await import(`../locales/${language}.json`);
         setCurrentTranslations(module.default);
       } catch (error) {
         console.error(`Failed to load translations for ${language}:`, error);
-        setCurrentTranslations(defaultTranslations); 
+        setCurrentTranslations(fallbackTranslations);
       }
     };
 
-    loadTranslations();
-  }, [language, defaultTranslations]); 
+    loadCurrentTranslations();
+  }, [language, fallbackTranslations]); 
 
   const t = (key: string): string => {
     if (currentTranslations[key]) {
       return currentTranslations[key];
     }
-    if (defaultTranslations[key]) {
-      return defaultTranslations[key];
+    if (fallbackTranslations[key]) { 
+      return fallbackTranslations[key];
     }
     return key;
   };

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { TourPackage, LanguageContent } from '../lib/types';
-import { 
+import {
   MapPin, Clock, Tag, Star, Camera, CheckCircle, XCircle
 } from 'lucide-react';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -12,17 +12,39 @@ import { getTourPackageDetail } from '../lib/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
 import ImageModal from '../components/ImageModal';
+import { setMetaTag, setLinkTag } from '../lib/seoUtils';
 
 const TourDetail: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>(); 
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { t, language: currentLanguage } = useLanguage();
   const [tour, setTour] = useState<TourPackage | null>(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'includedExcluded' | 'itinerary' | 'pricing' | 'faq' | 'booking'>('overview');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
+
+  const getLocalizedContent = useCallback((content: LanguageContent | undefined) => {
+    if (!content) return ''; 
+    if (currentLanguage === 'id') return content.id ?? content.en ?? '';
+    if (currentLanguage === 'ru') return content.ru ?? content.en ?? '';
+    return content.en ?? '';
+  }, [currentLanguage]);
+
+  const getLocalizedSeoTitle = useCallback(() => {
+    if (!tour) return '';
+    if (currentLanguage === 'id') return tour.seo_title_id || tour.seo_title_en || '';
+    if (currentLanguage === 'ru') return tour.seo_title_ru || tour.seo_title_en || '';
+    return tour.seo_title_en || '';
+  }, [tour, currentLanguage]);
+
+  const getLocalizedSeoDescription = useCallback(() => {
+    if (!tour) return '';
+    if (currentLanguage === 'id') return tour.seo_description_id || tour.seo_description_en || '';
+    if (currentLanguage === 'ru') return tour.seo_description_ru || tour.seo_description_en || '';
+    return tour.seo_description_en || '';
+  }, [tour, currentLanguage]);
 
   const fetchTourDetail = async () => {
     if (!slug) {
@@ -51,7 +73,18 @@ const TourDetail: React.FC = () => {
 
   useEffect(() => {
     fetchTourDetail();
-  }, [slug, navigate, t]); 
+  }, [slug]);
+
+  useEffect(() => {
+    if (tour) {
+      document.title = getLocalizedSeoTitle();
+      const descriptionContent = getLocalizedSeoDescription();
+      setMetaTag('description', descriptionContent);
+
+      const currentUrl = window.location.href;
+      setLinkTag('canonical', currentUrl);
+    }
+  }, [tour, getLocalizedContent, getLocalizedSeoTitle, getLocalizedSeoDescription]); 
 
   if (loading) {
     return (
@@ -76,12 +109,6 @@ const TourDetail: React.FC = () => {
       </div>
     );
   }
-
-  const getLocalizedContent = (content: LanguageContent) => {
-    if (currentLanguage === 'id') return content.id;
-    if (currentLanguage === 'ru') return content.ru || content.en;
-    return content.en;
-  };
 
   const sortedImages = [...tour.images].sort((a, b) => {
     const orderA = a.order ?? 0;

@@ -19,6 +19,12 @@ const CreateBlog: React.FC = () => {
     posting_date: new Date().toISOString().split('T')[0],
     category: '',
     image: undefined,
+    seo_title_id: '', // New field
+    seo_description_id: '', // New field
+    seo_title_en: '', // New field
+    seo_description_en: '', // New field
+    seo_title_ru: '', // New field
+    seo_description_ru: '', // New field
   });
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -135,6 +141,101 @@ const CreateBlog: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
+        {/* New Localized SEO Fields */}
+        <div className="mb-6 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+          <h3 className="text-lg font-medium text-gray-800 mb-4">SEO Metadata</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label htmlFor="seo_title_id" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Title (ID)
+              </label>
+              <input
+                type="text"
+                id="seo_title_id"
+                name="seo_title_id"
+                value={formData.seo_title_id || ''}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="Judul SEO untuk mesin pencari (ID)"
+              />
+            </div>
+            <div>
+              <label htmlFor="seo_title_en" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Title (EN)
+              </label>
+              <input
+                type="text"
+                id="seo_title_en"
+                name="seo_title_en"
+                value={formData.seo_title_en || ''}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="SEO Title for search engines (EN)"
+              />
+            </div>
+            <div>
+              <label htmlFor="seo_title_ru" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Title (RU)
+              </label>
+              <input
+                type="text"
+                id="seo_title_ru"
+                name="seo_title_ru"
+                value={formData.seo_title_ru || ''}
+                onChange={handleChange}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="SEO Title for search engines (RU)"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label htmlFor="seo_description_id" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Description (ID)
+              </label>
+              <textarea
+                id="seo_description_id"
+                name="seo_description_id"
+                value={formData.seo_description_id || ''}
+                onChange={handleChange}
+                rows={4}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="Deskripsi meta untuk mesin pencari (ID)"
+              />
+            </div>
+            <div>
+              <label htmlFor="seo_description_en" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Description (EN)
+              </label>
+              <textarea
+                id="seo_description_en"
+                name="seo_description_en"
+                value={formData.seo_description_en || ''}
+                onChange={handleChange}
+                rows={4}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="Meta description for search engines (EN)"
+              />
+            </div>
+            <div>
+              <label htmlFor="seo_description_ru" className="block text-sm font-medium text-gray-700 mb-1">
+                SEO Description (RU)
+              </label>
+              <textarea
+                id="seo_description_ru"
+                name="seo_description_ru"
+                value={formData.seo_description_ru || ''}
+                onChange={handleChange}
+                rows={4}
+                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2"
+                placeholder="Meta description for search engines (RU)"
+              />
+            </div>
+          </div>
+        </div>
+        {/* End New Localized SEO Fields */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <label htmlFor="title_id" className="block text-sm font-medium text-gray-700 mb-1">

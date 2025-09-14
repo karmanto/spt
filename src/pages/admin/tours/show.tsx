@@ -107,6 +107,49 @@ export default function ShowTour() {
     </div>
   );
 
+  const renderLocalizedTextDisplay = (
+    label: string,
+    idContent: string | undefined,
+    enContent: string | undefined,
+    ruContent: string | undefined,
+  ) => (
+    <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+      <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {idContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">English</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {enContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Russian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {ruContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSimpleTextDisplay = (
+    label: string,
+    value: string | number | undefined | null,
+  ) => (
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+        {value !== undefined && value !== null && value !== '' ? value : <span className="text-gray-400 italic">Tidak ada</span>}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:px-0">
@@ -160,20 +203,28 @@ export default function ShowTour() {
 
         <div className="bg-white shadow-xl rounded-xl p-8 space-y-8">
           <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">SEO Metadata</h2>
+            <div className="grid grid-cols-1 gap-6 mb-6">
+              {renderLocalizedTextDisplay(
+                'SEO Title',
+                tour.seo_title_id,
+                tour.seo_title_en,
+                tour.seo_title_ru
+              )}
+              {renderLocalizedTextDisplay(
+                'SEO Description',
+                tour.seo_description_id,
+                tour.seo_description_en,
+                tour.seo_description_ru
+              )}
+            </div>
+          </section>
+          
+          <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Dasar</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Kode Tur</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.code || <span className="text-gray-400 italic">Tidak ada</span>}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Tur</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {getTagDisplayName(tour.tags)}
-                </div>
-              </div>
+              {renderSimpleTextDisplay('Kode Tur', tour.code)}
+              {renderSimpleTextDisplay('Tipe Tur', getTagDisplayName(tour.tags))}
             </div>
 
             {renderLanguageContentDisplay('Nama Tur', tour.name)}
@@ -185,24 +236,9 @@ export default function ShowTour() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Harga</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Mata Uang</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.currency ? tour.currency : <span className="text-gray-400 italic">Tidak ada</span>}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.starting_price ? `${(tour.starting_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Harga Asli (opsional)</label>
-                <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.original_price ? `${(tour.original_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
-                </div>
-              </div>
+              {renderSimpleTextDisplay('Mata Uang', tour.currency)}
+              {renderSimpleTextDisplay('Harga Mulai Dari', tour.starting_price ? `${(parseFloat(tour.starting_price)).toLocaleString()}` : null)}
+              {renderSimpleTextDisplay('Harga Asli (opsional)', tour.original_price ? `${(parseFloat(tour.original_price)).toLocaleString()}` : null)}
             </div>
 
             <h3 className="text-xl font-semibold text-gray-800 mb-4">Opsi Harga</h3>
@@ -211,18 +247,8 @@ export default function ShowTour() {
                 {tour.prices.map((priceOption, index) => (
                   <div key={priceOption.id || index} className="p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Layanan</label>
-                        <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                          {priceOption.service_type.id || priceOption.service_type.en || <span className="text-gray-400 italic">Tidak ada</span>}
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Harga</label>
-                        <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                          {priceOption.price ? `${tour.currency || ''}${priceOption.price.toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
-                        </div>
-                      </div>
+                      {renderSimpleTextDisplay('Tipe Layanan', priceOption.service_type.id || priceOption.service_type.en)}
+                      {renderSimpleTextDisplay('Harga', priceOption.price ? `${tour.currency || ''}${priceOption.price.toLocaleString()}` : null)}
                     </div>
                     {renderLanguageContentDisplay('Deskripsi Harga', priceOption.description)}
                   </div>
@@ -233,10 +259,7 @@ export default function ShowTour() {
             )}
 
             <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Rating (opsional, 0-5)</label>
-              <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                {tour.rate || <span className="text-gray-400 italic">Tidak ada</span>}
-              </div>
+              {renderSimpleTextDisplay('Rating (opsional, 0-5)', tour.rate)}
             </div>
           </section>
 
@@ -301,12 +324,7 @@ export default function ShowTour() {
                       <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-5 border-t border-gray-300 space-y-6">
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nomor Urutan</label>
-                        <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                          {itinerary.day}
-                        </div>
-                      </div>
+                      {renderSimpleTextDisplay('Nomor Urutan', itinerary.day)}
                       {renderLanguageContentDisplay('Judul ', itinerary.title)}
 
                       <h4 className="text-lg font-semibold text-gray-800 mt-4 mb-3">Aktivitas</h4>
@@ -315,12 +333,7 @@ export default function ShowTour() {
                           itinerary.activities.map((activity, activityIndex) => (
                             <div key={activity.id || activityIndex} className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm flex flex-col sm:flex-row sm:items-end gap-4">
                               <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <div className="sm:col-span-1">
-                                  <label className="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
-                                  <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                                    {activity.time || <span className="text-gray-400 italic">Tidak ada</span>}
-                                  </div>
-                                </div>
+                                {renderSimpleTextDisplay('Waktu', activity.time)}
                                 <div className="sm:col-span-3">
                                   {renderLanguageContentDisplay('Deskripsi Aktivitas', activity.description)}
                                 </div>
@@ -366,10 +379,7 @@ export default function ShowTour() {
                       <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition-transform" />
                     </summary>
                     <div className="p-4 border-t border-gray-200">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Tipe</label>
-                      <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                        {item.type === 'included' ? 'Termasuk' : 'Tidak Termasuk'}
-                      </div>
+                      {renderSimpleTextDisplay('Tipe', item.type === 'included' ? 'Termasuk' : 'Tidak Termasuk')}
                       {renderLanguageContentDisplay('Deskripsi', item.description)}
                     </div>
                   </details>

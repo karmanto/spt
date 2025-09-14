@@ -1,4 +1,17 @@
-import { Promo, PromoCreatePayload, TourPackage, TourPackageResponse, TourPackageCreatePayload, TourPackageUpdatePayload, LanguageContent, Blog, BlogCreatePayload, BlogUpdatePayload, BlogResponse, Language } from './types';
+import {  Promo, 
+          PromoCreatePayload, 
+          TourPackage, 
+          TourPackageResponse, 
+          TourPackageCreatePayload, 
+          TourPackageUpdatePayload, 
+          LanguageContent, 
+          Blog, 
+          BlogCreatePayload, 
+          BlogUpdatePayload, 
+          BlogResponse, 
+          Language, 
+          SEOContent 
+        } from './types';
 import { handleAuthError } from './auth'; 
 import { slugify } from './utils'; 
 
@@ -50,6 +63,9 @@ const parseTourPackageData = (tour: TourPackage): TourPackage => {
   parsedTour.duration = safeJSONParse<LanguageContent>(tour.duration) as LanguageContent;
   parsedTour.location = safeJSONParse<LanguageContent>(tour.location) as LanguageContent;
   parsedTour.overview = safeJSONParse<LanguageContent>(tour.overview) as LanguageContent;
+  // Removed generic seo_title and seo_description parsing
+  // parsedTour.seo_title = tour.seo_title; 
+  // parsedTour.seo_description = tour.seo_description; 
 
   parsedTour.prices = tour.prices.map(p => ({
     ...p,
@@ -102,6 +118,10 @@ const parseBlogData = (blog: Blog): Blog => {
   const parsedBlog = { ...blog };
   const currentLang = getCurrentLanguage(); // Get language here
   
+  // Removed generic seo_title and seo_description parsing
+  // parsedBlog.seo_title = blog.seo_title;
+  // parsedBlog.seo_description = blog.seo_description;
+
   // Use the localized title for slugification
   const localizedTitle = getLocalizedBlogTitle(parsedBlog, currentLang);
   parsedBlog.slug = `${slugify(localizedTitle)}-${blog.id}`;
@@ -311,6 +331,13 @@ export const addTourPackage = async (tour: TourPackageCreatePayload) => {
     cancellation_policies: tour.cancellation_policies.map(cp => ({
       description: JSON.stringify(cp.description)
     })),
+    // Corrected: Localized SEO fields
+    seo_title_id: tour.seo_title_id || '',
+    seo_description_id: tour.seo_description_id || '',
+    seo_title_en: tour.seo_title_en || '',
+    seo_description_en: tour.seo_description_en || '',
+    seo_title_ru: tour.seo_title_ru || '',
+    seo_description_ru: tour.seo_description_ru || '',
   };
 
   return fetchData<TourPackage>('packages', {
@@ -360,6 +387,13 @@ export const updateTourPackage = async (id: number, tour: TourPackageUpdatePaylo
     ...(tour.cancellation_policies && { cancellation_policies: tour.cancellation_policies.map(cp => ({
       description: JSON.stringify(cp.description)
     })) }),
+    // Corrected: Localized SEO fields
+    ...(tour.seo_title_id !== undefined && { seo_title_id: tour.seo_title_id || '' }),
+    ...(tour.seo_description_id !== undefined && { seo_description_id: tour.seo_description_id || '' }),
+    ...(tour.seo_title_en !== undefined && { seo_title_en: tour.seo_title_en || '' }),
+    ...(tour.seo_description_en !== undefined && { seo_description_en: tour.seo_description_en || '' }),
+    ...(tour.seo_title_ru !== undefined && { seo_title_ru: tour.seo_title_ru || '' }),
+    ...(tour.seo_description_ru !== undefined && { seo_description_ru: tour.seo_description_ru || '' }),
   };
 
   return fetchData<TourPackage>(`packages/${id}`, {
@@ -426,6 +460,13 @@ export const addBlog = async (blog: BlogCreatePayload) => {
   if (blog.image) {
     formData.append('image', blog.image);
   }
+  // Corrected: Append localized SEO fields
+  formData.append('seo_title_id', blog.seo_title_id || '');
+  formData.append('seo_description_id', blog.seo_description_id || '');
+  formData.append('seo_title_en', blog.seo_title_en || '');
+  formData.append('seo_description_en', blog.seo_description_en || '');
+  formData.append('seo_title_ru', blog.seo_title_ru || '');
+  formData.append('seo_description_ru', blog.seo_description_ru || '');
   return fetchMultipartData<Blog>('blogs', { method: 'POST', body: formData });
 };
 
@@ -443,6 +484,13 @@ export const updateBlog = async (id: number, blog: BlogUpdatePayload) => {
   if (blog.image) {
     formData.append('image', blog.image);
   }
+  // Corrected: Append localized SEO fields
+  if (blog.seo_title_id !== undefined) formData.append('seo_title_id', blog.seo_title_id || '');
+  if (blog.seo_description_id !== undefined) formData.append('seo_description_id', blog.seo_description_id || '');
+  if (blog.seo_title_en !== undefined) formData.append('seo_title_en', blog.seo_title_en || '');
+  if (blog.seo_description_en !== undefined) formData.append('seo_description_en', blog.seo_description_en || '');
+  if (blog.seo_title_ru !== undefined) formData.append('seo_title_ru', blog.seo_title_ru || '');
+  if (blog.seo_description_ru !== undefined) formData.append('seo_description_ru', blog.seo_description_ru || '');
 
   formData.append('_method', 'PUT');
 
@@ -454,3 +502,13 @@ export const updateBlog = async (id: number, blog: BlogUpdatePayload) => {
 
 export const deleteBlog = async (id: number) =>
   fetchData<void>(`blogs/${id}`, { method: 'DELETE' });
+
+// ==== API SEO Content ====
+export const getSEOContent = async () => fetchData<SEOContent>('seo-content');
+
+export const updateSEOContent = async (content: SEOContent) => {
+  return fetchData<void>('seo-content', {
+    method: 'PUT',
+    body: JSON.stringify(content),
+  });
+};

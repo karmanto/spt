@@ -23,8 +23,9 @@ import ShowTour from './pages/admin/tours/show';
 import { setAuthErrorHandler } from './lib/auth';
 import LoadingSpinner from './components/LoadingSpinner';
 import { useLanguage } from './context/LanguageContext'; 
-import seoContentJson from './constants/seoContent.json'; 
-import { Language, HreflangLinks, SEOContent } from './lib/types';
+import { Language, PageSEO, SEOContent } from './lib/types';
+import { getSEOContent } from './lib/api'; 
+import { setMetaTag, setLinkTag, clearAllDynamicSEOTags } from './lib/seoUtils';
 
 import IntlTourList from './pages/IntlTourList';
 import IntlTourDetail from './pages/IntlTourDetail';
@@ -39,6 +40,9 @@ import DomesticAdminTours from './pages/admin/domesticTours';
 import DomesticCreateTour from './pages/admin/domesticTours/create';
 import DomesticEditTour from './pages/admin/domesticTours/edit';
 import DomesticShowTour from './pages/admin/domesticTours/show';
+
+import SeoShow from './pages/admin/seo/show'; 
+import SeoEdit from './pages/admin/seo/edit'; 
 
 const BlogList = lazy(() => import('./pages/BlogList'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
@@ -61,8 +65,21 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { language, setLanguageFromUrl, isLoading } = useLanguage(); 
+  const [seoContentData, setSeoContentData] = useState<SEOContent | null>(null); 
 
-  const seoContent: SEOContent = seoContentJson as SEOContent;
+  useEffect(() => {
+    if (!isLoading && !seoContentData) { 
+      const fetchSeo = async () => {
+        try {
+          const data = await getSEOContent();
+          setSeoContentData(data);
+        } catch (error) {
+          console.error("Failed to fetch SEO content:", error);
+        }
+      };
+      fetchSeo();
+    }
+  }, [isLoading, seoContentData]);
 
   useEffect(() => {
     if (isLoading) {
@@ -87,7 +104,7 @@ function App() {
   }, [location.pathname, navigate, language, setLanguageFromUrl, isLoading]); 
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading || !seoContentData) { 
       return;
     }
 
@@ -96,37 +113,58 @@ function App() {
     const currentLangInUrl = pathSegments[0];
     const actualLanguage = ['id', 'en', 'ru'].includes(currentLangInUrl) ? currentLangInUrl : language;
 
-    let pageKey: keyof typeof seoContent = 'home';
-    if (path.includes('/blogs')) {
+    let pageKey: keyof SEOContent | null = null; 
+
+    const isBlogListPage = path === `/${actualLanguage}/blogs` || path === '/blogs';
+    const isIntlTourListPage = path === `/${actualLanguage}/international-tours` || path === '/international-tours';
+    const isDomesticTourListPage = path === `/${actualLanguage}/domestic-tours` || path === '/domestic-tours';
+    const isTourListPage = path === `/${actualLanguage}/tours` || path === '/tours';
+    const isHomePage = path === `/${actualLanguage}` || path === '/';
+
+    const isBlogDetailPage = path.match(/^\/(id|en|ru)?\/blogs\/[^/]+$/);
+    const isIntlTourDetailPage = path.match(/^\/(id|en|ru)?\/international-tours\/[^/]+$/);
+    const isDomesticTourDetailPage = path.match(/^\/(id|en|ru)?\/domestic-tours\/[^/]+$/);
+    const isTourDetailPage = path.match(/^\/(id|en|ru)?\/tours\/[^/]+$/);
+
+    if (isHomePage) {
+      pageKey = 'home';
+    } else if (isBlogListPage || isBlogDetailPage) { 
       pageKey = 'blogs';
-    } else if (path.includes('/international-tours')) {
+    } else if (isIntlTourListPage || isIntlTourDetailPage) {
       pageKey = 'intlTours';
-    } else if (path.includes('/domestic-tours')) {
+    } else if (isDomesticTourListPage || isDomesticTourDetailPage) {
       pageKey = 'domesticTours';
-    } else if (path.includes('/tours')) {
+    } else if (isTourListPage || isTourDetailPage) {
       pageKey = 'tours';
     }
 
-    const seoData = seoContent[pageKey]?.[actualLanguage as Language];
+    const seoData: PageSEO | undefined = pageKey ? seoContentData[pageKey]?.[actualLanguage as Language] : undefined;
+
+    clearAllDynamicSEOTags();
 
     if (seoData) {
-      document.title = seoData.title;
-      const metaDescription = document.querySelector('meta[name="description"]');
-      if (metaDescription) {
-        metaDescription.setAttribute('content', seoData.description);
+      if (!isBlogDetailPage && !isIntlTourDetailPage && !isDomesticTourDetailPage && !isTourDetailPage) {
+        document.title = seoData.title;
+        setMetaTag('description', seoData.description);
+
+        if (seoData.canonicalUrl) setLinkTag('canonical', seoData.canonicalUrl);
       }
 
+      if (seoData.author) setMetaTag('author', seoData.author);
+      if (seoData.robots) setMetaTag('robots', seoData.robots);
+      
       document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => link.remove());
-
-      for (const langCode in seoData.hreflang) {
-        const link = document.createElement('link');
-        link.rel = 'alternate';
-        link.hreflang = langCode;
-        link.href = seoData.hreflang[langCode as keyof HreflangLinks];
-        document.head.appendChild(link);
-      }
-    }
-  }, [language, location.pathname, seoContent, isLoading]); 
+      const hreflangObj = seoData.hreflang ?? {};
+      Object.entries(hreflangObj).forEach(([langCode, href]) => {
+        if (typeof href === 'string' && href.trim() !== '') {
+          const link = document.createElement('link');
+          link.rel = 'alternate';
+          link.hreflang = langCode;
+          document.head.appendChild(link);
+        }
+      });
+    } 
+  }, [language, location.pathname, seoContentData, isLoading]); 
 
   useEffect(() => {
     setAuthErrorHandler(() => {
@@ -268,6 +306,17 @@ function App() {
               <Route path="create" element={<CreateBlog />} />
               <Route path="edit/:id" element={<EditBlog />} />
               <Route path=":id" element={<ShowBlog />} />
+            </Route>
+            <Route
+              path="/admin/seo-settings" 
+              element={
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<SeoShow />} /> 
+              <Route path="edit" element={<SeoEdit />} /> 
             </Route>
           </Routes>
         </main>

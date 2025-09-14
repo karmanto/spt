@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { Outlet, Link } from 'react-router-dom';
-import { LayoutDashboard, Gift, Globe, Menu, X } from 'lucide-react'; 
+import { LayoutDashboard, Gift, Globe, Menu, X, Settings, BookOpen } from 'lucide-react'; 
 
 const AdminLayout: React.FC = () => {
   const { t } = useLanguage();
@@ -111,8 +111,16 @@ const AdminLayout: React.FC = () => {
             className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
             onClick={() => setMenuOpen(false)}
           >
-            <Globe className=" h-4 w-4 mr-2" />
+            <BookOpen className=" h-4 w-4 mr-2" />
             kelola blog
+          </Link>
+          <Link
+            to="/admin/seo-settings"
+            className="flex items-center px-3 py-2 rounded-md text-textSecondary hover:bg-gray-700 hover:text-white transition-colors duration-200"
+            onClick={() => setMenuOpen(false)}
+          >
+            <Settings className="h-4 w-4 mr-2" />
+            kelola SEO
           </Link>
         </div>
       </nav>

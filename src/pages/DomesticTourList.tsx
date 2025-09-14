@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { OutletContext, TourPackage } from '../lib/types';
@@ -12,7 +12,6 @@ const TourList: React.FC = () => {
   const { t } = useLanguage();
   
   const { searchTerm, selectedCategory, setSearchTerm, setSelectedCategory } = useOutletContext<OutletContext>();
-  const [initialized, setInitialized] = useState(false);
   
   const [tours, setTours] = useState<TourPackage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,9 +31,6 @@ const TourList: React.FC = () => {
   const tourCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
   const filtersContainerRef = useRef<HTMLDivElement>(null);
 
-  const prevSearchTermRef = useRef(searchTerm);
-  const prevSelectedCategoryRef = useRef(selectedCategory);
-
   useEffect(() => {
     const storedFilterParams = sessionStorage.getItem('tourFilterParams');
     if (storedFilterParams) {
@@ -48,11 +44,9 @@ const TourList: React.FC = () => {
         sessionStorage.removeItem('tourFilterParams');
       }
     }
-
-    setInitialized(true);
   }, [setSearchTerm, setSelectedCategory]); 
 
-  const fetchTours = useCallback(async () => {
+  const fetchTours = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -72,26 +66,18 @@ const TourList: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, searchTerm, selectedCategory, t]); 
+  }
 
   useEffect(() => {
-    const searchTermChanged = searchTerm !== prevSearchTermRef.current;
-    const selectedCategoryChanged = selectedCategory !== prevSelectedCategoryRef.current;
-
-    if (searchTermChanged || selectedCategoryChanged) {
-      if (currentPage !== 1) {
-        setCurrentPage(1);
-      }
-    }
-
-    prevSearchTermRef.current = searchTerm;
-    prevSelectedCategoryRef.current = selectedCategory;
-  }, [searchTerm, selectedCategory]); 
-
-  useEffect(() => {
-    if (!initialized) return;
     fetchTours();
-  }, [initialized, fetchTours]);
+  }, [currentPage, searchTerm, selectedCategory]);
+  
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [currentPage]);
 
   useEffect(() => {
     if (!loading && tours.length > 0) {

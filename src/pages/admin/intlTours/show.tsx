@@ -107,6 +107,37 @@ export default function ShowTour() {
     </div>
   );
 
+  const renderLocalizedTextDisplay = (
+    label: string,
+    idContent: string | undefined,
+    enContent: string | undefined,
+    ruContent: string | undefined,
+  ) => (
+    <div className="mb-4 p-5 border border-gray-200 rounded-lg bg-gray-50 shadow-sm">
+      <label className="block text-sm font-medium text-gray-700 mb-3">{label}</label>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Indonesian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {idContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">English</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {enContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500">Russian</label>
+          <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
+            {ruContent || <span className="text-gray-400 italic">Tidak ada</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 py-6 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:px-0">
@@ -159,6 +190,26 @@ export default function ShowTour() {
         )}
 
         <div className="bg-white shadow-xl rounded-xl p-8 space-y-8">
+          {/* New SEO Section */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">SEO Metadata</h2>
+            <div className="grid grid-cols-1 gap-6 mb-6">
+              {renderLocalizedTextDisplay(
+                'SEO Title',
+                tour.seo_title_id,
+                tour.seo_title_en,
+                tour.seo_title_ru
+              )}
+              {renderLocalizedTextDisplay(
+                'SEO Description',
+                tour.seo_description_id,
+                tour.seo_description_en,
+                tour.seo_description_ru
+              )}
+            </div>
+          </section>
+          {/* End New SEO Section */}
+          
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Dasar</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -194,13 +245,13 @@ export default function ShowTour() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Harga Mulai Dari</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.starting_price ? `${(tour.starting_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                  {tour.starting_price ? `${(parseFloat(tour.starting_price)).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Harga Asli (opsional)</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  {tour.original_price ? `${(tour.original_price).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
+                  {tour.original_price ? `${(parseFloat(tour.original_price)).toLocaleString()}` : <span className="text-gray-400 italic">Tidak ada</span>}
                 </div>
               </div>
             </div>

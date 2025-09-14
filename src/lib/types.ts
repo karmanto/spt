@@ -1,24 +1,27 @@
 export type Language = 'id' | 'en' | 'ru';
 
 export interface HreflangLinks {
-  en: string;
-  id: string;
-  ru: string;
-  'x-default': string;
+  en?: string;
+  id?: string;
+  ru?: string;
+  'x-default'?: string;
 }
 
 export interface PageSEO {
   title: string;
   description: string;
-  hreflang: HreflangLinks;
+  author?: string;
+  robots?: string;
+  canonicalUrl?: string;
+  hreflang?: HreflangLinks;
 }
 
 export interface SEOContent {
-  home: { [key in Language]: PageSEO };
-  blogs: { [key in Language]: PageSEO };
-  tours: { [key in Language]: PageSEO }; 
-  intlTours: { [key in Language]: PageSEO };
-  domesticTours: { [key in Language]: PageSEO };
+  home?: { [key in Language]?: PageSEO };
+  blogs?: { [key in Language]?: PageSEO };
+  tours?: { [key in Language]?: PageSEO };
+  intlTours?: { [key in Language]?: PageSEO };
+  domesticTours?: { [key in Language]?: PageSEO };
 }
 
 export interface CountdownState {
@@ -37,9 +40,9 @@ export interface Promo {
   description_en: string;
   description_ru: string;
   price: string;
-  old_price: string | null; // Changed to allow null
-  price2: string | null; // Changed to allow null
-  old_price2: string | null; // Changed to allow null
+  old_price: string | null;
+  price2: string | null;
+  old_price2: string | null;
   image: string;
   end_date: string;
   pdf_url: string;
@@ -130,17 +133,17 @@ export interface TourFAQ {
 
 export interface TourCancellationPolicy {
   id: number;
-  package_id: number; 
+  package_id: number;
   description: LanguageContent;
   created_at: string;
   updated_at: string;
 }
 
 export interface TourPriceOption {
-  id?: number; 
-  service_type: LanguageContent; 
+  id?: number;
+  service_type: LanguageContent;
   price: number;
-  description: LanguageContent; 
+  description: LanguageContent;
   created_at?: string;
   updated_at?: string;
 }
@@ -152,9 +155,9 @@ export interface TourPackage {
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  prices: TourPriceOption[]; 
-  starting_price: string; 
-  original_price?: string; 
+  prices: TourPriceOption[];
+  starting_price: string;
+  original_price?: string;
   currency?: string;
   rate?: string;
   images: TourImage[];
@@ -165,10 +168,16 @@ export interface TourPackage {
   faqs: TourFAQ[];
   cancellation_policies: TourCancellationPolicy[];
   tags?: string;
-  order?: number; 
+  order?: number;
+  seo_title_id?: string;
+  seo_description_id?: string;
+  seo_title_en?: string;
+  seo_description_en?: string;
+  seo_title_ru?: string;
+  seo_description_ru?: string;
   created_at: string;
   updated_at: string;
-  slug?: string; 
+  slug?: string;
 }
 
 export interface TourPackageResponse {
@@ -187,18 +196,18 @@ export interface TourPackageCreatePayload {
   name: LanguageContent;
   duration: LanguageContent;
   location: LanguageContent;
-  prices: { 
+  prices: {
     service_type: LanguageContent;
     price: number;
     description: LanguageContent;
   }[];
-  starting_price: number; 
-  original_price?: number; 
+  starting_price: number;
+  original_price?: number;
   currency?: string;
-  rate?: number; 
-  images: { path: string; order: number }[]; 
+  rate?: number;
+  images: { path: string; order: number }[];
   overview: LanguageContent;
-  highlights: { description: LanguageContent }[]; 
+  highlights: { description: LanguageContent }[];
   itineraries: {
     day: number;
     title: LanguageContent;
@@ -210,6 +219,12 @@ export interface TourPackageCreatePayload {
   cancellation_policies: { description: LanguageContent }[];
   tags?: string;
   order?: number;
+  seo_title_id?: string;
+  seo_description_id?: string;
+  seo_title_en?: string;
+  seo_description_en?: string;
+  seo_title_ru?: string;
+  seo_description_ru?: string;
 }
 
 export interface TourPackageUpdatePayload extends Partial<TourPackageCreatePayload> {}
@@ -293,7 +308,7 @@ export interface HeaderProps {
 export interface ImageModalProps {
   images: { id: string; path: string; order?: number | null; }[];
   currentIndex: number;
-  altText: string; 
+  altText: string;
   onClose: () => void;
   onNavigate: (newIndex: number) => void;
 }
@@ -304,7 +319,7 @@ export interface ItineraryDocumentProps {
 
 export interface TourCardProps {
   tour: TourPackage;
-  currentPage: number; 
+  currentPage: number;
 }
 
 // New interfaces for Blog
@@ -319,7 +334,13 @@ export interface Blog {
   image: string;
   posting_date: string;
   category: string;
-  slug?: string; 
+  slug?: string;
+  seo_title_id?: string;
+  seo_description_id?: string;
+  seo_title_en?: string;
+  seo_description_en?: string;
+  seo_title_ru?: string;
+  seo_description_ru?: string;
 }
 
 export interface BlogCreatePayload extends Omit<Blog, 'id' | 'image'> {
@@ -342,5 +363,5 @@ export interface BlogResponse {
 
 export interface BlogCardProps {
   blog: Blog;
-  currentPage: number; 
+  currentPage: number;
 }

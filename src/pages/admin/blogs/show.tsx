@@ -182,6 +182,26 @@ const ShowBlog: React.FC = () => {
         )}
 
         <div className="bg-white shadow-xl rounded-xl p-8 space-y-8">
+          {/* Updated SEO Section to use localized display */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">SEO Metadata</h2>
+            <div className="grid grid-cols-1 gap-6 mb-6">
+              {renderBlogLanguageContentDisplay(
+                'SEO Title',
+                blog.seo_title_id,
+                blog.seo_title_en,
+                blog.seo_title_ru
+              )}
+              {renderBlogLanguageContentDisplay(
+                'SEO Description',
+                blog.seo_description_id,
+                blog.seo_description_en,
+                blog.seo_description_ru
+              )}
+            </div>
+          </section>
+          {/* End Updated SEO Section */}
+          
           <section>
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">Informasi Umum</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -195,7 +215,7 @@ const ShowBlog: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
                 <div className="mt-1 block w-full rounded-lg border border-gray-300 bg-white shadow-sm sm:text-sm p-2 min-h-[40px] flex items-center">
-                  <FaTag className="w-4 h-4 mr-2 text-gray-500" /> {/* Mengganti ikon di sini */}
+                  <FaTag className="w-4 h-4 mr-2 text-gray-500" />
                   <span>{blog.category ?? '-'}</span>
                 </div>
               </div>

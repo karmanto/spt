@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getBlogs } from '../lib/api';
 import { Blog, OutletContext } from '../lib/types';
 import BlogCard from '../components/BlogCard';
@@ -31,10 +31,7 @@ const BlogList: React.FC = () => {
   const blogCardRefs = useRef<Map<number, HTMLDivElement | null>>(new Map());
   const filtersContainerRef = useRef<HTMLDivElement>(null); 
 
-  const prevSearchTermRef = useRef(searchTerm);
-  const prevSelectedCategoryRef = useRef(selectedCategory);
-
-  const fetchBlogs = useCallback(async () => {
+  const fetchBlogs = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -53,11 +50,18 @@ const BlogList: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, debouncedSearchTerm, selectedCategory, t]); 
+  };
 
   useEffect(() => {
     fetchBlogs();
-  }, [fetchBlogs]);
+  }, [currentPage, debouncedSearchTerm, selectedCategory]);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }, [currentPage]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -68,20 +72,6 @@ const BlogList: React.FC = () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
-
-  useEffect(() => {
-    const searchTermChanged = searchTerm !== prevSearchTermRef.current;
-    const selectedCategoryChanged = selectedCategory !== prevSelectedCategoryRef.current;
-
-    if (searchTermChanged || selectedCategoryChanged) {
-      if (currentPage !== 1) {
-        setCurrentPage(1);
-      }
-    }
-
-    prevSearchTermRef.current = searchTerm;
-    prevSelectedCategoryRef.current = selectedCategory;
-  }, [searchTerm, selectedCategory]);
 
   useEffect(() => {
     if (!loading && blogs.length > 0) {

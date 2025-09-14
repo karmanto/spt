@@ -7,6 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorDisplay from '../components/ErrorDisplay';
 import { FaArrowLeft } from 'react-icons/fa';
 import { CalendarDays, Tag } from 'lucide-react';
+import { setMetaTag, setLinkTag } from '../lib/seoUtils';
 
 const BlogDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>(); 
@@ -16,7 +17,35 @@ const BlogDetail: React.FC = () => {
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState<string | null>(null);
 
-  const fetchBlogDetail = useCallback(async () => {
+  const getLocalizedTitle = useCallback(() => {
+    if (!blog) return '';
+    if (currentLanguage === 'id') return blog.title_id;
+    if (currentLanguage === 'ru') return blog.title_ru || blog.title_en;
+    return blog.title_en;
+  }, [blog, currentLanguage]);
+
+  const getLocalizedContent = useCallback(() => {
+    if (!blog) return '';
+    if (currentLanguage === 'id') return blog.content_id;
+    if (currentLanguage === 'ru') return blog.content_ru || blog.content_en;
+    return blog.content_en;
+  }, [blog, currentLanguage]);
+
+  const getLocalizedSeoTitle = useCallback(() => {
+    if (!blog) return '';
+    if (currentLanguage === 'id') return blog.seo_title_id || blog.seo_title_en || '';
+    if (currentLanguage === 'ru') return blog.seo_title_ru || blog.seo_title_en || '';
+    return blog.seo_title_en || '';
+  }, [blog, currentLanguage]);
+
+  const getLocalizedSeoDescription = useCallback(() => {
+    if (!blog) return '';
+    if (currentLanguage === 'id') return blog.seo_description_id || blog.seo_description_en || '';
+    if (currentLanguage === 'ru') return blog.seo_description_ru || blog.seo_description_en || '';
+    return blog.seo_description_en || '';
+  }, [blog, currentLanguage]);
+
+  const fetchBlogDetail = async () => {
     if (!slug) {
       navigate('/blogs');
       return;
@@ -39,11 +68,23 @@ const BlogDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [slug, navigate, t]); 
+  }
 
   useEffect(() => {
     fetchBlogDetail();
-  }, [fetchBlogDetail]);
+  }, [slug]); 
+
+  useEffect(() => {
+    if (blog) {
+      document.title = getLocalizedSeoTitle();
+
+      const descriptionContent = getLocalizedSeoDescription();
+      setMetaTag('description', descriptionContent);
+
+      const currentUrl = window.location.href;
+      setLinkTag('canonical', currentUrl);
+    }
+  }, [blog, getLocalizedSeoTitle, getLocalizedSeoDescription]); 
 
   if (loading) {
     return (
@@ -68,18 +109,6 @@ const BlogDetail: React.FC = () => {
       </div>
     );
   }
-
-  const getLocalizedTitle = () => {
-    if (currentLanguage === 'id') return blog.title_id;
-    if (currentLanguage === 'ru') return blog.title_ru || blog.title_en;
-    return blog.title_en;
-  };
-
-  const getLocalizedContent = () => {
-    if (currentLanguage === 'id') return blog.content_id;
-    if (currentLanguage === 'ru') return blog.content_ru || blog.content_en;
-    return blog.content_en;
-  };
 
   const formattedDate = new Date(blog.posting_date).toLocaleDateString(currentLanguage === 'id' ? 'id-ID' : 'en-US', {
     year: 'numeric',
