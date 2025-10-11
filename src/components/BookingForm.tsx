@@ -18,6 +18,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   const whatsappContactNumber = import.meta.env.VITE_WHATSAPP_NUMBER;
   const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME;
 
+  const uniqueNationalities = [...new Set(nationalities)].sort();
+
   const getMinDate = () => {
     const today = new Date();
     today.setDate(today.getDate() + 1);
@@ -184,7 +186,7 @@ ${t('lookingForwardToConfirmation')}
             required
           >
             <option value="">{t('selectNationality')}</option>
-            {nationalities.map((nat) => (
+            {uniqueNationalities.map((nat) => (
               <option key={nat} value={nat}>{nat}</option>
             ))}
           </select>

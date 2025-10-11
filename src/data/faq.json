@@ -1,6 +1,15 @@
 {
   "faqs": [
     {
+      "id": 0,
+      "questionId": "Apa saja rekomendasi paket wisata Phuket terbaik dari SPT?",
+      "questionEn": "What are the best Phuket tour package recommendations from SPT?",
+      "questionRu": "Какие лучшие туристические пакеты на Пхукет от SPT вы рекомендуете?",
+      "answerId": "SPT menawarkan beragam pilihan paket wisata Phuket terbaik, mulai dari Island Hopping ke Phi Phi Island, tur budaya di Kota Tua Phuket, hingga petualangan ke James Bond Island. Setiap paket wisata Phuket kami dirancang untuk memberikan pengalaman berwisata yang nyaman dan tak terlupakan.",
+      "answerEn": "SPT offers a variety of the best Phuket tour packages, from Island Hopping to Phi Phi Island, cultural tours in Phuket Old Town, to adventures to James Bond Island. Each of our Phuket tour packages is designed to provide a comfortable and unforgettable travel experience.",
+      "answerRu": "SPT предлагает разнообразные лучшие туристические пакеты на Пхукет: от островного hopping до острова Пхи-Пхи, культурных туров по Старому городу Пхукета до приключений на острове Джеймса Бонда. Каждый наш турпакет на Пхукет разработан для обеспечения комфортного и незабываемого путешествия."
+    },
+    {
       "id": 1,
       "questionId": "Bagaimana metode pembayarannya?",
       "questionEn": "How can I make a payment?",
