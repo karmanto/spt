@@ -249,5 +249,13 @@
   "blog_berita": "Berita",
   "blog_inspirasi": "Inspirasi",
   "allBlogs": "Semua Blog",
-  "whatsIncludedAndExcluded": "Termasuk & Tidak Termasuk"
+  "whatsIncludedAndExcluded": "Termasuk & Tidak Termasuk",
+  "customerLoginTitle": "Login Pelanggan",
+  "customerLoginSubtitle": "Masuk dengan cepat menggunakan akun Google Anda untuk mengelola pemesanan dan profil Anda.",
+  "loginDisclaimer": "Dengan masuk, Anda menyetujui Ketentuan Layanan dan Kebijakan Privasi kami.",
+  "profileTitle": "Profil Anda",
+  "email": "Email",
+  "language": "Bahasa",
+  "logout": "Keluar",
+  "profile": "Profil"
 }

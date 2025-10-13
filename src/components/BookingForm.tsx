@@ -33,9 +33,10 @@ const BookingForm: React.FC<BookingFormProps> = ({ tour }) => {
   useEffect(() => {
     if (tour && tour.prices && tour.prices.length > 0) {
       const initialQuantities: { [id: number]: number } = {};
-      tour.prices.forEach(option => {
+      tour.prices.forEach((option, index) => {
         if (option.id !== undefined) {
-          initialQuantities[option.id] = 0;
+          // CRITICAL: Set the quantity of the first price option (index 0) to 1
+          initialQuantities[option.id] = index === 0 ? 1 : 0;
         }
       });
       setQuantities(initialQuantities);

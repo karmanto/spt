@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Menu, X, User } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useGoogleAuth } from '../context/GoogleAuthContext';
 import 'flag-icons/css/flag-icons.min.css';
 import { HeaderProps } from '../lib/types';
+import LoginModal from './LoginModal'; 
+import ProfileModal from './ProfileModal'; 
 
 const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => {
   const { language, setLanguage, t } = useLanguage();
+  const { isLoggedIn, user } = useGoogleAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [isAuthUIVisible, setIsAuthUIVisible] = useState(false); 
 
   const logoUrl = "/spt_logo.png"
 
@@ -28,14 +33,45 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
     setLanguage(next); 
   };
 
+  const toggleAuthUI = useCallback(() => {
+    setIsAuthUIVisible(prev => !prev);
+  }, []);
+
+  const closeAuthUI = useCallback(() => {
+    setIsAuthUIVisible(false);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      setIsAuthUIVisible(false);
+    }
+  }, [mobileMenuOpen]);
+
   const flagCode = language === 'id' ? 'id' : language === 'en' ? 'us' : 'ru';
   const nextLangLabel = language === 'id' ? 'English' : language === 'en' ? 'Русский' : 'Bahasa Indonesia';
+
+  const iconColorClass = scrolled || mobileMenuOpen ? 'text-gray-700 hover:text-[#FB8C00]' : 'text-white hover:text-[#FB8C00]';
+  const textColorClass = scrolled || mobileMenuOpen ? 'text-black' : 'text-white';
+
+  const renderProfileIcon = (size: number) => (
+    user?.picture ? (
+      <img 
+        src={user.picture} 
+        alt={t('profile')} 
+        className={`h-${size} w-${size} rounded-full object-cover border-2 border-transparent transition-all duration-200 ${
+          scrolled ? 'border-[#FB8C00]' : 'border-white'
+        }`} 
+      />
+    ) : (
+      <User size={24} className={iconColorClass} />
+    )
+  );
 
   return (
     <header
@@ -60,6 +96,15 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
 
           <div className="flex items-center mr-2 lg:hidden">
             <button
+              onClick={toggleAuthUI}
+              className={`p-2 mr-2 rounded-full transition-colors ${iconColorClass}`}
+              aria-label={isLoggedIn ? t('profile') : t('customerLoginTitle')}
+              aria-expanded={isAuthUIVisible}
+            >
+              {renderProfileIcon(6)}
+            </button>
+
+            <button
               onClick={toggleLanguage}
               className={`flex items-center p-2 mr-2 rounded-md transition-colors ${
                 scrolled || mobileMenuOpen ? 'hover:bg-gray-100' : 'hover:bg-gray-700'
@@ -67,9 +112,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               aria-label={`Switch to ${nextLangLabel}`}
             >
               <span className={`fi fi-${flagCode} h-5 w-5 mr-[5px]`} />
-              <span className={`ml-1 text-sm font-medium ${
-                scrolled || mobileMenuOpen ? 'text-black' : 'text-white'
-              }`}>{language.toUpperCase()}</span>
+              <span className={`ml-1 text-sm font-medium ${textColorClass}`}>{language.toUpperCase()}</span>
             </button>
             <button
               onClick={toggleMobileMenu}
@@ -102,7 +145,21 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
             ))}
           </nav>
 
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center space-x-4 relative">
+            <button
+              onClick={toggleAuthUI}
+              className={`p-2 rounded-full transition-colors ${
+                scrolled
+                  ? 'hover:bg-gray-100'
+                  : 'hover:bg-gray-700'
+              } ${isAuthUIVisible ? 'ring-2 ring-[#FB8C00] ring-offset-2 ring-offset-transparent' : ''}`}
+              aria-label={isLoggedIn ? t('profile') : t('customerLoginTitle')}
+              aria-expanded={isAuthUIVisible}
+              id="user-menu-button"
+            >
+              {renderProfileIcon(8)}
+            </button>
+
             <button
               onClick={toggleLanguage}
               className={`flex items-center p-2 rounded-md transition-colors ${
@@ -111,9 +168,7 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
               aria-label={`Switch to ${nextLangLabel}`}
             >
               <span className={`fi fi-${flagCode} h-6 w-6 mr-[5px]`} />
-              <span className={`ml-1 text-sm font-medium ${
-                scrolled || mobileMenuOpen ? 'text-black' : 'text-white'
-              }`}>{language.toUpperCase()}</span>
+              <span className={`ml-1 text-sm font-medium ${textColorClass}`}>{language.toUpperCase()}</span>
             </button>
           </div>
         </div>
@@ -134,6 +189,10 @@ const Header: React.FC<HeaderProps> = ({ mobileMenuOpen, toggleMobileMenu }) => 
           ))}
         </nav>
       </div>
+
+      {!isLoggedIn && <LoginModal isOpen={isAuthUIVisible} onClose={closeAuthUI} />}
+      
+      {isLoggedIn && <ProfileModal isOpen={isAuthUIVisible} onClose={closeAuthUI} />}
     </header>
   );
 };

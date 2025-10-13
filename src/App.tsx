@@ -5,6 +5,8 @@ import Hero from './components/Hero';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import Login from './pages/Login';
+// Removed: import CustomerLogin from './pages/CustomerLogin'; 
+// Removed: import Profile from './pages/Profile'; 
 import TourList from './pages/TourList';
 import TourDetail from './pages/TourDetail';
 import TourLayout from './layouts/TourLayout';
@@ -209,6 +211,8 @@ function App() {
                 <WhatsAppButton />
               </>
             } />
+
+            {/* REMOVED: Customer Auth Routes (Login and Profile are now handled by Header components) */}
 
             <Route element={<TourLayout />}>
               <Route path="/:lang?/tours" element={<TourList />} />
